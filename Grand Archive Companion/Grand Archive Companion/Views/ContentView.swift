@@ -9,13 +9,32 @@ import SwiftUI
 
 struct ContentView: View {
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        ZStack {
+            Color.black.ignoresSafeArea(.all)
+            
+            VStack {
+                Text("Grand Archive Companion")
+                    .font(.title)
+                    .foregroundColor(.white)
+                    .padding()
+                
+                Button {
+                    
+                } label: {
+                    Image(systemName: "plus.circle.fill")
+                        .imageScale(.large)
+                    Text("New Game")
+                }.padding()
+                
+                Button {
+                    
+                } label: {
+                    Image(systemName: "magnifyingglass")
+                        .imageScale(.large)
+                    Text("Card Search")
+                }.padding()
+            }
         }
-        .padding()
     }
 }
 
