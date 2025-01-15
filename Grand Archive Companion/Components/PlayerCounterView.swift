@@ -22,13 +22,19 @@ struct PlayerCounterView: View {
     
     @State private var menuButtonSize: CGSize = CGSize(width: 35, height: 35)
     
+    @State private var showLevelCounter = false
+    @State private var showPreparationCounter = false
+    @State private var showEnlightenmentCounter = false
+    @State private var showLashCounter = false
+    @State private var showFloatingMemoryCounter = false
+    
     var buttons: [RadialButton] {
         [
             RadialButton(label: "Level Counter", image: Image("Level"), imageSize: menuButtonSize, action: levelTapped),
-            RadialButton(label: "Preparation Counter", image: Image("Preparation"), imageSize: menuButtonSize, action: levelTapped),
-            RadialButton(label: "Enlightenment Counter", image: Image("Enlightenment"), imageSize: menuButtonSize, action: levelTapped),
-            RadialButton(label: "Lash Counter", image: Image("Lash"), imageSize: menuButtonSize, action: levelTapped),
-            RadialButton(label: "Floating Memory", image: Image("FloatingMemory"), imageSize: menuButtonSize, action: levelTapped),
+            RadialButton(label: "Preparation Counter", image: Image("Preparation"), imageSize: menuButtonSize, action: preparationTapped),
+            RadialButton(label: "Enlightenment Counter", image: Image("Enlightenment"), imageSize: menuButtonSize, action: enlightenmentTapped),
+            RadialButton(label: "Lash Counter", image: Image("Lash"), imageSize: menuButtonSize, action: lashTapped),
+            RadialButton(label: "Floating Memory", image: Image("FloatingMemory"), imageSize: menuButtonSize, action: floatingMemoryTapped),
         ]
     }
     
@@ -120,7 +126,51 @@ struct PlayerCounterView: View {
                     
                     Spacer()
                     
-                    RadialMenu(title: "Counters", closedImage: Image(systemName: "ellipsis.circle"), openImage: Image(systemName: "multiply.circle.fill"), buttons: buttons, animation: .interactiveSpring(response: 0.4, dampingFraction: 0.6))
+                    VStack {
+                        HStack {
+                            if showLevelCounter {
+                                CounterButtonView(iconName: "Level"){
+                                    withAnimation(.easeInOut(duration: 0.2)) {
+                                        showLevelCounter.toggle()
+                                    }
+                                }
+                            }
+                            
+                            if showPreparationCounter {
+                                CounterButtonView(iconName: "Preparation"){
+                                    withAnimation(.easeInOut(duration: 0.2)) {
+                                        showPreparationCounter.toggle()
+                                    }
+                                }
+                            }
+                            
+                            if showEnlightenmentCounter {
+                                CounterButtonView(iconName: "Enlightenment"){
+                                    withAnimation(.easeInOut(duration: 0.2)) {
+                                        showEnlightenmentCounter.toggle()
+                                    }
+                                }
+                            }
+                            
+                            if showLashCounter {
+                                CounterButtonView(iconName: "Lash"){
+                                    withAnimation(.easeInOut(duration: 0.2)) {
+                                        showLashCounter.toggle()
+                                    }
+                                }
+                            }
+                            
+                            if showFloatingMemoryCounter {
+                                CounterButtonView(iconName: "FloatingMemory"){
+                                    withAnimation(.easeInOut(duration: 0.2)) {
+                                        showFloatingMemoryCounter.toggle()
+                                    }
+                                }
+                            }
+                        }
+                        
+                        RadialMenu(title: "Counters", closedImage: Image(systemName: "ellipsis.circle"), openImage: Image(systemName: "multiply.circle.fill"), buttons: buttons, animation: .interactiveSpring(response: 0.4, dampingFraction: 0.6))
+                    }
                 }
                 
             } .foregroundStyle(fontColor)
@@ -133,6 +183,8 @@ struct PlayerCounterView: View {
                 }
         }
     }
+    
+        // MARK: - Helper Functions
     
     func levelUp(champion: Champion? = nil) {
         // If the function is called without a champion being passed to it, we check to see if there are multiple levelup options. If there aren't we automatically level up.
@@ -176,7 +228,23 @@ struct PlayerCounterView: View {
                      
     // MARK: - Radial Button Functions
     func levelTapped() {
-        print("Level Tapped")
+        showLevelCounter.toggle()
+    }
+    
+    func preparationTapped() {
+        showPreparationCounter.toggle()
+    }
+    
+    func enlightenmentTapped() {
+        showEnlightenmentCounter.toggle()
+    }
+    
+    func lashTapped() {
+        showLashCounter.toggle()
+    }
+    
+    func floatingMemoryTapped() {
+        showFloatingMemoryCounter.toggle()
     }
 }
 

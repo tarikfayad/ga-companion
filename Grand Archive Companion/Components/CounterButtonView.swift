@@ -43,10 +43,15 @@ struct CounterButtonView: View {
             }
         }
         .buttonStyle(CounterButtonStyle())
-        .onTapGesture(count: 2){
+        .simultaneousGesture(
+            LongPressGesture()
+                .onEnded { _ in
+                    onLongPress()
+                }
+        )
+        .onTapGesture(count: 2) {
             decrementValue()
         }
-        .onLongPressGesture(perform: onLongPress)
     }
     
     private func incrementValue() {
