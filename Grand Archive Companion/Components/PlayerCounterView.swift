@@ -79,7 +79,7 @@ struct PlayerCounterView: View {
                                 titleVisibility: .visible,
                                 presenting: nextChampions
                             ) { champions in
-                                
+                                // Displaying a list of possible next champions for selection.
                                 ForEach(champions) { champion in
                                     Button(champion.name) {
                                         levelUp(champion: champion)
@@ -165,7 +165,7 @@ struct PlayerCounterView: View {
     let champs: [Champion] =  [
         .init(name: "Minthe, Spirit of Water", lineage: "", jobs: ["Spirit"], health: 15, level: 0),
         .init(name: "Mordred, Flawless Blade", lineage: "", jobs: ["Warrior"], health: 24, level: 2),
-        .init(name: "Mordred, Great Blade", lineage: "", jobs: ["Warrior"], health: 24, level: 2),
+//        .init(name: "Mordred, Great Blade", lineage: "", jobs: ["Warrior"], health: 24, level: 2),
         .init(name: "Lorraine, Wandering Warrior", lineage: "", jobs: ["Warrior"], health: 20, level: 1),
         .init(name: "Lorraine, Spirit Ruler", lineage: "Lorraine", jobs: ["Warrior"], health: 28, level: 3)
     ]
