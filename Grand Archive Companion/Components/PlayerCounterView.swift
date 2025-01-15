@@ -11,14 +11,15 @@ struct PlayerCounterView: View {
     
     @State var backgroundColor: Color // We'll set the background color based on the player number
     @State var fontColor: Color
-    @State var championArray: [Champion] // An ordered array sorted by level. The level 0 champion will always be first. //
+    @State var championArray: [Champion] // An ordered array sorted by level. The level 0 champion will always be first.
     
-    @State private var currentHealth: Int = 0
+    @State private var damageCounter: Int = 0
     @State private var currentChampion: Champion?
     @State private var nextChampions: [Champion]?
     @State private var previousChampions: [Champion]? = []
     
     @State private var isShowingLevelUpSheet: Bool = false
+    @State private var isDead: Bool = false
     
     @State private var menuButtonSize: CGSize = CGSize(width: 35, height: 35)
     
@@ -49,7 +50,7 @@ struct PlayerCounterView: View {
                             .font(.system(size: 17))
                             .padding(.bottom, -30)
                         
-                        Text(String(currentHealth))
+                        Text(String(damageCounter))
                             .font(.custom("Helvetica-Bold", size: 300))
                             .padding(.top, -30)
                     }
@@ -60,15 +61,17 @@ struct PlayerCounterView: View {
                         .frame(height: geometry.size.height / 2)
                         .contentShape(Rectangle()) // Necessary to make the tap gesture work
                         .onTapGesture {
-                            currentHealth += 1
+                            damageCounter += 1
+                            checkIfDead()
                         }
                     
                     Rectangle()
                         .frame(height: geometry.size.height / 2)
                         .contentShape(Rectangle()) // Necessary to make the tap gesture work
                         .onTapGesture {
-                            if currentHealth > 0 { // Only reduce the health if it's above 0.
-                                currentHealth -= 1
+                            if damageCounter > 0 { // Only reduce damage counters if they're above 0.
+                                damageCounter -= 1
+                                checkIfDead()
                             }
                         }
                 }.foregroundStyle(.clear)
@@ -178,9 +181,13 @@ struct PlayerCounterView: View {
                     let sortedChampions = championArray.sorted(by: { $0.level < $1.level })
                     if let champion = sortedChampions.first {
                         currentChampion = champion
-                        currentHealth = champion.health
                     }
                 }
+                .alert("You Died!", isPresented: $isDead) {
+                            Button("OK", role: .cancel) { }
+                        } message: {
+                            Text("Your champion has perished.")
+                        }
         }
     }
     
@@ -197,10 +204,9 @@ struct PlayerCounterView: View {
                 // If there is only one champion that matches the search, automatically level up
                 if nextChampions?.count == 1 {
                     let nextChampion = nextChampions?.first
-                    let healthDifference = nextChampion!.health - currentChampion!.health
                     previousChampions?.append(currentChampion!)
                     currentChampion = nextChampion
-                    currentHealth += healthDifference
+                    checkIfDead()
                 } else {
                     // If there are multiple, display an action sheet with the champions to select from.
                     isShowingLevelUpSheet = true
@@ -209,21 +215,23 @@ struct PlayerCounterView: View {
         } else {
             // If a champion is passed to the function, we use that as the basis to level up.
             let nextChampion = champion
-            let healthDifference = nextChampion!.health - currentChampion!.health
             previousChampions?.append(currentChampion!)
             currentChampion = nextChampion
-            currentHealth += healthDifference
+            checkIfDead()
         }
     }
     
     func levelDown() {
         if currentChampion!.level > 0 {
             let previousChampion = previousChampions?.last
-            let healthDifference =  currentChampion!.health - previousChampion!.health
             currentChampion = previousChampion
-            currentHealth -= healthDifference
             previousChampions?.removeLast()
+            checkIfDead()
         }
+    }
+    
+    func checkIfDead() {
+        if damageCounter >= currentChampion!.health { isDead = true }
     }
                      
     // MARK: - Radial Button Functions
