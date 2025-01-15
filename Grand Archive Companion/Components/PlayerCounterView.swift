@@ -50,6 +50,7 @@ struct PlayerCounterView: View {
                         Text(String(damageCounter))
                             .font(.custom("Helvetica-Bold", size: largeFontSize))
                             .padding(.bottom, -1 * largeFontSize / 10)
+                            .padding(.top, -1 * largeFontSize / 10)
                         
                         Text(currentChampion.name)
                             .font(.system(size: 17, weight: .bold))
