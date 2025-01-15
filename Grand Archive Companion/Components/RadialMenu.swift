@@ -22,6 +22,7 @@ struct RadialMenuButtonStyle: ButtonStyle {
 struct RadialButton {
     let label: String
     let image: Image
+    let imageSize: CGSize
     let action: () -> Void
 }
 
@@ -59,6 +60,9 @@ struct RadialMenu: View {
                     isExpanded.toggle()
                 } label: {
                     buttons[index].image
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: buttons[index].imageSize.width, height: buttons[index].imageSize.height)
                 }
                 .accessibility(hidden: isExpanded == false)
                 .accessibility(label: Text(buttons[index].label))

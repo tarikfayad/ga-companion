@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "preparation.png",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}
