@@ -11,7 +11,7 @@ struct PlayerCounterView: View {
     
     @State var backgroundColor: Color // We'll set the background color based on the player number
     @State var fontColor: Color
-    @State var championArray: [Champion] // An ordered array sorted by level. The level 0 champion will always be first.
+    @State var championArray: [Champion] // An ordered array sorted by level. The level 0 champion will always be first. //
     
     @State private var currentHealth: Int = 0
     @State private var currentChampion: Champion?
