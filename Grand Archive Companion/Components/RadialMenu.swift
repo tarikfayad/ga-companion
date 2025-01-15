@@ -27,6 +27,7 @@ struct RadialButton {
 
 struct RadialMenu: View {
     @State private var isExpanded = false
+    @State private var isShowingSheet = false
     
     let title: String
     let closedImage: Image
@@ -40,7 +41,11 @@ struct RadialMenu: View {
     var body: some View {
         ZStack {
             Button {
-                isExpanded.toggle()
+                if UIAccessibility.isVoiceOverRunning {
+                    isShowingSheet.toggle()
+                } else {
+                    isExpanded.toggle()
+                }
             } label: {
                 isExpanded ? openImage : closedImage
             }
@@ -62,6 +67,13 @@ struct RadialMenu: View {
             }
             .opacity(isExpanded ? 1 : 0)
             .animation(animation, value: isExpanded)
+        }
+        .actionSheet(isPresented: $isShowingSheet) {
+            ActionSheet(title: Text(title), message: nil, buttons:
+                buttons.map { btn in
+                    ActionSheet.Button.default(Text(btn.label), action: btn.action)
+            } + [.cancel()]
+            )
         }
     }
     
