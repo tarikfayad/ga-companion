@@ -28,10 +28,10 @@ struct CounterView: View {
                     Color.red.ignoresSafeArea(.all)
                     PlayerCounterView(backgroundColor: .red, fontColor: .white, championArray: champs)
                         .rotationEffect(.degrees(180))
-                } .padding(.bottom, -5)
+                } .padding(.bottom, 10)
             }
             PlayerCounterView(backgroundColor: .blue, fontColor: .white, championArray: champs)
-                .padding(.top, -5)
+                .padding(.top, -20)
         }
         .navigationBarBackButtonHidden(true)
         .toolbar {
