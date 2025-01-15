@@ -23,6 +23,12 @@ struct Grand_Archive_CompanionApp: App {
     }
     
     func populateChampionData() {
+        
+        let descriptor = FetchDescriptor<Champion>()
+        let existingChampions = try? modelContext.fetch(descriptor)
+        
+        let existingNames = Set(existingChampions?.map(\.name) ?? []) // Creating a set to filter out any duplicate champions. Future proofing in case GA reuses names.
+        
         let champions: [Champion] = [
             .init(name: "Aithne, Spirit of Fire", lineage: "", jobs: ["Spirit"], health: 15, level: 0),
             .init(name: "Allen, Beast Beckoner", lineage: "", jobs: ["Tamer"], health: 22, level: 2),
@@ -99,5 +105,15 @@ struct Grand_Archive_CompanionApp: App {
             .init(name: "Zander, Deft Executor", lineage: "Zander", jobs: ["Assassin"], health: 22, level: 2),
             .init(name: "Zander, Prepared Scout", lineage: "", jobs: ["Assassin"], health: 19, level: 1)
         ]
+        
+        champions.forEach { champion in
+            // Filtering out already saved champions as the data will be regenerated on each launch.
+            // This is just an easier way to push updates in future versions.
+            if !existingNames.contains(champion.name) {
+                modelContext.insert(champion)
+            }
+        }
+        
+        try? modelContext.save()
     }
 }

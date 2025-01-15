@@ -8,34 +8,44 @@
 import SwiftUI
 
 struct ContentView: View {
+    @State private var navigateToPlayerView = false
+    @State private var navigateToCardView = false
+    
     var body: some View {
-        ZStack {
-            Color.background.ignoresSafeArea(.all)
-            
-            VStack {
-                Text("Grand Archive Companion")
-                    .font(.title)
-                    .foregroundColor(.white)
+        NavigationStack {
+            ZStack {
+                Color.background.ignoresSafeArea(.all)
+                VStack {
+                    Text("Grand Archive Companion")
+                        .font(.title)
+                        .foregroundColor(.white)
+                        .padding()
+                    
+                    Button {
+                        navigateToPlayerView = true
+                    } label: {
+                        Text("Start")
+                            .frame(width:270, height:27)
+                    }
                     .padding()
-                
-                Button {
+                    .buttonStyle(.borderedProminent)
                     
-                } label: {
-                    Text("Start")
-                        .frame(width:270, height:27)
+                    Button {
+                        navigateToCardView = true
+                    } label: {
+                        Image(systemName: "magnifyingglass")
+                            .imageScale(.large)
+                        Text("Card Search")
+                    }
+                    .padding()
+                    .foregroundStyle(.white)
                 }
-                .padding()
-                .buttonStyle(.borderedProminent)
-                
-                Button {
-                    
-                } label: {
-                    Image(systemName: "magnifyingglass")
-                        .imageScale(.large)
-                    Text("Card Search")
-                }
-                .padding()
-                .foregroundStyle(.white)
+            }
+            .navigationDestination(isPresented: $navigateToPlayerView) {
+                SelectPlayersView()
+            }
+            .navigationDestination(isPresented: $navigateToCardView) {
+                CardSearchView()
             }
         }
     }
