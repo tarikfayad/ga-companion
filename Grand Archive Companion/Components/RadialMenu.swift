@@ -7,6 +7,18 @@
 
 import SwiftUI
 
+struct RadialMenuButtonStyle: ButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .padding()
+            .font(.title)
+            .background(Color.black.opacity(configuration.isPressed ? 0.5 : 1))
+            .clipShape(Circle())
+            .foregroundStyle(.white)
+    }
+}
+    
+
 struct RadialButton {
     let label: String
     let image: Image
@@ -21,7 +33,7 @@ struct RadialMenu: View {
     let openImage: Image
     let buttons: [RadialButton]
     var direction = Angle(degrees: 0)
-    var range = Angle(degrees: 90)
+    var range = Angle(degrees: 160)
     var distance: CGFloat = 100
     var animation = Animation.default
     
@@ -33,6 +45,7 @@ struct RadialMenu: View {
                 isExpanded ? openImage : closedImage
             }
             .accessibility(label: Text(title))
+            .buttonStyle(RadialMenuButtonStyle())
             
             // Setting the radial buttons.
             ForEach(0..<buttons.count, id: \.self) { index in
@@ -45,6 +58,7 @@ struct RadialMenu: View {
                 .accessibility(hidden: isExpanded == false)
                 .accessibility(label: Text(buttons[index].label))
                 .offset(offset(for: index))
+                .buttonStyle(RadialMenuButtonStyle())
             }
             .opacity(isExpanded ? 1 : 0)
             .animation(animation, value: isExpanded)
