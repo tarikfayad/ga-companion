@@ -10,7 +10,7 @@ import SwiftUI
 struct ContentView: View {
     var body: some View {
         ZStack {
-            Color.black.ignoresSafeArea(.all)
+            Color.background.ignoresSafeArea(.all)
             
             VStack {
                 Text("Grand Archive Companion")
@@ -21,10 +21,11 @@ struct ContentView: View {
                 Button {
                     
                 } label: {
-                    Image(systemName: "plus.circle.fill")
-                        .imageScale(.large)
-                    Text("New Game")
-                }.padding()
+                    Text("Start")
+                        .frame(width:270, height:27)
+                }
+                .padding()
+                .buttonStyle(.borderedProminent)
                 
                 Button {
                     
@@ -32,7 +33,9 @@ struct ContentView: View {
                     Image(systemName: "magnifyingglass")
                         .imageScale(.large)
                     Text("Card Search")
-                }.padding()
+                }
+                .padding()
+                .foregroundStyle(.white)
             }
         }
     }
