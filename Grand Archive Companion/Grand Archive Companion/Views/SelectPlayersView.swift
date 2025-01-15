@@ -8,6 +8,12 @@
 import SwiftUI
 
 struct SelectPlayersView: View {
+    
+    @Environment(\.presentationMode) var presentationMode
+    
+    @State private var navigateToPlayerView = false
+    @State private var numberOfPlayers: Int = 1
+    
     var body: some View {
         ZStack {
             Color.background.ignoresSafeArea(.all)
@@ -21,15 +27,31 @@ struct SelectPlayersView: View {
                     .padding(.bottom, 30)
                 
                 HStack {
-                    PlayerButtonView(playerNumber: 1){}
-                    PlayerButtonView(playerNumber: 2){}
-                }
-                
-                HStack {
-                    PlayerButtonView(playerNumber: 3){}
-                    PlayerButtonView(playerNumber: 4){}
+                    PlayerButtonView(playerNumber: 1){
+                        numberOfPlayers = 1
+                        navigateToPlayerView = true
+                    }
+                    PlayerButtonView(playerNumber: 2){
+                        numberOfPlayers = 2
+                        navigateToPlayerView = true
+                    }
                 }
             }.foregroundStyle(.white)
+        }
+        .navigationDestination(isPresented: $navigateToPlayerView) {
+            CounterView(numberOfPlayers: numberOfPlayers)
+        }
+        .navigationBarBackButtonHidden(true)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                Button(action: {
+                    presentationMode.wrappedValue.dismiss() // Go back
+                }) {
+                    HStack {
+                        Image(systemName: "arrow.backward") // Custom back icon
+                    } .foregroundStyle(.white)
+                }
+            }
         }
     }
 }

@@ -46,13 +46,15 @@ struct PlayerCounterView: View {
                 
                 VStack {
                     if let currentChampion = currentChampion {
-                        Text(currentChampion.name)
-                            .font(.system(size: 17))
-                            .padding(.bottom, -30)
-                        
+                        let largeFontSize = geometry.size.height / 3
                         Text(String(damageCounter))
-                            .font(.custom("Helvetica-Bold", size: 300))
-                            .padding(.top, -30)
+                            .font(.custom("Helvetica-Bold", size: largeFontSize))
+                            .padding(.bottom, -1 * largeFontSize / 10)
+                        
+                        Text(currentChampion.name)
+                            .font(.system(size: 17, weight: .bold))
+                            .padding(.top, -1 * largeFontSize / 10)
+                            .textCase(.uppercase)
                     }
                 }
                 
@@ -132,7 +134,7 @@ struct PlayerCounterView: View {
                     VStack {
                         HStack {
                             if showLevelCounter {
-                                CounterButtonView(iconName: "Level"){
+                                CounterButtonView(iconName: "Level", count: currentChampion!.level){
                                     withAnimation(.easeInOut(duration: 0.2)) {
                                         showLevelCounter.toggle()
                                     }
@@ -183,10 +185,10 @@ struct PlayerCounterView: View {
                         currentChampion = champion
                     }
                 }
-                .alert("You Died!", isPresented: $isDead) {
+                .alert("You Died 💀", isPresented: $isDead) {
                             Button("OK", role: .cancel) { }
                         } message: {
-                            Text("Your champion has perished.")
+                            Text("Your champion has perished!")
                         }
         }
     }
