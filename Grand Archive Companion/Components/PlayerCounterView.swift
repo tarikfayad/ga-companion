@@ -58,12 +58,34 @@ struct PlayerCounterView: View {
                         Spacer()
                         
                         VStack {
-                            Image(systemName: "arrow.up.circle")
-                            Text("Level\nUp")
+                            Button {
+                                levelUp()
+                            } label: {
+                                VStack {
+                                    Image(systemName: "arrow.up.circle")
+                                    Text("Level\nUp")
+                                }
+                            }
+                            .frame(width: 75, height: 75)
+                            .background(.black)
+                            .cornerRadius(5)
+                            .padding()
                             
-                            Image(systemName: "arrow.down.circle")
-                            Text("Level\nDown")
-                        }.multilineTextAlignment(.center)
+                            Button {
+                                levelDown()
+                            } label: {
+                                VStack {
+                                    Text("Level\nDown")
+                                    Image(systemName: "arrow.down.circle")
+                                }
+                            }
+                            .frame(width: 75, height: 75)
+                            .background(.black)
+                            .cornerRadius(5)
+                            .padding(.top, -15)
+                        }
+                        .multilineTextAlignment(.center)
+                        .fontWeight(.bold)
                     }
                     
                     Spacer()
@@ -71,16 +93,43 @@ struct PlayerCounterView: View {
                 
             } .foregroundStyle(fontColor)
                 .onAppear() {
-                    if let champion = championArray.first {
+                    let sortedChampions = championArray.sorted(by: { $0.level < $1.level })
+                    if let champion = sortedChampions.first {
                         currentChampion = champion
                         currentHealth = champion.health
                     }
                 }
         }
     }
+    
+    func levelUp() {
+        // Only leveling up if the champion level is below three. We cannot level beyond this.
+        // need to take into account cases where people have multiple champions of the same level.
+        // In this case, we need to show an action sheet and let them select which champion they would like to level into.
+        if currentChampion!.level < 3 {
+            let nextChampion = championArray.first(where: { $0.level == currentChampion!.level + 1 })
+            let healthDifference = nextChampion!.health - currentChampion!.health
+            currentChampion = nextChampion
+            currentHealth += healthDifference
+        }
+    }
+    
+    func levelDown() {
+        if currentChampion!.level > 0 {
+            let previousChampion = championArray.first(where: { $0.level == currentChampion!.level - 1 })
+            let healthDifference =  currentChampion!.health - previousChampion!.health
+            currentChampion = previousChampion
+            currentHealth -= healthDifference
+        }
+    }
 }
 
 #Preview {
-    let champ =  Champion.init(name: "Mordred, Flawless Blade", lineage: "", jobs: ["Warrior"], health: 24, level: 2)
-    PlayerCounterView(backgroundColor: .blue, fontColor: .white, championArray: [champ])
+    let champs: [Champion] =  [
+        .init(name: "Minthe, Spirit of Water", lineage: "", jobs: ["Spirit"], health: 15, level: 0),
+        .init(name: "Mordred, Flawless Blade", lineage: "", jobs: ["Warrior"], health: 24, level: 2),
+        .init(name: "Lorraine, Wandering Warrior", lineage: "", jobs: ["Warrior"], health: 20, level: 1),
+        .init(name: "Lorraine, Spirit Ruler", lineage: "Lorraine", jobs: ["Warrior"], health: 28, level: 3)
+    ]
+    PlayerCounterView(backgroundColor: .blue, fontColor: .white, championArray: champs)
 }
