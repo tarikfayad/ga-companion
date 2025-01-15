@@ -20,7 +20,7 @@ struct RadialMenu: View {
     let closedImage: Image
     let openImage: Image
     let buttons: [RadialButton]
-    var direction = Angle(degrees: 315)
+    var direction = Angle(degrees: 0)
     var range = Angle(degrees: 90)
     var distance: CGFloat = 100
     var animation = Animation.default

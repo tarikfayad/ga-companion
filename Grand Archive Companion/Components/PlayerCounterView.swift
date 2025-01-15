@@ -20,6 +20,16 @@ struct PlayerCounterView: View {
     
     @State private var isShowingLevelUpSheet: Bool = false
     
+    var buttons: [RadialButton] {
+        [
+            RadialButton(label: "Level Counter", image: Image(systemName: "arrow.up.circle"), action: levelTapped),
+            RadialButton(label: "Preparation Counter", image: Image(systemName: "arrow.up.circle"), action: levelTapped),
+            RadialButton(label: "Enlightenment Counter", image: Image(systemName: "arrow.up.circle"), action: levelTapped),
+            RadialButton(label: "Lash Counter", image: Image(systemName: "arrow.up.circle"), action: levelTapped),
+            RadialButton(label: "Floating Memory", image: Image(systemName: "arrow.up.circle"), action: levelTapped),
+        ]
+    }
+    
     var body: some View {
         GeometryReader { geometry in
             ZStack {
@@ -107,6 +117,8 @@ struct PlayerCounterView: View {
                     }
                     
                     Spacer()
+                    
+                    RadialMenu(title: "Counters", closedImage: Image(systemName: "ellipsis.circle"), openImage: Image(systemName: "multiply.circle.fill"), buttons: buttons, animation: .interactiveSpring(response: 0.4, dampingFraction: 0.6))
                 }
                 
             } .foregroundStyle(fontColor)
@@ -158,6 +170,11 @@ struct PlayerCounterView: View {
             currentHealth -= healthDifference
             previousChampions?.removeLast()
         }
+    }
+                     
+    // MARK: - Radial Button Functions
+    func levelTapped() {
+        print("Level Tapped")
     }
 }
 
