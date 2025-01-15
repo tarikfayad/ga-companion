@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct RadialMenuButtonStyle: ButtonStyle {
+private struct RadialMenuButtonStyle: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
             .padding()

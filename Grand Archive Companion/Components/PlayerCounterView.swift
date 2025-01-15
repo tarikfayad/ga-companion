@@ -20,7 +20,7 @@ struct PlayerCounterView: View {
     
     @State private var isShowingLevelUpSheet: Bool = false
     
-    @State private var menuButtonSize: CGSize = CGSize(width: 40, height: 40)
+    @State private var menuButtonSize: CGSize = CGSize(width: 35, height: 35)
     
     var buttons: [RadialButton] {
         [
@@ -28,7 +28,7 @@ struct PlayerCounterView: View {
             RadialButton(label: "Preparation Counter", image: Image("Preparation"), imageSize: menuButtonSize, action: levelTapped),
             RadialButton(label: "Enlightenment Counter", image: Image("Enlightenment"), imageSize: menuButtonSize, action: levelTapped),
             RadialButton(label: "Lash Counter", image: Image("Lash"), imageSize: menuButtonSize, action: levelTapped),
-            RadialButton(label: "Floating Memory", image: Image("Floating Memory"), imageSize: menuButtonSize, action: levelTapped),
+            RadialButton(label: "Floating Memory", image: Image("FloatingMemory"), imageSize: menuButtonSize, action: levelTapped),
         ]
     }
     
