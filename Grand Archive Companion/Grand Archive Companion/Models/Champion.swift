@@ -9,7 +9,7 @@ import Foundation
 import SwiftData
 
 @Model
-class Champion {
+class Champion: Equatable {
     var name: String
     var lineage: String
     var jobs: [String] // Called class in game but I can't use class as a variable name

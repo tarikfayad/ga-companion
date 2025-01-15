@@ -15,6 +15,10 @@ struct PlayerCounterView: View {
     
     @State private var currentHealth: Int = 0
     @State private var currentChampion: Champion?
+    @State private var nextChampions: [Champion]?
+    @State private var previousChampions: [Champion]? = []
+    
+    @State private var isShowingLevelUpSheet: Bool = false
     
     var body: some View {
         GeometryReader { geometry in
@@ -48,7 +52,6 @@ struct PlayerCounterView: View {
                             if currentHealth > 0 { // Only reduce the health if it's above 0.
                                 currentHealth -= 1
                             }
-                            print(currentHealth)
                         }
                 }.foregroundStyle(.clear)
                 
@@ -70,6 +73,21 @@ struct PlayerCounterView: View {
                             .background(.black)
                             .cornerRadius(5)
                             .padding()
+                            .confirmationDialog(
+                                "Select a Champion",
+                                isPresented: $isShowingLevelUpSheet,
+                                titleVisibility: .visible,
+                                presenting: nextChampions
+                            ) { champions in
+                                
+                                ForEach(champions) { champion in
+                                    Button(champion.name) {
+                                        levelUp(champion: champion)
+                                    }
+                                }
+                                
+                                Button("Cancel", role: .cancel) {}
+                            }
                             
                             Button {
                                 levelDown()
@@ -102,13 +120,31 @@ struct PlayerCounterView: View {
         }
     }
     
-    func levelUp() {
-        // Only leveling up if the champion level is below three. We cannot level beyond this.
-        // need to take into account cases where people have multiple champions of the same level.
-        // In this case, we need to show an action sheet and let them select which champion they would like to level into.
-        if currentChampion!.level < 3 {
-            let nextChampion = championArray.first(where: { $0.level == currentChampion!.level + 1 })
+    func levelUp(champion: Champion? = nil) {
+        // If the function is called without a champion being passed to it, we check to see if there are multiple levelup options. If there aren't we automatically level up.
+        if champion == nil {
+            // Only leveling up if the champion level is below three. We cannot level beyond this.
+            if currentChampion!.level < 3 {
+                // Searching for all champions selected that are exactly one level higher than the current champion
+                nextChampions = championArray.filter{ $0.level == currentChampion!.level + 1 }
+                
+                // If there is only one champion that matches the search, automatically level up
+                if nextChampions?.count == 1 {
+                    let nextChampion = nextChampions?.first
+                    let healthDifference = nextChampion!.health - currentChampion!.health
+                    previousChampions?.append(currentChampion!)
+                    currentChampion = nextChampion
+                    currentHealth += healthDifference
+                } else {
+                    // If there are multiple, display an action sheet with the champions to select from.
+                    isShowingLevelUpSheet = true
+                }
+            }
+        } else {
+            // If a champion is passed to the function, we use that as the basis to level up.
+            let nextChampion = champion
             let healthDifference = nextChampion!.health - currentChampion!.health
+            previousChampions?.append(currentChampion!)
             currentChampion = nextChampion
             currentHealth += healthDifference
         }
@@ -116,10 +152,11 @@ struct PlayerCounterView: View {
     
     func levelDown() {
         if currentChampion!.level > 0 {
-            let previousChampion = championArray.first(where: { $0.level == currentChampion!.level - 1 })
+            let previousChampion = previousChampions?.last
             let healthDifference =  currentChampion!.health - previousChampion!.health
             currentChampion = previousChampion
             currentHealth -= healthDifference
+            previousChampions?.removeLast()
         }
     }
 }
@@ -128,6 +165,7 @@ struct PlayerCounterView: View {
     let champs: [Champion] =  [
         .init(name: "Minthe, Spirit of Water", lineage: "", jobs: ["Spirit"], health: 15, level: 0),
         .init(name: "Mordred, Flawless Blade", lineage: "", jobs: ["Warrior"], health: 24, level: 2),
+        .init(name: "Mordred, Great Blade", lineage: "", jobs: ["Warrior"], health: 24, level: 2),
         .init(name: "Lorraine, Wandering Warrior", lineage: "", jobs: ["Warrior"], health: 20, level: 1),
         .init(name: "Lorraine, Spirit Ruler", lineage: "Lorraine", jobs: ["Warrior"], health: 28, level: 3)
     ]
