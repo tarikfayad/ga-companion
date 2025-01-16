@@ -27,11 +27,11 @@ struct SelectPlayersView: View {
                     .padding(.bottom, 30)
                 
                 HStack {
-                    PlayerButtonView(playerNumber: 1){
+                    PlayerButtonView(playerNumber: 1, tintColor: .playerBlue){
                         numberOfPlayers = 1
                         navigateToPlayerView = true
                     }
-                    PlayerButtonView(playerNumber: 2){
+                    PlayerButtonView(playerNumber: 2, tintColor: .playerPink){
                         numberOfPlayers = 2
                         navigateToPlayerView = true
                     }
