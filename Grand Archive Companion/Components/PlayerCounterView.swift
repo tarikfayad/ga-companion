@@ -52,10 +52,11 @@ struct PlayerCounterView: View {
                             .padding(.bottom, -1 * largeFontSize / 10)
                             .padding(.top, -1 * largeFontSize / 10)
                         
-                        Text(currentChampion.name)
-                            .font(.system(size: 17, weight: .bold))
-                            .padding(.top, -1 * largeFontSize / 10)
-                            .textCase(.uppercase)
+                        // MARK: - Current Champion Name. Hiding as it's part of the levelup feature.
+//                        Text(currentChampion.name)
+//                            .font(.system(size: 17, weight: .bold))
+//                            .padding(.top, -1 * largeFontSize / 10)
+//                            .textCase(.uppercase)
                     }
                 }
                 
@@ -84,48 +85,49 @@ struct PlayerCounterView: View {
                         // Levelup Buttons will go here
                         Spacer()
                         
-                        VStack {
-                            Button {
-                                levelUp()
-                            } label: {
-                                VStack {
-                                    Image(systemName: "arrow.up.circle")
-                                    Text("Level\nUp")
-                                }
-                            }
-                            .frame(width: 75, height: 75)
-                            .background(.black)
-                            .cornerRadius(5)
-                            .padding()
-                            .confirmationDialog(
-                                "Select a Champion",
-                                isPresented: $isShowingLevelUpSheet,
-                                titleVisibility: .visible,
-                                presenting: nextChampions
-                            ) { champions in
-                                // Displaying a list of possible next champions for selection.
-                                ForEach(champions) { champion in
-                                    Button(champion.name) {
-                                        levelUp(champion: champion)
-                                    }
-                                }
-                                
-                                Button("Cancel", role: .cancel) {}
-                            }
-                            
-                            Button {
-                                levelDown()
-                            } label: {
-                                VStack {
-                                    Text("Level\nDown")
-                                    Image(systemName: "arrow.down.circle")
-                                }
-                            }
-                            .frame(width: 75, height: 75)
-                            .background(.black)
-                            .cornerRadius(5)
-                            .padding(.top, -15)
-                        }
+                        // MARK: - Level up and level down buttons. Hiding for now as I've received feedback that the feature might not be needed. Going to test without it availiable and then rip out all the logic later if more people agree.
+//                        VStack {
+//                            Button {
+//                                levelUp()
+//                            } label: {
+//                                VStack {
+//                                    Image(systemName: "arrow.up.circle")
+//                                    Text("Level\nUp")
+//                                }
+//                            }
+//                            .frame(width: 75, height: 75)
+//                            .background(.black)
+//                            .cornerRadius(5)
+//                            .padding()
+//                            .confirmationDialog(
+//                                "Select a Champion",
+//                                isPresented: $isShowingLevelUpSheet,
+//                                titleVisibility: .visible,
+//                                presenting: nextChampions
+//                            ) { champions in
+//                                // Displaying a list of possible next champions for selection.
+//                                ForEach(champions) { champion in
+//                                    Button(champion.name) {
+//                                        levelUp(champion: champion)
+//                                    }
+//                                }
+//                                
+//                                Button("Cancel", role: .cancel) {}
+//                            }
+//                            
+//                            Button {
+//                                levelDown()
+//                            } label: {
+//                                VStack {
+//                                    Text("Level\nDown")
+//                                    Image(systemName: "arrow.down.circle")
+//                                }
+//                            }
+//                            .frame(width: 75, height: 75)
+//                            .background(.black)
+//                            .cornerRadius(5)
+//                            .padding(.top, -15)
+//                        }
                         .multilineTextAlignment(.center)
                         .fontWeight(.bold)
                     }
