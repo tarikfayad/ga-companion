@@ -12,7 +12,7 @@ private struct CounterButtonStyle: ButtonStyle {
         configuration.label
             .padding()
             .font(.title)
-            .background(Color.black.opacity(configuration.isPressed ? 0.5 : 1))
+            .background(Color.background.opacity(configuration.isPressed ? 0.5 : 1))
             .clipShape(Circle())
             .foregroundStyle(.white)
     }
