@@ -23,6 +23,7 @@ struct PlayerCounterView: View {
     @State private var leftIsTouched: Bool = false
     @State private var rightIsTouched: Bool = false
     @State var isSinglePlayer: Bool = true
+    @State var isTopPlayer: Bool = false
     
     @State private var menuButtonSize: CGSize = CGSize(width: 35, height: 35)
     
@@ -67,7 +68,9 @@ struct PlayerCounterView: View {
                                 .frame(width: 30)
                                 .font(.custom("Helvetica", size: largeFontSize / 3))
                                 .opacity(0.5)
-                        }.multilineTextAlignment(.center)
+                        }
+                        .multilineTextAlignment(.center)
+                        .padding(.bottom, isTopPlayer ? 35 : 0)
                         
                         // MARK: - Current Champion Name. Hiding as it's part of the levelup feature.
 //                        Text(currentChampion.name)
@@ -172,7 +175,7 @@ struct PlayerCounterView: View {
                         
                         if isSinglePlayer {createCounterViews()} // Placing the counters right above the menu if only one person is tracking.
                         RadialMenu(title: "Counters", closedImage: Image(systemName: "ellipsis.circle"), openImage: Image(systemName: "multiply.circle.fill"), buttons: buttons, animation: .interactiveSpring(response: 0.4, dampingFraction: 0.6))
-                    }
+                    }.padding(.bottom, isTopPlayer ? 35 : 0)
                 }
                 
             } .foregroundStyle(fontColor)
