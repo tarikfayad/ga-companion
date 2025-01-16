@@ -26,12 +26,15 @@ struct CounterView: View {
             if numberOfPlayers > 1 {
                 ZStack {
                     Color.red.ignoresSafeArea(.all)
-                    PlayerCounterView(backgroundColor: .red, fontColor: .white, championArray: champs)
+                    PlayerCounterView(backgroundColor: .red, fontColor: .white, championArray: champs, isSinglePlayer: false)
                         .rotationEffect(.degrees(180))
                 } .padding(.bottom, 10)
+                PlayerCounterView(backgroundColor: .blue, fontColor: .white, championArray: champs, isSinglePlayer: false)
+                    .padding(.top, -20)
+            } else {
+                PlayerCounterView(backgroundColor: .blue, fontColor: .white, championArray: champs)
+                    .padding(.top, -20)
             }
-            PlayerCounterView(backgroundColor: .blue, fontColor: .white, championArray: champs)
-                .padding(.top, -20)
         }
         .navigationBarBackButtonHidden(true)
         .toolbar {

@@ -22,6 +22,7 @@ struct PlayerCounterView: View {
     @State private var isDead: Bool = false
     @State private var leftIsTouched: Bool = false
     @State private var rightIsTouched: Bool = false
+    @State var isSinglePlayer: Bool = true
     
     @State private var menuButtonSize: CGSize = CGSize(width: 35, height: 35)
     
@@ -113,102 +114,63 @@ struct PlayerCounterView: View {
                 }
                 
                 VStack {
-                    HStack {
-                        // Levelup Buttons will go here
-                        Spacer()
-                        
-                        // MARK: - Level up and level down buttons. Hiding for now as I've received feedback that the feature might not be needed. Going to test without it availiable and then rip out all the logic later if more people agree.
-//                        VStack {
-//                            Button {
-//                                levelUp()
-//                            } label: {
-//                                VStack {
-//                                    Image(systemName: "arrow.up.circle")
-//                                    Text("Level\nUp")
-//                                }
-//                            }
-//                            .frame(width: 75, height: 75)
-//                            .background(.black)
-//                            .cornerRadius(5)
-//                            .padding()
-//                            .confirmationDialog(
-//                                "Select a Champion",
-//                                isPresented: $isShowingLevelUpSheet,
-//                                titleVisibility: .visible,
-//                                presenting: nextChampions
-//                            ) { champions in
-//                                // Displaying a list of possible next champions for selection.
-//                                ForEach(champions) { champion in
-//                                    Button(champion.name) {
-//                                        levelUp(champion: champion)
-//                                    }
-//                                }
-//                                
-//                                Button("Cancel", role: .cancel) {}
-//                            }
-//                            
-//                            Button {
-//                                levelDown()
-//                            } label: {
-//                                VStack {
-//                                    Text("Level\nDown")
-//                                    Image(systemName: "arrow.down.circle")
-//                                }
-//                            }
-//                            .frame(width: 75, height: 75)
-//                            .background(.black)
-//                            .cornerRadius(5)
-//                            .padding(.top, -15)
-//                        }
-                        .multilineTextAlignment(.center)
-                        .fontWeight(.bold)
-                    }
+                    if !isSinglePlayer {createCounterViews().padding(.top, 20)} // Placing the counters at the top if multiple people are tracking.
+//                    HStack {
+//                        // Levelup Buttons will go here
+////                        Spacer()
+//                        
+//                        // MARK: - Level up and level down buttons. Hiding for now as I've received feedback that the feature might not be needed. Going to test without it availiable and then rip out all the logic later if more people agree.
+////                        VStack {
+////                            Button {
+////                                levelUp()
+////                            } label: {
+////                                VStack {
+////                                    Image(systemName: "arrow.up.circle")
+////                                    Text("Level\nUp")
+////                                }
+////                            }
+////                            .frame(width: 75, height: 75)
+////                            .background(.black)
+////                            .cornerRadius(5)
+////                            .padding()
+////                            .confirmationDialog(
+////                                "Select a Champion",
+////                                isPresented: $isShowingLevelUpSheet,
+////                                titleVisibility: .visible,
+////                                presenting: nextChampions
+////                            ) { champions in
+////                                // Displaying a list of possible next champions for selection.
+////                                ForEach(champions) { champion in
+////                                    Button(champion.name) {
+////                                        levelUp(champion: champion)
+////                                    }
+////                                }
+////                                
+////                                Button("Cancel", role: .cancel) {}
+////                            }
+////                            
+////                            Button {
+////                                levelDown()
+////                            } label: {
+////                                VStack {
+////                                    Text("Level\nDown")
+////                                    Image(systemName: "arrow.down.circle")
+////                                }
+////                            }
+////                            .frame(width: 75, height: 75)
+////                            .background(.black)
+////                            .cornerRadius(5)
+////                            .padding(.top, -15)
+////                        }
+////                        .multilineTextAlignment(.center)
+////                        .fontWeight(.bold)
+//                    }
                     
                     Spacer()
                     
                     VStack {
-                        HStack {
-                            if showLevelCounter {
-                                CounterButtonView(iconName: "Level", count: currentChampion!.level){
-                                    withAnimation(.easeInOut(duration: 0.2)) {
-                                        showLevelCounter.toggle()
-                                    }
-                                }
-                            }
-                            
-                            if showPreparationCounter {
-                                CounterButtonView(iconName: "Preparation"){
-                                    withAnimation(.easeInOut(duration: 0.2)) {
-                                        showPreparationCounter.toggle()
-                                    }
-                                }
-                            }
-                            
-                            if showEnlightenmentCounter {
-                                CounterButtonView(iconName: "Enlightenment"){
-                                    withAnimation(.easeInOut(duration: 0.2)) {
-                                        showEnlightenmentCounter.toggle()
-                                    }
-                                }
-                            }
-                            
-                            if showLashCounter {
-                                CounterButtonView(iconName: "Lash"){
-                                    withAnimation(.easeInOut(duration: 0.2)) {
-                                        showLashCounter.toggle()
-                                    }
-                                }
-                            }
-                            
-                            if showFloatingMemoryCounter {
-                                CounterButtonView(iconName: "FloatingMemory"){
-                                    withAnimation(.easeInOut(duration: 0.2)) {
-                                        showFloatingMemoryCounter.toggle()
-                                    }
-                                }
-                            }
-                        }
                         
+                        if isSinglePlayer {createCounterViews()} // Placing the counters right above the menu if only one person is tracking.
                         RadialMenu(title: "Counters", closedImage: Image(systemName: "ellipsis.circle"), openImage: Image(systemName: "multiply.circle.fill"), buttons: buttons, animation: .interactiveSpring(response: 0.4, dampingFraction: 0.6))
                     }
                 }
@@ -228,6 +190,49 @@ struct PlayerCounterView: View {
         }
     }
     
+    func createCounterViews() -> some View {
+        return HStack {
+            if showLevelCounter {
+                CounterButtonView(iconName: "Level", count: currentChampion!.level){
+                    withAnimation(.easeInOut(duration: 0.2)) {
+                        showLevelCounter.toggle()
+                    }
+                }
+            }
+            
+            if showPreparationCounter {
+                CounterButtonView(iconName: "Preparation"){
+                    withAnimation(.easeInOut(duration: 0.2)) {
+                        showPreparationCounter.toggle()
+                    }
+                }
+            }
+            
+            if showEnlightenmentCounter {
+                CounterButtonView(iconName: "Enlightenment"){
+                    withAnimation(.easeInOut(duration: 0.2)) {
+                        showEnlightenmentCounter.toggle()
+                    }
+                }
+            }
+            
+            if showLashCounter {
+                CounterButtonView(iconName: "Lash"){
+                    withAnimation(.easeInOut(duration: 0.2)) {
+                        showLashCounter.toggle()
+                    }
+                }
+            }
+            
+            if showFloatingMemoryCounter {
+                CounterButtonView(iconName: "FloatingMemory"){
+                    withAnimation(.easeInOut(duration: 0.2)) {
+                        showFloatingMemoryCounter.toggle()
+                    }
+                }
+            }
+        }
+    }
         // MARK: - Helper Functions
     
     func levelUp(champion: Champion? = nil) {
