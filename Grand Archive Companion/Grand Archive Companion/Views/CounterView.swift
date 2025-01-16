@@ -15,24 +15,17 @@ struct CounterView: View {
     
     var body: some View {
         
-        let champs: [Champion] =  [
-            .init(name: "Minthe, Spirit of Water", lineage: "", jobs: ["Spirit"], health: 15, level: 0),
-            .init(name: "Mordred, Flawless Blade", lineage: "", jobs: ["Warrior"], health: 24, level: 2),
-            .init(name: "Lorraine, Wandering Warrior", lineage: "", jobs: ["Warrior"], health: 20, level: 1),
-            .init(name: "Lorraine, Spirit Ruler", lineage: "Lorraine", jobs: ["Warrior"], health: 28, level: 3)
-        ]
-        
         VStack {
             if numberOfPlayers > 1 {
                 ZStack {
-                    PlayerCounterView(backgroundColor: .playerPink, fontColor: .white, championArray: champs, isSinglePlayer: false, isTopPlayer: true)
+                    PlayerCounterView(backgroundColor: .playerPink, fontColor: .white, isSinglePlayer: false, isTopPlayer: true)
                         .rotationEffect(.degrees(180))
                         .ignoresSafeArea(.all)
                 } .padding(.bottom, 10)
-                PlayerCounterView(backgroundColor: .playerBlue, fontColor: .white, championArray: champs, isSinglePlayer: false)
+                PlayerCounterView(backgroundColor: .playerBlue, fontColor: .white, isSinglePlayer: false)
                     .padding(.top, -20)
             } else {
-                PlayerCounterView(backgroundColor: .playerBlue, fontColor: .white, championArray: champs)
+                PlayerCounterView(backgroundColor: .playerBlue, fontColor: .white)
                     .padding(.top, -20)
             }
         }

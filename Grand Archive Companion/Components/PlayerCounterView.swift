@@ -11,15 +11,9 @@ struct PlayerCounterView: View {
     
     @State var backgroundColor: Color // We'll set the background color based on the player number
     @State var fontColor: Color
-    @State var championArray: [Champion] // An ordered array sorted by level. The level 0 champion will always be first.
     
     @State private var damageCounter: Int = 0
-    @State private var currentChampion: Champion?
-    @State private var nextChampions: [Champion]?
-    @State private var previousChampions: [Champion]? = []
     
-    @State private var isShowingLevelUpSheet: Bool = false
-    @State private var isDead: Bool = false
     @State private var leftIsTouched: Bool = false
     @State private var rightIsTouched: Bool = false
     @State var isSinglePlayer: Bool = true
@@ -49,35 +43,27 @@ struct PlayerCounterView: View {
                 backgroundColor.ignoresSafeArea(.all)
                 
                 VStack {
-                    if let currentChampion = currentChampion {
-                        let largeFontSize = geometry.size.height / 4
+                    let largeFontSize = geometry.size.height / 4
+                    
+                    HStack {
+                        Text("—")
+                            .frame(width: 30)
+                            .font(.custom("Helvetica", size: largeFontSize / 3))
+                            .opacity(0.5)
                         
-                        HStack {
-                            Text("—")
-                                .frame(width: 30)
-                                .font(.custom("Helvetica", size: largeFontSize / 3))
-                                .opacity(0.5)
-                            
-                            Text(String(damageCounter))
-                                .frame(minWidth: 200, minHeight: 100)
-                                .font(.custom("Helvetica-Bold", size: largeFontSize))
-                                .padding(.bottom, -1 * largeFontSize / 10)
-                                .padding(.top, -1 * largeFontSize / 10)
-                            
-                            Text("+")
-                                .frame(width: 30)
-                                .font(.custom("Helvetica", size: largeFontSize / 3))
-                                .opacity(0.5)
-                        }
-                        .multilineTextAlignment(.center)
-                        .padding(.bottom, isTopPlayer ? 35 : 0)
+                        Text(String(damageCounter))
+                            .frame(minWidth: 200, minHeight: 100)
+                            .font(.custom("Helvetica-Bold", size: largeFontSize))
+                            .padding(.bottom, -1 * largeFontSize / 10)
+                            .padding(.top, -1 * largeFontSize / 10)
                         
-                        // MARK: - Current Champion Name. Hiding as it's part of the levelup feature.
-//                        Text(currentChampion.name)
-//                            .font(.system(size: 17, weight: .bold))
-//                            .padding(.top, -1 * largeFontSize / 10)
-//                            .textCase(.uppercase)
+                        Text("+")
+                            .frame(width: 30)
+                            .font(.custom("Helvetica", size: largeFontSize / 3))
+                            .opacity(0.5)
                     }
+                    .multilineTextAlignment(.center)
+                    .padding(.bottom, isTopPlayer ? 35 : 0)
                 }
                 
                 HStack {
@@ -92,7 +78,6 @@ struct PlayerCounterView: View {
                                     leftIsTouched = false
                                     if damageCounter > 0 { // Only reduce damage counters if they're above 0.
                                         damageCounter -= 1
-                                        checkIfDead()
                                     }
                                 }
                         )
@@ -109,7 +94,6 @@ struct PlayerCounterView: View {
                                 }
                                 .onEnded { value in
                                     damageCounter += 1
-                                    checkIfDead()
                                     rightIsTouched = false
                                 }
                         )
@@ -118,56 +102,6 @@ struct PlayerCounterView: View {
                 
                 VStack {
                     if !isSinglePlayer {createCounterViews().padding(.top, 20)} // Placing the counters at the top if multiple people are tracking.
-//                    HStack {
-//                        // Levelup Buttons will go here
-////                        Spacer()
-//                        
-//                        // MARK: - Level up and level down buttons. Hiding for now as I've received feedback that the feature might not be needed. Going to test without it availiable and then rip out all the logic later if more people agree.
-////                        VStack {
-////                            Button {
-////                                levelUp()
-////                            } label: {
-////                                VStack {
-////                                    Image(systemName: "arrow.up.circle")
-////                                    Text("Level\nUp")
-////                                }
-////                            }
-////                            .frame(width: 75, height: 75)
-////                            .background(.black)
-////                            .cornerRadius(5)
-////                            .padding()
-////                            .confirmationDialog(
-////                                "Select a Champion",
-////                                isPresented: $isShowingLevelUpSheet,
-////                                titleVisibility: .visible,
-////                                presenting: nextChampions
-////                            ) { champions in
-////                                // Displaying a list of possible next champions for selection.
-////                                ForEach(champions) { champion in
-////                                    Button(champion.name) {
-////                                        levelUp(champion: champion)
-////                                    }
-////                                }
-////                                
-////                                Button("Cancel", role: .cancel) {}
-////                            }
-////                            
-////                            Button {
-////                                levelDown()
-////                            } label: {
-////                                VStack {
-////                                    Text("Level\nDown")
-////                                    Image(systemName: "arrow.down.circle")
-////                                }
-////                            }
-////                            .frame(width: 75, height: 75)
-////                            .background(.black)
-////                            .cornerRadius(5)
-////                            .padding(.top, -15)
-////                        }
-////                        .multilineTextAlignment(.center)
-////                        .fontWeight(.bold)
-//                    }
                     
                     Spacer()
                     
@@ -179,24 +113,13 @@ struct PlayerCounterView: View {
                 }
                 
             } .foregroundStyle(fontColor)
-                .onAppear() {
-                    let sortedChampions = championArray.sorted(by: { $0.level < $1.level })
-                    if let champion = sortedChampions.first {
-                        currentChampion = champion
-                    }
-                }
-                .alert("You Died 💀", isPresented: $isDead) {
-                            Button("OK", role: .cancel) { }
-                        } message: {
-                            Text("Your champion has perished!")
-                        }
         }
     }
     
     func createCounterViews() -> some View {
         return HStack {
             if showLevelCounter {
-                CounterButtonView(iconName: "Level", count: currentChampion!.level){
+                CounterButtonView(iconName: "Level"){
                     withAnimation(.easeInOut(duration: 0.2)) {
                         showLevelCounter.toggle()
                     }
@@ -236,49 +159,6 @@ struct PlayerCounterView: View {
             }
         }
     }
-        // MARK: - Helper Functions
-    
-    func levelUp(champion: Champion? = nil) {
-        // If the function is called without a champion being passed to it, we check to see if there are multiple levelup options. If there aren't we automatically level up.
-        if champion == nil {
-            // Only leveling up if the champion level is below three. We cannot level beyond this.
-            if currentChampion!.level < 3 {
-                // Searching for all champions selected that are exactly one level higher than the current champion
-                nextChampions = championArray.filter{ $0.level == currentChampion!.level + 1 }
-                
-                // If there is only one champion that matches the search, automatically level up
-                if nextChampions?.count == 1 {
-                    let nextChampion = nextChampions?.first
-                    previousChampions?.append(currentChampion!)
-                    currentChampion = nextChampion
-                    checkIfDead()
-                } else {
-                    // If there are multiple, display an action sheet with the champions to select from.
-                    isShowingLevelUpSheet = true
-                }
-            }
-        } else {
-            // If a champion is passed to the function, we use that as the basis to level up.
-            let nextChampion = champion
-            previousChampions?.append(currentChampion!)
-            currentChampion = nextChampion
-            checkIfDead()
-        }
-    }
-    
-    func levelDown() {
-        if currentChampion!.level > 0 {
-            let previousChampion = previousChampions?.last
-            currentChampion = previousChampion
-            previousChampions?.removeLast()
-            checkIfDead()
-        }
-    }
-    
-    func checkIfDead() {
-        // MARK: - Poor form to just comment this out but I'll clean it up after seeing if I want to remove the feature or not.
-//        if damageCounter >= currentChampion!.health { isDead = true }
-    }
                      
     // MARK: - Radial Button Functions
     func levelTapped() {
@@ -303,12 +183,5 @@ struct PlayerCounterView: View {
 }
 
 #Preview {
-    let champs: [Champion] =  [
-        .init(name: "Minthe, Spirit of Water", lineage: "", jobs: ["Spirit"], health: 15, level: 0),
-        .init(name: "Mordred, Flawless Blade", lineage: "", jobs: ["Warrior"], health: 24, level: 2),
-//        .init(name: "Mordred, Great Blade", lineage: "", jobs: ["Warrior"], health: 24, level: 2),
-        .init(name: "Lorraine, Wandering Warrior", lineage: "", jobs: ["Warrior"], health: 20, level: 1),
-        .init(name: "Lorraine, Spirit Ruler", lineage: "Lorraine", jobs: ["Warrior"], health: 28, level: 3)
-    ]
-    PlayerCounterView(backgroundColor: .blue, fontColor: .white, championArray: champs)
+    PlayerCounterView(backgroundColor: .blue, fontColor: .white)
 }
