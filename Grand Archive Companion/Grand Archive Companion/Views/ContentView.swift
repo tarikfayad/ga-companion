@@ -29,12 +29,12 @@ struct ContentView: View {
                     }
                     .padding()
                     .buttonStyle(.borderedProminent)
+                    .tint(.playerBlue)
                     
                     Button {
                         navigateToCardView = true
                     } label: {
                         Image(systemName: "magnifyingglass")
-                            .imageScale(.large)
                         Text("Card Search")
                     }
                     .padding()

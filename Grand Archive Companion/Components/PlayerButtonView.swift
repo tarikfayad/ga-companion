@@ -9,6 +9,7 @@ import SwiftUI
 
 struct PlayerButtonView: View {
     @State var playerNumber: Int
+    @State var tintColor: Color = .blue
     var onButtonTap: () -> Void
     
     var body: some View {
@@ -19,6 +20,7 @@ struct PlayerButtonView: View {
                 .font(.custom("Helvetica-Bold", size: 64))
                 .frame(width: 128, height: 158)
         }.buttonStyle(.borderedProminent)
+            .tint(tintColor)
     }
 }
 
