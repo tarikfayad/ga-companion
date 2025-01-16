@@ -46,11 +46,25 @@ struct PlayerCounterView: View {
                 
                 VStack {
                     if let currentChampion = currentChampion {
-                        let largeFontSize = geometry.size.height / 3
-                        Text(String(damageCounter))
-                            .font(.custom("Helvetica-Bold", size: largeFontSize))
-                            .padding(.bottom, -1 * largeFontSize / 10)
-                            .padding(.top, -1 * largeFontSize / 10)
+                        let largeFontSize = geometry.size.height / 4
+                        
+                        HStack {
+                            Text("—")
+                                .frame(width: 30)
+                                .font(.custom("Helvetica", size: largeFontSize / 3))
+                                .opacity(0.5)
+                            
+                            Text(String(damageCounter))
+                                .frame(minWidth: 200, minHeight: 100)
+                                .font(.custom("Helvetica-Bold", size: largeFontSize))
+                                .padding(.bottom, -1 * largeFontSize / 10)
+                                .padding(.top, -1 * largeFontSize / 10)
+                            
+                            Text("+")
+                                .frame(width: 30)
+                                .font(.custom("Helvetica", size: largeFontSize / 3))
+                                .opacity(0.5)
+                        }.multilineTextAlignment(.center)
                         
                         // MARK: - Current Champion Name. Hiding as it's part of the levelup feature.
 //                        Text(currentChampion.name)
@@ -60,23 +74,23 @@ struct PlayerCounterView: View {
                     }
                 }
                 
-                VStack {
+                HStack {
                     Rectangle()
-                        .frame(height: geometry.size.height / 2)
-                        .contentShape(Rectangle()) // Necessary to make the tap gesture work
-                        .onTapGesture {
-                            damageCounter += 1
-                            checkIfDead()
-                        }
-                    
-                    Rectangle()
-                        .frame(height: geometry.size.height / 2)
+                        .frame(width: geometry.size.width / 2)
                         .contentShape(Rectangle()) // Necessary to make the tap gesture work
                         .onTapGesture {
                             if damageCounter > 0 { // Only reduce damage counters if they're above 0.
                                 damageCounter -= 1
                                 checkIfDead()
                             }
+                        }
+                    
+                    Rectangle()
+                        .frame(width: geometry.size.width / 2)
+                        .contentShape(Rectangle()) // Necessary to make the tap gesture work
+                        .onTapGesture {
+                            damageCounter += 1
+                            checkIfDead()
                         }
                 }.foregroundStyle(.clear)
                 
