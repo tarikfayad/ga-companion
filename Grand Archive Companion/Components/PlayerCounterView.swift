@@ -31,11 +31,11 @@ struct PlayerCounterView: View {
     
     var buttons: [RadialButton] {
         [
-            RadialButton(label: "Level Counter", image: Image("Level"), imageSize: menuButtonSize, action: levelTapped),
-            RadialButton(label: "Preparation Counter", image: Image("Preparation"), imageSize: menuButtonSize, action: preparationTapped),
-            RadialButton(label: "Enlightenment Counter", image: Image("Enlightenment"), imageSize: menuButtonSize, action: enlightenmentTapped),
-            RadialButton(label: "Lash Counter", image: Image("Lash"), imageSize: menuButtonSize, action: lashTapped),
-            RadialButton(label: "Floating Memory", image: Image("FloatingMemory"), imageSize: menuButtonSize, action: floatingMemoryTapped),
+            RadialButton(label: "Lvl", image: Image("Level"), imageSize: menuButtonSize, action: levelTapped),
+            RadialButton(label: "Prep", image: Image("Preparation"), imageSize: menuButtonSize, action: preparationTapped),
+            RadialButton(label: "Enl", image: Image("Enlightenment"), imageSize: menuButtonSize, action: enlightenmentTapped),
+            RadialButton(label: "Lash", image: Image("Lash"), imageSize: menuButtonSize, action: lashTapped),
+            RadialButton(label: "Fl Mem", image: Image("FloatingMemory"), imageSize: menuButtonSize, action: floatingMemoryTapped),
         ]
     }
     
@@ -236,7 +236,8 @@ struct PlayerCounterView: View {
     }
     
     func checkIfDead() {
-        if damageCounter >= currentChampion!.health { isDead = true }
+        // MARK: - Poor form to just comment this out but I'll clean it up after seeing if I want to remove the feature or not.
+//        if damageCounter >= currentChampion!.health { isDead = true }
     }
                      
     // MARK: - Radial Button Functions

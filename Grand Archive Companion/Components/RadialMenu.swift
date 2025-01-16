@@ -59,10 +59,15 @@ struct RadialMenu: View {
                     buttons[index].action()
                     isExpanded.toggle()
                 } label: {
-                    buttons[index].image
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: buttons[index].imageSize.width, height: buttons[index].imageSize.height)
+                    VStack {
+                        buttons[index].image
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: buttons[index].imageSize.width, height: buttons[index].imageSize.height)
+                        Text(buttons[index].label)
+                            .font(.custom("Helvetica-Light", size: 10))
+                            .textCase(.uppercase)
+                    }
                 }
                 .accessibility(hidden: isExpanded == false)
                 .accessibility(label: Text(buttons[index].label))
