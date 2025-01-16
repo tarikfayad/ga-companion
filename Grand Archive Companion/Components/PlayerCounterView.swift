@@ -20,6 +20,8 @@ struct PlayerCounterView: View {
     
     @State private var isShowingLevelUpSheet: Bool = false
     @State private var isDead: Bool = false
+    @State private var leftIsTouched: Bool = false
+    @State private var rightIsTouched: Bool = false
     
     @State private var menuButtonSize: CGSize = CGSize(width: 35, height: 35)
     
@@ -77,22 +79,38 @@ struct PlayerCounterView: View {
                 HStack {
                     Rectangle()
                         .frame(width: geometry.size.width / 2)
+                        .ignoresSafeArea(.all)
                         .contentShape(Rectangle()) // Necessary to make the tap gesture work
-                        .onTapGesture {
-                            if damageCounter > 0 { // Only reduce damage counters if they're above 0.
-                                damageCounter -= 1
-                                checkIfDead()
-                            }
-                        }
+                        .gesture(
+                            DragGesture(minimumDistance: 0)
+                                .onChanged { _ in leftIsTouched = true }
+                                .onEnded { _ in
+                                    leftIsTouched = false
+                                    if damageCounter > 0 { // Only reduce damage counters if they're above 0.
+                                        damageCounter -= 1
+                                        checkIfDead()
+                                    }
+                                }
+                        )
+                        .foregroundStyle(leftIsTouched ? .black.opacity(0.4) : .clear)
                     
                     Rectangle()
                         .frame(width: geometry.size.width / 2)
+                        .ignoresSafeArea(.all)
                         .contentShape(Rectangle()) // Necessary to make the tap gesture work
-                        .onTapGesture {
-                            damageCounter += 1
-                            checkIfDead()
-                        }
-                }.foregroundStyle(.clear)
+                        .gesture(
+                            DragGesture(minimumDistance: 0)
+                                .onChanged { value in
+                                    rightIsTouched = true
+                                }
+                                .onEnded { value in
+                                    damageCounter += 1
+                                    checkIfDead()
+                                    rightIsTouched = false
+                                }
+                        )
+                        .foregroundStyle(rightIsTouched ? .black.opacity(0.4) : .clear)
+                }
                 
                 VStack {
                     HStack {
