@@ -21,6 +21,22 @@ struct Rule: Codable {
 
 struct Edition: Codable {
     let slug: String
+    let rarity: Int
+    
+    var rarityDescription: String {
+            switch rarity {
+            case 1: return "Common"
+            case 2: return "Uncommon"
+            case 3: return "Rare"
+            case 4: return "Super Rare"
+            case 5: return "Ultra Rare"
+            case 6: return "Promotional Rare"
+            case 7: return "Collector Super Rare"
+            case 8: return "Collector Ultra Rare"
+            case 9: return "Collector Promo Rare"
+            default: return "Unknown Rarity"
+            }
+        }
 }
 
 struct Card: Codable {

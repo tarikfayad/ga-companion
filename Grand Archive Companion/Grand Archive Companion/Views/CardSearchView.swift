@@ -46,7 +46,7 @@ struct CardSearchView: View {
             }
             .overlay{
                 if cards.isEmpty {
-                    ContentUnavailableView("No Cards Found", systemImage: "magnifyingglass.circle", description: Text("Enter a card name to search\nor check the spelling of your search."))
+                    ContentUnavailableView("No Cards to Display", systemImage: "magnifyingglass.circle", description: Text("Enter a card name to search\nor check the spelling of your search."))
                         .foregroundStyle(.white)
                 }
             }

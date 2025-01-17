@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		F3AF34082D3B12EB00875AED /* SDWebImageSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = F3AF34072D3B12EB00875AED /* SDWebImageSwiftUI */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		F397039B2D37059E0042CB5C /* Grand Archive Companion.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Grand Archive Companion.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -28,6 +32,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F3AF34082D3B12EB00875AED /* SDWebImageSwiftUI in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -72,6 +77,7 @@
 			);
 			name = "Grand Archive Companion";
 			packageProductDependencies = (
+				F3AF34072D3B12EB00875AED /* SDWebImageSwiftUI */,
 			);
 			productName = "Grand Archive Companion";
 			productReference = F397039B2D37059E0042CB5C /* Grand Archive Companion.app */;
@@ -102,6 +108,7 @@
 			mainGroup = F39703922D37059E0042CB5C;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
+				F3AF34062D3B12EB00875AED /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = F397039C2D37059E0042CB5C /* Products */;
@@ -333,6 +340,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		F3AF34062D3B12EB00875AED /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SDWebImage/SDWebImageSwiftUI";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.1.3;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		F3AF34072D3B12EB00875AED /* SDWebImageSwiftUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F3AF34062D3B12EB00875AED /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */;
+			productName = SDWebImageSwiftUI;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = F39703932D37059E0042CB5C /* Project object */;
 }
