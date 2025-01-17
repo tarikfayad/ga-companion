@@ -31,7 +31,7 @@ struct Card: Codable {
     let element: String
     let name: String
     let slug: String
-    let effect: String
+    let effect: String?
     let rules: [Rule]?
     let flavorText: String?
     let memoryCost: Int?
@@ -40,7 +40,7 @@ struct Card: Codable {
     let power: Int?
     let life: Int?
     let durability: Int?
-    let speed: Int?
+    let speed: Bool?
     let imageURL: URL?
     let resultEditions: [Edition]
     
@@ -77,7 +77,7 @@ struct Card: Codable {
         element = try container.decode(String.self, forKey: .element)
         name = try container.decode(String.self, forKey: .name)
         slug = try container.decode(String.self, forKey: .slug)
-        effect = try container.decode(String.self, forKey: .effect)
+        effect = try container.decodeIfPresent(String.self, forKey: .effect)
         rules = try container.decodeIfPresent([Rule].self, forKey: .rules)
         flavorText = try container.decodeIfPresent(String.self, forKey: .flavorText)
         memoryCost = try container.decodeIfPresent(Int.self, forKey: .memoryCost)
@@ -86,7 +86,7 @@ struct Card: Codable {
         power = try container.decodeIfPresent(Int.self, forKey: .power)
         life = try container.decodeIfPresent(Int.self, forKey: .life)
         durability = try container.decodeIfPresent(Int.self, forKey: .durability)
-        speed = try container.decodeIfPresent(Int.self, forKey: .speed)
+        speed = try container.decodeIfPresent(Bool.self, forKey: .speed)
         resultEditions = try container.decode([Edition].self, forKey: .resultEditions)
         
         if let firstEdition = resultEditions.first {
