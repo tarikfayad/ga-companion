@@ -24,6 +24,7 @@ struct Edition: Codable {
 }
 
 struct Card: Codable {
+    let uuid: String
     let types: [String]
     let classes: [String]
     let subtypes: [String]
@@ -44,6 +45,7 @@ struct Card: Codable {
     let resultEditions: [Edition]
     
     enum CodingKeys: String, CodingKey {
+        case uuid
         case types
         case classes
         case subtypes
@@ -68,6 +70,7 @@ struct Card: Codable {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         
         // Decode all normal fields
+        uuid = try container.decode(String.self, forKey: .uuid)
         types = try container.decode([String].self, forKey: .types)
         classes = try container.decode([String].self, forKey: .classes)
         subtypes = try container.decode([String].self, forKey: .subtypes)

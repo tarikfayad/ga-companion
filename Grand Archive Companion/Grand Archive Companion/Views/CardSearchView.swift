@@ -8,20 +8,26 @@
 import SwiftUI
 
 struct CardSearchView: View {
+    
+    @State private var searchText: String = ""
+    @State private var cards: [Card] = []
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
-            .onAppear {
-                Task {
-                    do {
-                        let cards = try await performCardSearch(for: "lorraine")
-                        for card in cards {
-                            print(card.name)
-                        }
-                    } catch {
-                        print("Failed to fetch cards: \(error)")
-                    }
+        
+        List {
+            ForEach(cards, id: \.uuid) { card in
+                Text(card.name)
+            }
+        }.onAppear {
+            Task {
+                do {
+                    cards = try await performCardSearch(for: "lorraine")
+                } catch {
+                    print("Failed to fetch cards: \(error)")
                 }
             }
+        }
+            
     }
 }
 
