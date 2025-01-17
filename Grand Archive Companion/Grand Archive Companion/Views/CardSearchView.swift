@@ -13,6 +13,11 @@ struct CardSearchView: View {
     @State private var cards: [Card] = []
     @State private var isLoading: Bool = false
     
+    init() {
+        // Making the background of the search bar white so that it doesn't get lost in the dark background.
+        UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).backgroundColor = .white
+    }
+    
     var body: some View {
         ZStack {
             Color.background.ignoresSafeArea(.all)
@@ -25,7 +30,9 @@ struct CardSearchView: View {
                     }
                 }
             }
-            .searchable(text: $searchText, prompt: "Card name")
+            .scrollContentBackground(.hidden)
+            .background(Color.background)
+            .searchable(text: $searchText, prompt: "Enter a card name...")
             .onSubmit(of: .search){
                 Task {
                     isLoading = true
@@ -40,6 +47,7 @@ struct CardSearchView: View {
             .overlay{
                 if cards.isEmpty {
                     ContentUnavailableView("No Cards Found", systemImage: "magnifyingglass.circle", description: Text("Enter a card name to search\nor check the spelling of your search."))
+                        .foregroundStyle(.white)
                 }
             }
         }
