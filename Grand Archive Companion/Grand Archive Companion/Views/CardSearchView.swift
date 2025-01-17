@@ -21,18 +21,17 @@ struct CardSearchView: View {
     var body: some View {
         ZStack {
             Color.background.ignoresSafeArea(.all)
-            List {
+            List(cards, id: \.uuid) { card in
                 if isLoading {
                     ProgressView("Searching for cards...")
                 } else {
-                    ForEach(cards, id: \.uuid) { card in
-                        Text(card.name)
-                    }
+                    CardRowView(card: card)
+                        .listRowBackground(Color.background)
                 }
             }
             .scrollContentBackground(.hidden)
             .background(Color.background)
-            .searchable(text: $searchText, prompt: "Enter a card name...")
+            .searchable(text: $searchText, placement: .navigationBarDrawer, prompt: "Enter a card name...")
             .onSubmit(of: .search){
                 Task {
                     isLoading = true
@@ -50,6 +49,12 @@ struct CardSearchView: View {
                         .foregroundStyle(.white)
                 }
             }
+        }.onAppear {
+            let appearance = UINavigationBarAppearance()
+            appearance.configureWithOpaqueBackground()
+            appearance.backgroundColor = .background
+            UINavigationBar.appearance().standardAppearance = appearance
+            UINavigationBar.appearance().scrollEdgeAppearance = appearance
         }
             
     }

@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftUI
 
 struct Rule: Codable {
     let title: String
@@ -24,19 +25,34 @@ struct Edition: Codable {
     let rarity: Int
     
     var rarityDescription: String {
-            switch rarity {
-            case 1: return "Common"
-            case 2: return "Uncommon"
-            case 3: return "Rare"
-            case 4: return "Super Rare"
-            case 5: return "Ultra Rare"
-            case 6: return "Promotional Rare"
-            case 7: return "Collector Super Rare"
-            case 8: return "Collector Ultra Rare"
-            case 9: return "Collector Promo Rare"
-            default: return "Unknown Rarity"
-            }
+        switch rarity {
+        case 1: return "Common"
+        case 2: return "Uncommon"
+        case 3: return "Rare"
+        case 4: return "Super Rare"
+        case 5: return "Ultra Rare"
+        case 6: return "Promotional Rare"
+        case 7: return "Collector Super Rare"
+        case 8: return "Collector Ultra Rare"
+        case 9: return "Collector Promo Rare"
+        default: return "Unknown Rarity"
         }
+    }
+    
+    var rarityColor: Color {
+        switch rarity {
+        case 1: return .gray
+        case 2: return .green
+        case 3: return .blue
+        case 4: return .purple
+        case 5: return .yellow
+        case 6: return .pink
+        case 7: return .white
+        case 8: return .white
+        case 9: return .white
+        default: return .gray
+        }
+    }
 }
 
 struct Card: Codable {

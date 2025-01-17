@@ -15,6 +15,7 @@ struct CardRowView: View {
         ZStack {
             HStack {
                 WebImage(url: card.imageURL)
+                    .resizable()
                     .indicator(.activity)
                     .scaledToFit()
                     .frame(width: 60, height: 60)
@@ -24,12 +25,14 @@ struct CardRowView: View {
                         Spacer()
                     }
                     .font(.system(size: 16, weight: .bold))
+                    .foregroundStyle(.white)
                     .padding(.bottom, 4)
                     
                     HStack {
                         Text(card.classes.joined(separator: " / "))
                         Text("•")
                         Text(card.resultEditions.first?.rarityDescription ?? "")
+                            .foregroundStyle(card.resultEditions.first?.rarityColor ?? .gray)
                         Spacer()
                     }
                     .font(.system(size: 12))
