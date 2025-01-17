@@ -6,51 +6,91 @@
 //
 
 import Foundation
-import SwiftData
 
 struct Rule: Codable {
-    var title: String
-    var dateAdded: String
-    var description: String
+    let title: String
+    let dateAdded: String
+    let description: String
+    
+    enum CodingKeys: String, CodingKey {
+        case title
+        case dateAdded = "date_added"
+        case description
+    }
 }
 
-@Model
-class Card: Equatable {
-    var types: [String]
-    var classes: [String]
-    var subtypes: [String]
-    var element: String
-    var name: String
-    var slug: String
-    var effect: String
-    var rules: [Rule]
-    var flavorText: String
-    var memoryCost: Int
-    var reserveCost: Int
-    var level: Int
-    var power: Int
-    var life: Int
-    var durability: Int
-    var speed: Int
+struct Edition: Codable {
+    let slug: String
+}
+
+struct Card: Codable {
+    let types: [String]
+    let classes: [String]
+    let subtypes: [String]
+    let element: String
+    let name: String
+    let slug: String
+    let effect: String
+    let rules: [Rule]?
+    let flavorText: String?
+    let memoryCost: Int?
+    let reserveCost: Int?
+    let level: Int?
+    let power: Int?
+    let life: Int?
+    let durability: Int?
+    let speed: Int?
+    let imageURL: URL?
+    let resultEditions: [Edition]
     
-    init(types: [String], classes: [String], subtypes: [String], element: String, name: String, slug: String, effect: String, rules: [Rule], flavorText: String, memoryCost: Int, reserveCost: Int, level: Int, power: Int, life: Int, durability: Int, speed: Int) {
-        self.types = types
-        self.classes = classes
-        self.subtypes = subtypes
-        self.element = element
-        self.name = name
-        self.slug = slug
-        self.effect = effect
-        self.rules = rules
-        self.flavorText = flavorText
-        self.memoryCost = memoryCost
-        self.reserveCost = reserveCost
-        self.level = level
-        self.power = power
-        self.life = life
-        self.durability = durability
-        self.speed = speed
+    enum CodingKeys: String, CodingKey {
+        case types
+        case classes
+        case subtypes
+        case element
+        case name
+        case slug
+        case effect
+        case rules = "rule" // Maps JSON "rule" to Swift "rules"
+        case flavorText = "flavor"
+        case memoryCost = "cost_memory"
+        case reserveCost = "cost_reserve"
+        case level
+        case power
+        case life
+        case durability
+        case speed
+        case resultEditions = "result_editions"
     }
     
+    // Custom initializer to build the imageURL
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        
+        // Decode all normal fields
+        types = try container.decode([String].self, forKey: .types)
+        classes = try container.decode([String].self, forKey: .classes)
+        subtypes = try container.decode([String].self, forKey: .subtypes)
+        element = try container.decode(String.self, forKey: .element)
+        name = try container.decode(String.self, forKey: .name)
+        slug = try container.decode(String.self, forKey: .slug)
+        effect = try container.decode(String.self, forKey: .effect)
+        rules = try container.decodeIfPresent([Rule].self, forKey: .rules)
+        flavorText = try container.decodeIfPresent(String.self, forKey: .flavorText)
+        memoryCost = try container.decodeIfPresent(Int.self, forKey: .memoryCost)
+        reserveCost = try container.decodeIfPresent(Int.self, forKey: .reserveCost)
+        level = try container.decodeIfPresent(Int.self, forKey: .level)
+        power = try container.decodeIfPresent(Int.self, forKey: .power)
+        life = try container.decodeIfPresent(Int.self, forKey: .life)
+        durability = try container.decodeIfPresent(Int.self, forKey: .durability)
+        speed = try container.decodeIfPresent(Int.self, forKey: .speed)
+        resultEditions = try container.decode([Edition].self, forKey: .resultEditions)
+        
+        if let firstEdition = resultEditions.first {
+            self.imageURL = URL(string: "https://ga-index-public.s3.us-west-2.amazonaws.com/cards/\(firstEdition.slug).jpg")
+        } else {
+            self.imageURL = nil
+        }
+    }
     
 }
