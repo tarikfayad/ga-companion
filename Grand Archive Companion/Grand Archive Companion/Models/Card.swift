@@ -55,6 +55,14 @@ struct Edition: Codable {
     }
 }
 
+struct Legality: Codable {
+    struct Standard: Codable {
+        let limit: Int
+    }
+
+    let STANDARD: Standard?
+}
+
 struct Card: Codable {
     let uuid: String
     let types: [String]
@@ -75,6 +83,11 @@ struct Card: Codable {
     let speed: Bool?
     let imageURL: URL?
     let resultEditions: [Edition]
+    let legality: Legality?
+    
+    var isBanned: Bool {
+        legality?.STANDARD?.limit == 0
+    }
     
     enum CodingKeys: String, CodingKey {
         case uuid
@@ -95,6 +108,7 @@ struct Card: Codable {
         case durability
         case speed
         case resultEditions = "result_editions"
+        case legality
     }
     
     // Custom initializer to build the imageURL
@@ -120,6 +134,7 @@ struct Card: Codable {
         durability = try container.decodeIfPresent(Int.self, forKey: .durability)
         speed = try container.decodeIfPresent(Bool.self, forKey: .speed)
         resultEditions = try container.decode([Edition].self, forKey: .resultEditions)
+        legality = try container.decodeIfPresent(Legality.self, forKey: .legality)
         
         if let firstEdition = resultEditions.first {
             self.imageURL = URL(string: "https://ga-index-public.s3.us-west-2.amazonaws.com/cards/\(firstEdition.slug).jpg")
