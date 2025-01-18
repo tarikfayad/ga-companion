@@ -16,10 +16,15 @@ struct ContentView: View {
             ZStack {
                 Color.background.ignoresSafeArea(.all)
                 VStack {
-                    Text("Grand Archive Companion")
-                        .font(.title)
-                        .foregroundColor(.white)
-                        .padding()
+                    Image("Proxia-Text")
+                        .resizable()
+                        .frame(width: 200, height: 200)
+                    
+                    Text("Grand Archive\nCompanion")
+                        .font(.system(size: 12))
+                        .foregroundColor(.gray)
+                        .multilineTextAlignment(.center)
+                        .textCase(.uppercase)
                     
                     Button {
                         navigateToPlayerView = true
