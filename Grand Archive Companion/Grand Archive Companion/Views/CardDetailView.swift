@@ -80,7 +80,7 @@ struct CardDetailView: View {
                         VStack(alignment: .leading) {
                             SmallBlockHeaderView(title: "Effect")
                             
-                            Text(cardEffect)
+                            Text(buildAttributedStringWithColon(fullText: cardEffect, boldSubstring: "Class Bonus"))
                                 .padding([.leading, .trailing, .bottom], 10)
                                 .padding(.top, 0)
                         }
@@ -100,7 +100,7 @@ struct CardDetailView: View {
                                         .background(Color.gray)
                                         .opacity(0.25)
                                     Spacer()
-                                } // Set color
+                                }
                             }
                         }
                         .applyBlockStyling()
@@ -121,6 +121,28 @@ struct CardDetailView: View {
                 }
             }
         }
+    }
+    
+    func buildAttributedString(fullText: String, boldSubstring: String) -> AttributedString {
+            var attributedString = AttributedString(fullText)
+            if let range = attributedString.range(of: boldSubstring) {
+                attributedString[range].font = .boldSystemFont(ofSize: UIFont.systemFontSize)
+            }
+            return attributedString
+        }
+    
+    func buildAttributedStringWithColon(fullText: String, boldSubstring: String) -> AttributedString {
+        var attributedString = AttributedString(fullText)
+        
+        if let range = attributedString.range(of: boldSubstring) {
+            // Make the substring bold
+            attributedString[range].font = .boldSystemFont(ofSize: 17)
+            
+            // Add ": " immediately after the bolded substring
+            attributedString.insert(AttributedString(": "), at: range.upperBound)
+        }
+        
+        return attributedString
     }
 }
 

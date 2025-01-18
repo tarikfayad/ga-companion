@@ -10,6 +10,7 @@ import SwiftUI
 struct CardSearchView: View {
     
     @Environment(\.presentationMode) var presentationMode
+    @Environment(\.colorScheme) var colorScheme
     
     @State private var searchText: String = ""
     @State private var cards: [Card] = []
@@ -58,6 +59,10 @@ struct CardSearchView: View {
             appearance.backgroundColor = .background
             UINavigationBar.appearance().standardAppearance = appearance
             UINavigationBar.appearance().scrollEdgeAppearance = appearance
+            
+            if colorScheme != .dark {
+                UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).textColor = .white
+            }
         }
         .navigationDestination(isPresented: $navigateToCardView) {
             if let selectedCard = selectedCard {
