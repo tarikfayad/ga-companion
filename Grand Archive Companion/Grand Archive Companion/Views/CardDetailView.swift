@@ -10,7 +10,8 @@ import SDWebImageSwiftUI
 
 struct CardDetailView: View {
     
-    @State var isBanned: Bool = true
+    @Environment(\.presentationMode) var presentationMode
+    
     @State var card: Card
     
     let maxContentWidth = UIScreen.main.bounds.width - 12
@@ -43,10 +44,7 @@ struct CardDetailView: View {
                     
                     if let flavor = card.flavorText {
                         VStack(alignment: .leading) {
-                            Text("FLAVOR TEXT")
-                                .foregroundStyle(.gray)
-                                .padding([.top, .leading], 5)
-                                .font(.system(size: 13, weight: .medium))
+                            SmallBlockHeaderView(title: "Flavor Text")
                             
                             Text(flavor)
                                 .padding([.leading, .trailing, .bottom], 10)
@@ -56,10 +54,7 @@ struct CardDetailView: View {
                     }
                     
                     VStack(alignment: .leading) {
-                        Text("STATS")
-                            .foregroundStyle(.gray)
-                            .padding([.top, .leading], 5)
-                            .font(.system(size: 13, weight: .medium))
+                        SmallBlockHeaderView(title: "Stats")
                         
                         HStack(spacing: 5) {
                             if let memCost = card.memoryCost {
@@ -75,7 +70,7 @@ struct CardDetailView: View {
                             }
                             
                             if let life = card.life {
-                                StatBlockView(statName: "Live", statValue: String(life))
+                                StatBlockView(statName: "Life", statValue: String(life))
                             }
                         }
                     }
@@ -83,10 +78,7 @@ struct CardDetailView: View {
                     
                     if let cardEffect = card.effect {
                         VStack(alignment: .leading) {
-                            Text("EFFECT")
-                                .foregroundStyle(.gray)
-                                .padding([.top, .leading], 5)
-                                .font(.system(size: 13, weight: .medium))
+                            SmallBlockHeaderView(title: "Effect")
                             
                             Text(cardEffect)
                                 .padding([.leading, .trailing, .bottom], 10)
@@ -97,10 +89,7 @@ struct CardDetailView: View {
                     
                     if let rules = card.rules {
                         VStack(alignment: .leading) {
-                            Text("RULES")
-                                .foregroundStyle(.gray)
-                                .padding([.top, .leading], 5)
-                                .font(.system(size: 13, weight: .medium))
+                            SmallBlockHeaderView(title: "Rules")
                             
                             ForEach(rules, id: \.description) { rule in
                                 RuleStackView(rule: rule)
@@ -118,6 +107,18 @@ struct CardDetailView: View {
                     }
                     
                 }.foregroundStyle(.white)
+            }
+        }
+        .navigationBarBackButtonHidden(true)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                Button(action: {
+                    presentationMode.wrappedValue.dismiss() // Go back
+                }) {
+                    HStack {
+                        Image(systemName: "arrow.backward") // Custom back icon
+                    } .foregroundStyle(.white)
+                }
             }
         }
     }

@@ -9,9 +9,14 @@ import SwiftUI
 
 struct CardSearchView: View {
     
+    @Environment(\.presentationMode) var presentationMode
+    
     @State private var searchText: String = ""
     @State private var cards: [Card] = []
     @State private var isLoading: Bool = false
+    
+    @State private var navigateToCardView = false
+    @State private var selectedCard: Card?
     
     init() {
         // Making the background of the search bar white so that it doesn't get lost in the dark background.
@@ -28,7 +33,8 @@ struct CardSearchView: View {
                     CardRowView(card: card)
                         .listRowBackground(Color.background)
                         .onTapGesture {
-                            print(card.name)
+                            selectedCard = card
+                            navigateToCardView = true
                         }
                 }
             }
@@ -58,6 +64,23 @@ struct CardSearchView: View {
             appearance.backgroundColor = .background
             UINavigationBar.appearance().standardAppearance = appearance
             UINavigationBar.appearance().scrollEdgeAppearance = appearance
+        }
+        .navigationDestination(isPresented: $navigateToCardView) {
+            if let selectedCard = selectedCard {
+                CardDetailView(card: selectedCard)
+            }
+        }
+        .navigationBarBackButtonHidden(true)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                Button(action: {
+                    presentationMode.wrappedValue.dismiss() // Go back
+                }) {
+                    HStack {
+                        Image(systemName: "arrow.backward") // Custom back icon
+                    } .foregroundStyle(.white)
+                }
+            }
         }
             
     }

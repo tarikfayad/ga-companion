@@ -29,4 +29,14 @@ extension View {
             .background(Color.white.opacity(0.1))
             .padding(.top, 5)
     }
+    
+    func applyBlockHeaderStyling() -> some View {
+        HStack {
+            Text("STATS")
+                .foregroundStyle(.gray)
+                .padding([.top, .leading, .bottom], 5)
+                .font(.system(size: 13, weight: .medium))
+            Spacer()
+        }
+    }
 }

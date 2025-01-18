@@ -23,8 +23,9 @@ struct RuleStackView: View {
         Text(rule.dateAdded)
             .padding([.leading, .trailing], 10)
             .padding([.top, .bottom], 0)
+            .font(.system(size: 12))
         
-        Text(rule.description)
+        Text(rule.description.replacingOccurrences(of: "\n", with: "\n\n"))
             .padding([.leading, .trailing, .bottom], 10)
             .padding(.top, 0)
     }

@@ -97,7 +97,7 @@ struct Card: Codable {
         case element
         case name
         case slug
-        case effect
+        case effect = "effect_raw"
         case rules = "rule" // Maps JSON "rule" to Swift "rules"
         case flavorText = "flavor"
         case memoryCost = "cost_memory"
@@ -123,9 +123,9 @@ struct Card: Codable {
         element = try container.decode(String.self, forKey: .element)
         name = try container.decode(String.self, forKey: .name)
         slug = try container.decode(String.self, forKey: .slug)
-        effect = try container.decodeIfPresent(String.self, forKey: .effect)
+        effect = try container.decodeIfPresent(String.self, forKey: .effect)?.replacingOccurrences(of: "\n", with: "\n\n")
         rules = try container.decodeIfPresent([Rule].self, forKey: .rules)
-        flavorText = try container.decodeIfPresent(String.self, forKey: .flavorText)
+        flavorText = try container.decodeIfPresent(String.self, forKey: .flavorText)?.replacingOccurrences(of: "\n", with: "\n\n")
         memoryCost = try container.decodeIfPresent(Int.self, forKey: .memoryCost)
         reserveCost = try container.decodeIfPresent(Int.self, forKey: .reserveCost)
         level = try container.decodeIfPresent(Int.self, forKey: .level)
