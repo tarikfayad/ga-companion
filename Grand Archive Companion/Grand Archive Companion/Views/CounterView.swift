@@ -12,21 +12,57 @@ struct CounterView: View {
     @Environment(\.presentationMode) var presentationMode
     
     @State var numberOfPlayers: Int
+    @State private var navigateToCardSearchView = false
     
     var body: some View {
         
         VStack {
             if numberOfPlayers > 1 {
                 ZStack {
-                    PlayerCounterView(backgroundColor: .playerPink, fontColor: .white, isSinglePlayer: false, isTopPlayer: true)
-                        .rotationEffect(.degrees(180))
-                        .ignoresSafeArea(.all)
-                } .padding(.bottom, 10)
-                PlayerCounterView(backgroundColor: .playerBlue, fontColor: .white, isSinglePlayer: false)
-                    .padding(.top, -20)
+                    VStack {
+                        ZStack {
+                            PlayerCounterView(backgroundColor: .playerPink, fontColor: .white, isSinglePlayer: false, isTopPlayer: true)
+                                .rotationEffect(.degrees(180))
+                                .ignoresSafeArea(.all)
+                        }
+                        PlayerCounterView(backgroundColor: .playerBlue, fontColor: .white, isSinglePlayer: false)
+                    }
+                    VStack {
+                        Button {
+                            navigateToCardSearchView = true
+                        } label: {
+                            Image(systemName: "magnifyingglass")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 20, height: 20)
+                                .padding(15)
+                        }
+                        .clipShape(Circle())
+                        .buttonStyle(.borderedProminent)
+                        .tint(Color.black)
+                    }
+                }
             } else {
-                PlayerCounterView(backgroundColor: .playerBlue, fontColor: .white)
-                    .padding(.top, -20)
+                ZStack {
+                    PlayerCounterView(backgroundColor: .playerBlue, fontColor: .white)
+                        .padding(.top, -20)
+                    
+                    VStack {
+                        Button {
+                            navigateToCardSearchView = true
+                        } label: {
+                            Image(systemName: "magnifyingglass")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 20, height: 20)
+                                .padding(15)
+                        }
+                        .clipShape(Circle())
+                        .buttonStyle(.borderedProminent)
+                        .tint(Color.black)
+                        Spacer()
+                    }
+                }
             }
         }
         .navigationBarBackButtonHidden(true)
@@ -40,6 +76,9 @@ struct CounterView: View {
                     } .foregroundStyle(.white)
                 }
             }
+        }
+        .navigationDestination(isPresented: $navigateToCardSearchView) {
+            CardSearchView()
         }
     }
     
