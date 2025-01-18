@@ -97,7 +97,7 @@ struct Card: Codable {
         case element
         case name
         case slug
-        case effect = "effect_raw"
+        case effect
         case rules = "rule" // Maps JSON "rule" to Swift "rules"
         case flavorText = "flavor"
         case memoryCost = "cost_memory"
@@ -123,7 +123,6 @@ struct Card: Codable {
         element = try container.decode(String.self, forKey: .element)
         name = try container.decode(String.self, forKey: .name)
         slug = try container.decode(String.self, forKey: .slug)
-        effect = try container.decodeIfPresent(String.self, forKey: .effect)?.replacingOccurrences(of: "\n", with: "\n\n")
         rules = try container.decodeIfPresent([Rule].self, forKey: .rules)
         flavorText = try container.decodeIfPresent(String.self, forKey: .flavorText)?.replacingOccurrences(of: "\n", with: "\n\n")
         memoryCost = try container.decodeIfPresent(Int.self, forKey: .memoryCost)
@@ -136,10 +135,51 @@ struct Card: Codable {
         resultEditions = try container.decode([Edition].self, forKey: .resultEditions)
         legality = try container.decodeIfPresent(Legality.self, forKey: .legality)
         
+        if let rawEffect = try container.decodeIfPresent(String.self, forKey: .effect) {
+            let transformedEffect = rawEffect
+                .replacingOccurrences(of: "\n", with: "\n\n")
+            
+            // Updated regex pattern to handle all <span> tags
+            let pattern = "<\\s*span[^>]*>(.*?)<\\s*/\\s*span\\s*>"
+
+            do {
+                let regex = try NSRegularExpression(pattern: pattern, options: [.dotMatchesLineSeparators, .caseInsensitive])
+                var result = transformedEffect
+                var previousResult: String
+
+                repeat {
+                    previousResult = result
+                    let range = NSRange(result.startIndex..<result.endIndex, in: result)
+                    result = regex.stringByReplacingMatches(in: result, options: [], range: range, withTemplate: "$1")
+                } while result != previousResult
+
+                effect = result
+            } catch {
+                print("Regex error: \(error)")
+                effect = transformedEffect
+            }
+        } else {
+            effect = nil
+        }
+        
         if let firstEdition = resultEditions.first {
             self.imageURL = URL(string: "https://ga-index-public.s3.us-west-2.amazonaws.com/cards/\(firstEdition.slug).jpg")
         } else {
             self.imageURL = nil
+        }
+    }
+    
+    func removeSpanTags(input: String) -> String {
+        let pattern = "<span[^>]*>(.*?)<\\/span>"
+
+        do {
+            let regex = try NSRegularExpression(pattern: pattern, options: .dotMatchesLineSeparators)
+            let range = NSRange(input.startIndex..<input.endIndex, in: input)
+            let output = regex.stringByReplacingMatches(in: input, options: [], range: range, withTemplate: "$1")
+            return output
+        } catch {
+            print("Invalid regex: \(error.localizedDescription)")
+            return ""
         }
     }
     
