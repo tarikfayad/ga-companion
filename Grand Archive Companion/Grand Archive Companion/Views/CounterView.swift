@@ -41,6 +41,24 @@ struct CounterView: View {
                         .buttonStyle(.borderedProminent)
                         .tint(Color.black)
                     }
+                    
+                    HStack {
+                        VStack {
+                            Button(action: {
+                                presentationMode.wrappedValue.dismiss() // Go back
+                            }) {
+                                HStack {
+                                    Image(systemName: "arrow.backward") // Custom back icon
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(width: 20, height: 20)
+                                } .foregroundStyle(.white)
+                            }
+                            .padding(.leading)
+                            Spacer()
+                        }
+                        Spacer()
+                    }
                 }
             } else {
                 ZStack {
@@ -62,21 +80,29 @@ struct CounterView: View {
                         .tint(Color.black)
                         Spacer()
                     }
-                }
-            }
-        }
-        .navigationBarBackButtonHidden(true)
-        .toolbar {
-            ToolbarItem(placement: .navigationBarLeading) {
-                Button(action: {
-                    presentationMode.wrappedValue.dismiss() // Go back
-                }) {
+                    
                     HStack {
-                        Image(systemName: "arrow.backward") // Custom back icon
-                    } .foregroundStyle(.white)
+                        VStack {
+                            Button(action: {
+                                presentationMode.wrappedValue.dismiss() // Go back
+                            }) {
+                                HStack {
+                                    Image(systemName: "arrow.backward") // Custom back icon
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(width: 20, height: 20)
+                                } .foregroundStyle(.white)
+                            }
+                            .padding(.leading)
+                            Spacer()
+                        }
+                        Spacer()
+                    }
                 }
             }
         }
+        .toolbar(.hidden)
+        .navigationBarBackButtonHidden(true)
         .navigationDestination(isPresented: $navigateToCardSearchView) {
             CardSearchView()
         }
