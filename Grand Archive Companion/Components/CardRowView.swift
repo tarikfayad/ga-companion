@@ -33,6 +33,11 @@ struct CardRowView: View {
                         Text("•")
                         Text(card.resultEditions.first?.rarityDescription ?? "")
                             .foregroundStyle(card.resultEditions.first?.rarityColor ?? .gray)
+                        if card.isBanned {
+                            Text("BANNED")
+                                .foregroundStyle(.white)
+                                .background(.red)
+                        }
                         Spacer()
                     }
                     .font(.system(size: 12))
