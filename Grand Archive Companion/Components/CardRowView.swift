@@ -34,7 +34,7 @@ struct CardRowView: View {
                         Text(card.resultEditions.first?.rarityDescription ?? "")
                             .foregroundStyle(card.resultEditions.first?.rarityColor ?? .gray)
                         if card.isBanned {
-                            Text("BANNED")
+                            Text(" BANNED ")
                                 .foregroundStyle(.white)
                                 .background(.red)
                         }

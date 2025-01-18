@@ -27,6 +27,9 @@ struct CardSearchView: View {
                 } else {
                     CardRowView(card: card)
                         .listRowBackground(Color.background)
+                        .onTapGesture {
+                            print(card.name)
+                        }
                 }
             }
             .scrollContentBackground(.hidden)
