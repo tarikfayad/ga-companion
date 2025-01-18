@@ -18,11 +18,6 @@ struct CardSearchView: View {
     @State private var navigateToCardView = false
     @State private var selectedCard: Card?
     
-    init() {
-        // Making the background of the search bar white so that it doesn't get lost in the dark background.
-        UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).backgroundColor = .white
-    }
-    
     var body: some View {
         ZStack {
             Color.background.ignoresSafeArea(.all)
@@ -39,7 +34,6 @@ struct CardSearchView: View {
                 }
             }
             .scrollContentBackground(.hidden)
-            .background(Color.background)
             .searchable(text: $searchText, placement: .navigationBarDrawer, prompt: "Enter a card name...")
             .onSubmit(of: .search){
                 Task {
