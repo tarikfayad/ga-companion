@@ -54,7 +54,7 @@ struct CounterView: View {
                                         .frame(width: 20, height: 20)
                                 } .foregroundStyle(.white)
                             }
-                            .padding(.leading)
+                            .padding([.leading, .top])
                             Spacer()
                         }
                         Spacer()
@@ -93,7 +93,7 @@ struct CounterView: View {
                                         .frame(width: 20, height: 20)
                                 } .foregroundStyle(.white)
                             }
-                            .padding(.leading)
+                            .padding([.leading, .top])
                             Spacer()
                         }
                         Spacer()
