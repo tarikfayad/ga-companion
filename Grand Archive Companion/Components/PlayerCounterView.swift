@@ -31,11 +31,13 @@ struct PlayerCounterView: View {
     @State private var incrementTapHistory: [Int] = []
     @State private var incrementLastTapTime: Date? = nil
     @State private var incrementShowTapCount: Bool = false
+    var onIncrementUpdate: (Int) -> Void
     
     @State private var decrementTapCount: Int = 0
     @State private var decrementTapHistory: [Int] = []
     @State private var decrementLastTapTime: Date? = nil
     @State private var decrementShowTapCount: Bool = false
+    var onDecrementUpdate: (Int) -> Void
     
     @State private var timer: Timer? = nil
     private let timerDuration = 0.5
@@ -69,7 +71,7 @@ struct PlayerCounterView: View {
                             
                             if decrementShowTapCount {
                                 Text(String(decrementTapCount))
-                                    .font(.custom("Helvetica", size: largeFontSize / 5))
+                                    .font(.custom("Helvetica", size: largeFontSize / 5.5))
                                     .opacity(decrementShowTapCount ? 1 : 0.5)
                             }
                         }.animation(.easeInOut(duration: 0.2), value: decrementShowTapCount)
@@ -88,7 +90,7 @@ struct PlayerCounterView: View {
                             
                             if incrementShowTapCount {
                                 Text(String(incrementTapCount))
-                                    .font(.custom("Helvetica", size: largeFontSize / 5))
+                                    .font(.custom("Helvetica", size: largeFontSize / 5.5))
                                     .opacity(incrementShowTapCount ? 1 : 0.5)
                             }
                         }.animation(.easeInOut(duration: 0.2), value: incrementShowTapCount)
@@ -229,6 +231,7 @@ struct PlayerCounterView: View {
         
         timer = Timer.scheduledTimer(withTimeInterval: timerDuration, repeats: false) { _ in
             incrementTapHistory.append(incrementTapCount)
+            onIncrementUpdate(incrementTapCount)
             resetTapCount()
         }
         
@@ -244,6 +247,7 @@ struct PlayerCounterView: View {
         
         timer = Timer.scheduledTimer(withTimeInterval: timerDuration, repeats: false) { _ in
             decrementTapHistory.append(decrementTapCount)
+            onDecrementUpdate(decrementTapCount * -1)
             resetTapCount()
         }
         
@@ -259,5 +263,12 @@ struct PlayerCounterView: View {
 }
 
 #Preview {
-    PlayerCounterView(backgroundColor: .blue, fontColor: .white)
+    PlayerCounterView (
+        backgroundColor: .blue,
+        fontColor: .white,
+        onIncrementUpdate: { count in
+        },
+        onDecrementUpdate: { count in
+        }
+    )
 }

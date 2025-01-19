@@ -9,6 +9,8 @@ import SwiftUI
 
 struct HistoryView: View {
     
+    @Environment(\.dismiss) private var dismiss
+    
     var multiplayer: Bool
     var playerOneColor: Color
     var playerTwoColor: Color?
@@ -79,9 +81,14 @@ struct HistoryView: View {
                             .listStyle(PlainListStyle())
                         }
                     }
+                    
+                    CircleButtonView(imageName: "xmark", tintColor: .black, padding: 15, buttonSize: 20){dismiss()}
                 }
             }
-        }.onAppear {
+        }
+        .toolbar(.hidden)
+        .navigationBarBackButtonHidden(true)
+        .onAppear {
             generatePlayerOneHistoryStrings()
             generatePlayerTwoHistoryStrings()
         }

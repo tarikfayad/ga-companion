@@ -12,7 +12,12 @@ struct CounterView: View {
     @Environment(\.presentationMode) var presentationMode
     
     @State var numberOfPlayers: Int
+    
+    @State private var playerOneHistory: [Int] = []
+    @State private var playerTwoHistory: [Int] = []
+    
     @State private var navigateToCardSearchView = false
+    @State private var navigateToHistoryView = false
     
     var body: some View {
         
@@ -21,11 +26,32 @@ struct CounterView: View {
                 ZStack {
                     VStack {
                         ZStack {
-                            PlayerCounterView(backgroundColor: .playerPink, fontColor: .white, isSinglePlayer: false, isTopPlayer: true)
-                                .rotationEffect(.degrees(180))
-                                .ignoresSafeArea(.all)
+                            PlayerCounterView (
+                                backgroundColor: .playerPink,
+                                fontColor: .white,
+                                isSinglePlayer: false,
+                                isTopPlayer: true,
+                                onIncrementUpdate: { count in
+                                    playerTwoHistory.append(count)
+                                },
+                                onDecrementUpdate: { count in
+                                    playerTwoHistory.append(count)
+                                }
+                            )
+                            .rotationEffect(.degrees(180))
+                            .ignoresSafeArea(.all)
                         }
-                        PlayerCounterView(backgroundColor: .playerBlue, fontColor: .white, isSinglePlayer: false)
+                        PlayerCounterView (
+                            backgroundColor: .playerBlue,
+                            fontColor: .white,
+                            isSinglePlayer: false,
+                            onIncrementUpdate: { count in
+                                playerOneHistory.append(count)
+                            },
+                            onDecrementUpdate: { count in
+                                playerOneHistory.append(count)
+                            }
+                        )
                     }
                     VStack {
                         HStack {
@@ -33,7 +59,9 @@ struct CounterView: View {
                                 navigateToCardSearchView = true
                             }
                             
-//                            CircleButtonView(imageName: "arrow.counterclockwise.circle", tintColor: Color.black, padding: 10, buttonSize: 30){}
+                            CircleButtonView(imageName: "arrow.counterclockwise.circle", tintColor: Color.black, padding: 10, buttonSize: 30){
+                                navigateToHistoryView = true
+                            }
                         }
                     }
                     
@@ -57,12 +85,26 @@ struct CounterView: View {
                 }
             } else {
                 ZStack {
-                    PlayerCounterView(backgroundColor: .playerBlue, fontColor: .white)
-                        .padding(.top, -20)
+                    PlayerCounterView (
+                        backgroundColor: .playerBlue,
+                        fontColor: .white,
+                        onIncrementUpdate: { count in
+                            playerOneHistory.append(count)
+                        },
+                        onDecrementUpdate: { count in
+                            playerOneHistory.append(count)
+                        }
+                    )
+                    .padding(.top, -20)
                     
                     VStack {
-                        CircleButtonView(imageName: "magnifyingglass", tintColor: Color.black, padding: 15, buttonSize: 20){
-                            navigateToCardSearchView = true
+                        HStack {
+                            CircleButtonView(imageName: "magnifyingglass", tintColor: Color.black, padding: 15, buttonSize: 20){
+                                navigateToCardSearchView = true
+                            }
+                            CircleButtonView(imageName: "arrow.counterclockwise.circle", tintColor: Color.black, padding: 10, buttonSize: 30){
+                                navigateToHistoryView = true
+                            }
                         }
                         Spacer()
                     }
@@ -91,6 +133,13 @@ struct CounterView: View {
         .navigationBarBackButtonHidden(true)
         .navigationDestination(isPresented: $navigateToCardSearchView) {
             CardSearchView()
+        }
+        .navigationDestination(isPresented: $navigateToHistoryView) {
+            if numberOfPlayers == 1 {
+                HistoryView(multiplayer: false, playerOneColor: .playerBlue, playerOneDamageHistory: playerOneHistory)
+            } else {
+                HistoryView(multiplayer: true, playerOneColor: .playerBlue, playerTwoColor: .playerPink, playerOneDamageHistory: playerOneHistory, playerTwoDamageHistory: playerTwoHistory)
+            }
         }
     }
     
