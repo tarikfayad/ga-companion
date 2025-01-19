@@ -80,7 +80,7 @@ struct CardDetailView: View {
                         VStack(alignment: .leading) {
                             SmallBlockHeaderView(title: "Effect")
                             
-                            Text(buildAttributedString(fullText: cardEffect, boldSubstrings: ["Class Bonus", "On Enter", "On Champion Hit", "On Attack", "Floating Memory", "floating memory", "level", "refinement", "buff", "preparation", "lash", "influence", "gather", "summon", "upkeep", "spellshroud", "Reservable", "reservable", "taunt", "distant", "durability", "Stealth", "stealth", "true sight", "Ranged", "intercept", "Foster", "foster", "On Foster", "vigor", "On Sacrifice", "negate"]))
+                            Text(buildAttributedString(fullText: cardEffect.replacingOccurrences(of: "Class Bonus", with: " Class Bonus "), boldSubstrings: [" Class Bonus ", "On Enter", "On Champion Hit", "On Attack", "Floating Memory", "floating memory", "level", "refinement", "buff", "preparation", "lash", "influence", "gather", "summon", "upkeep", "spellshroud", "Reservable", "reservable", "taunt", "distant", "durability", "Stealth", "stealth", "true sight", "Ranged", "intercept", "Foster", "foster", "On Foster", "vigor", "On Sacrifice", "negate"]))
                                 .padding([.leading, .trailing, .bottom], 10)
                                 .padding(.top, 0)
                         }
@@ -127,8 +127,38 @@ struct CardDetailView: View {
         var attributedString = AttributedString(fullText)
         
         for boldSubstring in boldSubstrings {
-            if let range = attributedString.range(of: boldSubstring) {
-                attributedString[range].font = .boldSystemFont(ofSize: 17)
+            do {
+                // Create a regex for the substring
+                let regex = try NSRegularExpression(
+                    pattern: NSRegularExpression.escapedPattern(for: boldSubstring),
+                    options: .caseInsensitive
+                )
+                
+                // Find matches
+                let matches = regex.matches(
+                    in: fullText,
+                    options: [],
+                    range: NSRange(fullText.startIndex..., in: fullText)
+                )
+                
+                for match in matches {
+                    // Convert NSRange to Range<String.Index>
+                    if let stringRange = Range(match.range, in: fullText) {
+                        // Convert String range to AttributedString range
+                        if let attributedRange = Range(stringRange, in: attributedString) {
+                            // Apply bold font to the range
+                            attributedString[attributedRange].font = Font.system(size: 17, weight: .bold)
+                            
+                            // Additional check for "Class Bonus"
+                            if boldSubstring.lowercased() == " class bonus " {
+                                attributedString[attributedRange].backgroundColor = .black
+                                attributedString[attributedRange].foregroundColor = .white
+                            }
+                        }
+                    }
+                }
+            } catch {
+                print("Invalid regex pattern: \(error.localizedDescription)")
             }
         }
         
