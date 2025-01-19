@@ -38,6 +38,7 @@ struct CardSearchView: View {
             }
             .scrollContentBackground(.hidden)
             .searchable(text: $searchText, placement: .navigationBarDrawer, prompt: "Enter a card name...")
+            .disableAutocorrection(true)
             .onSubmit(of: .search){
                 searchCards()
             }
@@ -48,7 +49,7 @@ struct CardSearchView: View {
             }
             .overlay{
                 if cards.isEmpty {
-                    ContentUnavailableView("No Cards to Display", systemImage: "magnifyingglass.circle", description: Text("Enter a card name to search\nor check the spelling of your search."))
+                    ContentUnavailableView("Card Search", systemImage: "magnifyingglass.circle", description: Text("Enter a card name to search\nor check the spelling of your search."))
                         .foregroundStyle(.white)
                 }
             }

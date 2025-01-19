@@ -80,7 +80,7 @@ struct CardDetailView: View {
                         VStack(alignment: .leading) {
                             SmallBlockHeaderView(title: "Effect")
                             
-                            Text(buildAttributedStringWithColon(fullText: cardEffect, boldSubstring: "Class Bonus"))
+                            Text(buildAttributedString(fullText: cardEffect, boldSubstrings: ["Class Bonus", "On Enter", "On Champion Hit", "On Attack", "Floating Memory", "floating memory", "level", "refinement", "buff", "preparation", "lash", "influence", "gather", "summon", "upkeep", "spellshroud", "Reservable", "reservable", "taunt", "distant", "durability", "Stealth", "stealth", "true sight", "Ranged", "intercept", "Foster", "foster", "On Foster", "vigor", "On Sacrifice", "negate"]))
                                 .padding([.leading, .trailing, .bottom], 10)
                                 .padding(.top, 0)
                         }
@@ -123,22 +123,23 @@ struct CardDetailView: View {
         }
     }
     
-    func buildAttributedString(fullText: String, boldSubstring: String) -> AttributedString {
-            var attributedString = AttributedString(fullText)
+    func buildAttributedString(fullText: String, boldSubstrings: [String]) -> AttributedString {
+        var attributedString = AttributedString(fullText)
+        
+        for boldSubstring in boldSubstrings {
             if let range = attributedString.range(of: boldSubstring) {
-                attributedString[range].font = .boldSystemFont(ofSize: UIFont.systemFontSize)
+                attributedString[range].font = .boldSystemFont(ofSize: 17)
             }
-            return attributedString
         }
+        
+        return attributedString
+    }
     
     func buildAttributedStringWithColon(fullText: String, boldSubstring: String) -> AttributedString {
         var attributedString = AttributedString(fullText)
         
         if let range = attributedString.range(of: boldSubstring) {
-            // Make the substring bold
             attributedString[range].font = .boldSystemFont(ofSize: 17)
-            
-            // Add ": " immediately after the bolded substring
             attributedString.insert(AttributedString(": "), at: range.upperBound)
         }
         
