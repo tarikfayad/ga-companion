@@ -26,8 +26,8 @@ struct HistoryView: View {
             ZStack {
                 Color.background.ignoresSafeArea(.all)
                 
-                let singlePlayerWidth = geometry.size.width - 20
-                let multiplayerWidth = geometry.size.width / 2 - 15
+                let singlePlayerWidth = max(geometry.size.width - 20, 0)
+                let multiplayerWidth = max(geometry.size.width / 2 - 15, 0)
                 
                 VStack {
                     HStack {
