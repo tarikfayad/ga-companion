@@ -14,9 +14,22 @@
 		F397039B2D37059E0042CB5C /* Grand Archive Companion.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Grand Archive Companion.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		F37434DD2D3CD1130049C4EB /* Exceptions for "Grand Archive Companion" folder in "Grand Archive Companion" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				"Grand-Archive-Companion-Info.plist",
+			);
+			target = F397039A2D37059E0042CB5C /* Grand Archive Companion */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		F397039D2D37059E0042CB5C /* Grand Archive Companion */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				F37434DD2D3CD1130049C4EB /* Exceptions for "Grand Archive Companion" folder in "Grand Archive Companion" target */,
+			);
 			path = "Grand Archive Companion";
 			sourceTree = "<group>";
 		};
@@ -271,6 +284,7 @@
 				DEVELOPMENT_TEAM = 69TU3D4ZD4;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Grand-Archive-Companion-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = Proxia;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.card-games";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -307,6 +321,7 @@
 				DEVELOPMENT_TEAM = 69TU3D4ZD4;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Grand-Archive-Companion-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = Proxia;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.card-games";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
