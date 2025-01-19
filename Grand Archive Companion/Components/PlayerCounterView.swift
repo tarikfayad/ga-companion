@@ -27,6 +27,18 @@ struct PlayerCounterView: View {
     @State private var showLashCounter = false
     @State private var showFloatingMemoryCounter = false
     
+    @State private var incrementTapCount: Int = 0
+    @State private var incrementTapHistory: [Int] = []
+    @State private var incrementLastTapTime: Date? = nil
+    @State private var incrementShowTapCount: Bool = false
+    
+    @State private var decrementTapCount: Int = 0
+    @State private var decrementTapHistory: [Int] = []
+    @State private var decrementLastTapTime: Date? = nil
+    @State private var decrementShowTapCount: Bool = false
+    
+    @State private var timer: Timer? = nil
+    
     let hapticFeedback = UINotificationFeedbackGenerator()
     
     var buttons: [RadialButton] {
@@ -80,6 +92,7 @@ struct PlayerCounterView: View {
                                     leftIsTouched = false
                                     if damageCounter > 0 { // Only reduce damage counters if they're above 0.
                                         damageCounter -= 1
+                                        handleDecrementTap()
                                     }
                                 }
                         )
@@ -96,6 +109,7 @@ struct PlayerCounterView: View {
                                 }
                                 .onEnded { value in
                                     damageCounter += 1
+                                    handleIncrementTap()
                                     rightIsTouched = false
                                 }
                         )
@@ -186,6 +200,44 @@ struct PlayerCounterView: View {
     
     func floatingMemoryTapped() {
         showFloatingMemoryCounter.toggle()
+    }
+    
+    // MARK: - Tap Counter Functions
+    func handleIncrementTap() {
+        let currentTime = Date()
+        timer?.invalidate()
+        
+        incrementTapCount += 1
+        incrementShowTapCount = true
+        
+        timer = Timer.scheduledTimer(withTimeInterval: 2.0, repeats: false) { _ in
+            incrementTapHistory.append(incrementTapCount)
+            resetTapCount()
+        }
+        
+        incrementLastTapTime = currentTime
+    }
+    
+    func handleDecrementTap() {
+        let currentTime = Date()
+        timer?.invalidate()
+        
+        decrementTapCount += 1
+        decrementShowTapCount = true
+        
+        timer = Timer.scheduledTimer(withTimeInterval: 2.0, repeats: false) { _ in
+            decrementTapHistory.append(decrementTapCount)
+            resetTapCount()
+        }
+        
+        decrementLastTapTime = currentTime
+    }
+    
+    func resetTapCount() {
+        incrementShowTapCount = false
+        decrementShowTapCount = false
+        incrementTapCount = 0
+        decrementTapCount = 0
     }
 }
 
