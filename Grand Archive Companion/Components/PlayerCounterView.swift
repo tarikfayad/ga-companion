@@ -38,6 +38,7 @@ struct PlayerCounterView: View {
     @State private var decrementShowTapCount: Bool = false
     
     @State private var timer: Timer? = nil
+    private let timerDuration = 0.5
     
     let hapticFeedback = UINotificationFeedbackGenerator()
     
@@ -60,10 +61,18 @@ struct PlayerCounterView: View {
                     let largeFontSize = geometry.size.height / 4
                     
                     HStack {
-                        Text("—")
-                            .frame(width: 30)
-                            .font(.custom("Helvetica", size: largeFontSize / 3))
-                            .opacity(0.5)
+                        VStack {
+                            Text("—")
+                                .frame(width: 30)
+                                .font(.custom("Helvetica", size: largeFontSize / 3))
+                                .opacity(decrementShowTapCount ? 1 : 0.5)
+                            
+                            if decrementShowTapCount {
+                                Text(String(decrementTapCount))
+                                    .font(.custom("Helvetica", size: largeFontSize / 5))
+                                    .opacity(decrementShowTapCount ? 1 : 0.5)
+                            }
+                        }.animation(.easeInOut(duration: 0.2), value: decrementShowTapCount)
                         
                         Text(String(damageCounter))
                             .frame(minWidth: 200, minHeight: 100)
@@ -71,10 +80,18 @@ struct PlayerCounterView: View {
                             .padding(.bottom, -1 * largeFontSize / 10)
                             .padding(.top, -1 * largeFontSize / 10)
                         
-                        Text("+")
-                            .frame(width: 30)
-                            .font(.custom("Helvetica", size: largeFontSize / 3))
-                            .opacity(0.5)
+                        VStack {
+                            Text("+")
+                                .frame(width: 30)
+                                .font(.custom("Helvetica", size: largeFontSize / 3))
+                                .opacity(incrementShowTapCount ? 1 : 0.5)
+                            
+                            if incrementShowTapCount {
+                                Text(String(incrementTapCount))
+                                    .font(.custom("Helvetica", size: largeFontSize / 5))
+                                    .opacity(incrementShowTapCount ? 1 : 0.5)
+                            }
+                        }.animation(.easeInOut(duration: 0.2), value: incrementShowTapCount)
                     }
                     .multilineTextAlignment(.center)
                     .padding(.bottom, isTopPlayer ? 35 : 0)
@@ -210,7 +227,7 @@ struct PlayerCounterView: View {
         incrementTapCount += 1
         incrementShowTapCount = true
         
-        timer = Timer.scheduledTimer(withTimeInterval: 2.0, repeats: false) { _ in
+        timer = Timer.scheduledTimer(withTimeInterval: timerDuration, repeats: false) { _ in
             incrementTapHistory.append(incrementTapCount)
             resetTapCount()
         }
@@ -225,7 +242,7 @@ struct PlayerCounterView: View {
         decrementTapCount += 1
         decrementShowTapCount = true
         
-        timer = Timer.scheduledTimer(withTimeInterval: 2.0, repeats: false) { _ in
+        timer = Timer.scheduledTimer(withTimeInterval: timerDuration, repeats: false) { _ in
             decrementTapHistory.append(decrementTapCount)
             resetTapCount()
         }
