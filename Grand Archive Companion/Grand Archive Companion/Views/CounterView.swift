@@ -28,18 +28,9 @@ struct CounterView: View {
                         PlayerCounterView(backgroundColor: .playerBlue, fontColor: .white, isSinglePlayer: false)
                     }
                     VStack {
-                        Button {
+                        CircleButtonView(imageName: "magnifyingglass", tintColor: Color.black){
                             navigateToCardSearchView = true
-                        } label: {
-                            Image(systemName: "magnifyingglass")
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 20, height: 20)
-                                .padding(15)
                         }
-                        .clipShape(Circle())
-                        .buttonStyle(.borderedProminent)
-                        .tint(Color.black)
                     }
                     
                     HStack {
@@ -66,18 +57,9 @@ struct CounterView: View {
                         .padding(.top, -20)
                     
                     VStack {
-                        Button {
+                        CircleButtonView(imageName: "magnifyingglass", tintColor: Color.black){
                             navigateToCardSearchView = true
-                        } label: {
-                            Image(systemName: "magnifyingglass")
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 20, height: 20)
-                                .padding(15)
                         }
-                        .clipShape(Circle())
-                        .buttonStyle(.borderedProminent)
-                        .tint(Color.black)
                         Spacer()
                     }
                     
