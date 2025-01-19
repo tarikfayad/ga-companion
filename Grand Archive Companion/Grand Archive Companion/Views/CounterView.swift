@@ -28,8 +28,12 @@ struct CounterView: View {
                         PlayerCounterView(backgroundColor: .playerBlue, fontColor: .white, isSinglePlayer: false)
                     }
                     VStack {
-                        CircleButtonView(imageName: "magnifyingglass", tintColor: Color.black){
-                            navigateToCardSearchView = true
+                        HStack {
+                            CircleButtonView(imageName: "magnifyingglass", tintColor: Color.black, padding: 15, buttonSize: 20){
+                                navigateToCardSearchView = true
+                            }
+                            
+//                            CircleButtonView(imageName: "arrow.counterclockwise.circle", tintColor: Color.black, padding: 10, buttonSize: 30){}
                         }
                     }
                     
@@ -57,7 +61,7 @@ struct CounterView: View {
                         .padding(.top, -20)
                     
                     VStack {
-                        CircleButtonView(imageName: "magnifyingglass", tintColor: Color.black){
+                        CircleButtonView(imageName: "magnifyingglass", tintColor: Color.black, padding: 15, buttonSize: 20){
                             navigateToCardSearchView = true
                         }
                         Spacer()

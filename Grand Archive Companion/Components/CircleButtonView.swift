@@ -11,8 +11,8 @@ struct CircleButtonView: View {
     
     let imageName: String
     let tintColor: Color
-    let buttonSize: CGFloat = 20
-    let padding: CGFloat = 15
+    let padding: CGFloat
+    let buttonSize: CGFloat
     let action: () -> Void
     
     var body: some View {
@@ -26,9 +26,10 @@ struct CircleButtonView: View {
         .clipShape(Circle())
         .buttonStyle(.borderedProminent)
         .tint(tintColor)
+        .shadow(radius: 5)
     }
 }
 
 #Preview {
-    CircleButtonView(imageName: "magnifyingglass", tintColor: Color.black){}
+    CircleButtonView(imageName: "magnifyingglass", tintColor: Color.black, padding: 15, buttonSize: 20){}
 }
