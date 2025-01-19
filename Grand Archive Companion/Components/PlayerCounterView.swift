@@ -27,6 +27,8 @@ struct PlayerCounterView: View {
     @State private var showLashCounter = false
     @State private var showFloatingMemoryCounter = false
     
+    let hapticFeedback = UINotificationFeedbackGenerator()
+    
     var buttons: [RadialButton] {
         [
             RadialButton(label: "Lvl", image: Image("Level"), imageSize: menuButtonSize, action: levelTapped),
@@ -122,6 +124,7 @@ struct PlayerCounterView: View {
                 CounterButtonView(iconName: "Level"){
                     withAnimation(.easeInOut(duration: 0.2)) {
                         showLevelCounter.toggle()
+                        hapticFeedback.notificationOccurred(.success)
                     }
                 }
             }
@@ -130,6 +133,7 @@ struct PlayerCounterView: View {
                 CounterButtonView(iconName: "Preparation"){
                     withAnimation(.easeInOut(duration: 0.2)) {
                         showPreparationCounter.toggle()
+                        hapticFeedback.notificationOccurred(.success)
                     }
                 }
             }
@@ -138,6 +142,7 @@ struct PlayerCounterView: View {
                 CounterButtonView(iconName: "Enlightenment"){
                     withAnimation(.easeInOut(duration: 0.2)) {
                         showEnlightenmentCounter.toggle()
+                        hapticFeedback.notificationOccurred(.success)
                     }
                 }
             }
@@ -146,6 +151,7 @@ struct PlayerCounterView: View {
                 CounterButtonView(iconName: "Lash"){
                     withAnimation(.easeInOut(duration: 0.2)) {
                         showLashCounter.toggle()
+                        hapticFeedback.notificationOccurred(.success)
                     }
                 }
             }
@@ -154,6 +160,7 @@ struct PlayerCounterView: View {
                 CounterButtonView(iconName: "FloatingMemory"){
                     withAnimation(.easeInOut(duration: 0.2)) {
                         showFloatingMemoryCounter.toggle()
+                        hapticFeedback.notificationOccurred(.success)
                     }
                 }
             }

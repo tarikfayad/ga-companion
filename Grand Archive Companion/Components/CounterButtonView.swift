@@ -7,12 +7,14 @@
 
 import SwiftUI
 
-private struct CounterButtonStyle: ButtonStyle {
-    func makeBody(configuration: Configuration) -> some View {
-        configuration.label
+private struct CounterButtonStyle: ViewModifier {
+    let isPressed: Bool
+    
+    func body(content: Content) -> some View {
+        content
             .padding()
             .font(.title)
-            .background(Color.background.opacity(configuration.isPressed ? 0.5 : 1))
+            .background(Color.background.opacity(isPressed ? 0.5 : 1))
             .clipShape(Circle())
             .foregroundStyle(.white)
     }
@@ -24,34 +26,44 @@ struct CounterButtonView: View {
     @State var count: Int = 0
     
     @State private var size: CGSize = CGSize(width: 30, height: 30)
+    @State private var isPressed: Bool = false
     
     var onLongPress: () -> Void
     
     var body: some View {
-        Button {
-            incrementValue()
-        } label: {
-            VStack {
-                Image("\(iconName)")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: size.width, height: size.height)
-                    .padding(.bottom, -12)
-                Text("\(count)")
-                    .font(.custom("Helvetica-Bold", size: 20))
-                    .textCase(.uppercase)
-            }
+        VStack {
+            Image("\(iconName)")
+                .resizable()
+                .scaledToFit()
+                .frame(width: size.width, height: size.height)
+                .padding(.bottom, -12)
+            Text("\(count)")
+                .font(.custom("Helvetica-Bold", size: 20))
+                .textCase(.uppercase)
         }
-        .buttonStyle(CounterButtonStyle())
+        .modifier(CounterButtonStyle(isPressed: isPressed))
+        .gesture(
+            DragGesture(minimumDistance: 0)
+                .onChanged { _ in
+                    if !isPressed { isPressed = true } // Set isPressed when gesture starts
+                }
+                .onEnded { _ in
+                    isPressed = false // Reset isPressed when gesture ends
+                }
+        )
+        .simultaneousGesture (
+            TapGesture(count: 2)
+                .onEnded {decrementValue()}
+                .exclusively(before: TapGesture().onEnded{incrementValue()})
+        )
         .simultaneousGesture(
             LongPressGesture()
+                .onChanged { _ in isPressed = true }
                 .onEnded { _ in
+                    isPressed = false
                     onLongPress()
                 }
         )
-        .onTapGesture(count: 2) {
-            decrementValue()
-        }
     }
     
     private func incrementValue() {
