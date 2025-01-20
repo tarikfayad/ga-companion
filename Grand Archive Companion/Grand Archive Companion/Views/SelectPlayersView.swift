@@ -15,6 +15,7 @@ struct SelectPlayersView: View {
     @State private var showNewGameSheet = false
     @State private var navigateToPlayerView = false
     @State private var numberOfPlayers: Int = 1
+    @State private var buttonNumber: Int
     
     var body: some View {
         ZStack {
@@ -30,14 +31,18 @@ struct SelectPlayersView: View {
                 
                 HStack {
                     PlayerButtonView(playerNumber: 1, tintColor: .playerBlue){
-                        numberOfPlayers = 1
-                        if Player.arePlayersSaved(context: modelContext) {
+                        buttonNumber = 1
+                        let playerCheck = Player.arePlayersSaved(context: modelContext)
+                        if playerCheck.boolean {
+                            numberOfPlayers = playerCheck.number
                             showNewGameSheet = true
                         } else {navigateToPlayerView = true}
                     }
                     PlayerButtonView(playerNumber: 2, tintColor: .playerPink){
-                        numberOfPlayers = 2
-                        if Player.arePlayersSaved(context: modelContext) {
+                        buttonNumber = 2
+                        let playerCheck = Player.arePlayersSaved(context: modelContext)
+                        if playerCheck.boolean {
+                            numberOfPlayers = playerCheck.number
                             showNewGameSheet = true
                         } else {navigateToPlayerView = true}
                     }
@@ -66,9 +71,10 @@ struct SelectPlayersView: View {
             UINavigationBar.appearance().scrollEdgeAppearance = appearance
         }
         .alert("Start a New Game?", isPresented: $showNewGameSheet) {
-            Text("It looks like you had a game in progress.\nWould you like to start a new one or load the previous one?")
+//            Text("It looks like you had a game in progress.\nWould you like to start a new one or load the previous one?")
             Button {
                 Player.deleteAll(context: modelContext)
+                numberOfPlayers = buttonNumber
                 navigateToPlayerView = true
             } label:{
                 Text("New Game")

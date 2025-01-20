@@ -11,8 +11,6 @@ class Player: Codable {
     var lashCounters: Int
     var enlightenmentCounters: Int
     var floatingMemory: Int
-    
-    @Attribute(.transformable(by: NSValueTransformerName.secureUnarchiveFromDataTransformerName.rawValue))
     var damageHistory: [Damage] // The problem child and the reason I needed to write encode and decode functions.
     
     init(id: UUID = UUID(), index: Int, damage: Int = 0, levelCounters: Int = 0, preparationCounters: Int = 0, lashCounters: Int = 0, enlightenmentCounters: Int = 0, floatingMemory: Int = 0, damageHistory: [Damage] = []) {
@@ -95,56 +93,52 @@ class Player: Codable {
             }
             try context.save()
             print("All players deleted successfully.")
-        } catch {
-            print("Failed to delete players: \(error)")
+        } catch let error as NSError {
+            print("Failed to save context: \(error.localizedDescription)")
+            print("Error details: \(error.userInfo)")
         }
     }
     
-    static func arePlayersSaved(context: ModelContext) -> Bool {
+    static func arePlayersSaved(context: ModelContext) -> (boolean: Bool, number: Int) {
         let fetchDescriptor = FetchDescriptor<Player>()
         do {
             if try context.fetch(fetchDescriptor).isEmpty {
-                return false
+                return (false, 0)
             } else {
-                return true
+                return (true, try context.fetch(fetchDescriptor).count)
             }
         } catch {
-            return false
+            return (false, 0)
         }
     }
 }
 
 @Model
 class Damage: Codable {
-    var id: UUID
     var value: Int
     var sortIndex: Int
 
-    init(id: UUID = UUID(), value: Int, sortIndex: Int) {
-        self.id = id
+    init(value: Int, sortIndex: Int) {
         self.value = value
         self.sortIndex = sortIndex
     }
 
-    // Encoding logic
-    func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(id, forKey: .id)
-        try container.encode(value, forKey: .value)
-        try container.encode(sortIndex, forKey: .sortIndex)
-    }
-
-    // Decoding logic
+    // This initializer is required to conform to Decodable
     required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        id = try container.decode(UUID.self, forKey: .id)
         value = try container.decode(Int.self, forKey: .value)
         sortIndex = try container.decode(Int.self, forKey: .sortIndex)
     }
 
-    // Coding keys
+    // This method is required to conform to Encodable
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(value, forKey: .value)
+        try container.encode(sortIndex, forKey: .sortIndex)
+    }
+
+    // Define the coding keys
     enum CodingKeys: String, CodingKey {
-        case id
         case value
         case sortIndex
     }
