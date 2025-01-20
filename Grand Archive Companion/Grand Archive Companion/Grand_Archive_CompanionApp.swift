@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SwiftData
 
 @main
 struct Grand_Archive_CompanionApp: App {
@@ -13,6 +14,6 @@ struct Grand_Archive_CompanionApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
-        }
+        }.modelContainer(for: [Player.self])
     }
 }

@@ -22,11 +22,6 @@
 			path = "Grand Archive Companion";
 			sourceTree = "<group>";
 		};
-		F39703BB2D37F24A0042CB5C /* Components */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = Components;
-			sourceTree = "<group>";
-		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -47,7 +42,6 @@
 				F348C3232D3DE22F009D7EC9 /* Launch Screen.storyboard */,
 				F397039D2D37059E0042CB5C /* Grand Archive Companion */,
 				F397039C2D37059E0042CB5C /* Products */,
-				F39703BB2D37F24A0042CB5C /* Components */,
 			);
 			sourceTree = "<group>";
 		};
@@ -76,7 +70,6 @@
 			);
 			fileSystemSynchronizedGroups = (
 				F397039D2D37059E0042CB5C /* Grand Archive Companion */,
-				F39703BB2D37F24A0042CB5C /* Components */,
 			);
 			name = "Grand Archive Companion";
 			packageProductDependencies = (
