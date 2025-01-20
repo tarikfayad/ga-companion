@@ -12,6 +12,8 @@ struct CounterView: View {
     
     @Environment(\.presentationMode) var presentationMode
     @Environment(\.modelContext) private var modelContext
+    @State private var isFirstLaunch: Bool = false
+    
     @Query private var players: [Player] // Fetch all Player models
     
     @State var numberOfPlayers: Int
@@ -144,6 +146,7 @@ struct CounterView: View {
             }
         }
         .onAppear {
+            checkFirstLaunch()
             setupPlayers()
         }
         .toolbar(.hidden)
@@ -192,6 +195,19 @@ struct CounterView: View {
     
     private func retrieveHighestSortIndex(player: Player) -> Int {
         return player.damageHistory.max(by: { $0.sortIndex < $1.sortIndex })?.sortIndex ?? 0
+    }
+    
+    private func checkFirstLaunch() {
+        let hasLaunchedKey = "hasLaunchedBefore"
+
+        if !UserDefaults.standard.bool(forKey: hasLaunchedKey) {
+            // First launch
+            isFirstLaunch = true
+            UserDefaults.standard.set(true, forKey: hasLaunchedKey)
+        } else {
+            // Not the first launch
+            isFirstLaunch = false
+        }
     }
 }
 
