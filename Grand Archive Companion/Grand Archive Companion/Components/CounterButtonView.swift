@@ -28,6 +28,7 @@ struct CounterButtonView: View {
     @State private var size: CGSize = CGSize(width: 30, height: 30)
     @State private var isPressed: Bool = false
     
+    var onValueChange: (_ value: Int) -> Void
     var onLongPress: () -> Void
     
     var body: some View {
@@ -68,14 +69,16 @@ struct CounterButtonView: View {
     
     private func incrementValue() {
         count += 1
+        onValueChange(count) // Passing along the current token value
     }
     
     private func decrementValue() {
         if count == 0 { return }
         count -= 1
+        onValueChange(count) // Passing along the current token value
     }
 }
 
 #Preview {
-    CounterButtonView(iconName: "Level"){}
+    CounterButtonView(iconName: "Level", onValueChange: { _ in }, onLongPress: {})
 }

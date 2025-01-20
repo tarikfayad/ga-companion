@@ -27,13 +27,11 @@ struct PlayerCounterView: View {
     @State private var showFloatingMemoryCounter = false
     
     @State private var incrementTapCount: Int = 0
-    @State private var incrementTapHistory: [Int] = []
     @State private var incrementLastTapTime: Date? = nil
     @State private var incrementShowTapCount: Bool = false
     var onIncrementUpdate: (Int) -> Void
     
     @State private var decrementTapCount: Int = 0
-    @State private var decrementTapHistory: [Int] = []
     @State private var decrementLastTapTime: Date? = nil
     @State private var decrementShowTapCount: Bool = false
     var onDecrementUpdate: (Int) -> Void
@@ -153,48 +151,58 @@ struct PlayerCounterView: View {
     func createCounterViews() -> some View {
         return HStack {
             if showLevelCounter {
-                CounterButtonView(iconName: "Level"){
+                CounterButtonView(iconName: "Level", count: player.levelCounters, onValueChange: { value in
+                    player.levelCounters = value
+                }, onLongPress: {
                     withAnimation(.easeInOut(duration: 0.2)) {
                         showLevelCounter.toggle()
                         hapticFeedback.notificationOccurred(.success)
                     }
-                }
+                })
             }
             
             if showPreparationCounter {
-                CounterButtonView(iconName: "Preparation"){
+                CounterButtonView(iconName: "Preparation", count: player.preparationCounters, onValueChange: { value in
+                    player.preparationCounters = value
+                }, onLongPress: {
                     withAnimation(.easeInOut(duration: 0.2)) {
                         showPreparationCounter.toggle()
                         hapticFeedback.notificationOccurred(.success)
                     }
-                }
+                })
             }
             
             if showEnlightenmentCounter {
-                CounterButtonView(iconName: "Enlightenment"){
+                CounterButtonView(iconName: "Enlightenment", count: player.enlightenmentCounters, onValueChange: { value in
+                    player.enlightenmentCounters = value
+                }, onLongPress: {
                     withAnimation(.easeInOut(duration: 0.2)) {
                         showEnlightenmentCounter.toggle()
                         hapticFeedback.notificationOccurred(.success)
                     }
-                }
+                })
             }
             
             if showLashCounter {
-                CounterButtonView(iconName: "Lash"){
+                CounterButtonView(iconName: "Lash", count: player.lashCounters, onValueChange: { value in
+                    player.lashCounters = value
+                }, onLongPress: {
                     withAnimation(.easeInOut(duration: 0.2)) {
                         showLashCounter.toggle()
                         hapticFeedback.notificationOccurred(.success)
                     }
-                }
+                })
             }
             
             if showFloatingMemoryCounter {
-                CounterButtonView(iconName: "FloatingMemory"){
+                CounterButtonView(iconName: "FloatingMemory", count: player.floatingMemory, onValueChange: { value in
+                    player.floatingMemory = value
+                }, onLongPress: {
                     withAnimation(.easeInOut(duration: 0.2)) {
                         showFloatingMemoryCounter.toggle()
                         hapticFeedback.notificationOccurred(.success)
                     }
-                }
+                })
             }
         }
     }
@@ -229,7 +237,6 @@ struct PlayerCounterView: View {
         incrementShowTapCount = true
         
         timer = Timer.scheduledTimer(withTimeInterval: timerDuration, repeats: false) { _ in
-            incrementTapHistory.append(incrementTapCount)
             onIncrementUpdate(incrementTapCount)
             resetTapCount()
         }
@@ -245,7 +252,6 @@ struct PlayerCounterView: View {
         decrementShowTapCount = true
         
         timer = Timer.scheduledTimer(withTimeInterval: timerDuration, repeats: false) { _ in
-            decrementTapHistory.append(decrementTapCount)
             onDecrementUpdate(decrementTapCount * -1)
             resetTapCount()
         }

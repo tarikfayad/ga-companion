@@ -161,37 +161,27 @@ struct CounterView: View {
     }
     
     private func setupPlayers() {
-        // Create a fetch descriptor for all players
-        let fetchDescriptor = FetchDescriptor<Player>()
+        // Load all players from the context
+        let fetchedPlayers = Player.load(context: modelContext)
 
-        do {
-            // Fetch saved players
-            let fetchedPlayers = try modelContext.fetch(fetchDescriptor)
+        // Check for Player One
+        if let existingPlayerOne = fetchedPlayers.first(where: { $0.index == 1 }) {
+            playerOne = existingPlayerOne
+        } else {
+            let newPlayerOne = Player(index: 1)
+            Player.save(players: [newPlayerOne], context: modelContext)
+            playerOne = newPlayerOne
+        }
 
-            // Check for Player One
-            if let existingPlayerOne = fetchedPlayers.first(where: { $0.index == 1 }) {
-                playerOne = existingPlayerOne
+        // Check for Player Two if there is more than one player playing
+        if numberOfPlayers > 1 {
+            if let existingPlayerTwo = fetchedPlayers.first(where: { $0.index == 2 }) {
+                playerTwo = existingPlayerTwo
             } else {
-                let newPlayerOne = Player(index: 1)
-                modelContext.insert(newPlayerOne)
-                playerOne = newPlayerOne
+                let newPlayerTwo = Player(index: 2)
+                Player.save(players: [newPlayerTwo], context: modelContext)
+                playerTwo = newPlayerTwo
             }
-
-            // Check for Player Two if there is more than one player playing.
-            if numberOfPlayers > 1 {
-                if let existingPlayerTwo = fetchedPlayers.first(where: { $0.index == 2 }) {
-                    playerTwo = existingPlayerTwo
-                } else {
-                    let newPlayerTwo = Player(index: 2)
-                    modelContext.insert(newPlayerTwo)
-                    playerTwo = newPlayerTwo
-                }
-            }
-
-            // Save the context after any changes
-            try modelContext.save()
-        } catch {
-            print("Error fetching or saving players: \(error)")
         }
     }
 }
