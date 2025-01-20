@@ -15,10 +15,10 @@ struct HistoryView: View {
     var playerOneColor: Color
     var playerTwoColor: Color?
     
-    var playerOneDamageHistory: [Int] = []
+    var playerOneDamageHistory: [Damage] = []
     @State var playerOneHistory: [String] = []
     
-    var playerTwoDamageHistory: [Int] = []
+    var playerTwoDamageHistory: [Damage] = []
     @State var playerTwoHistory: [String] = []
     
     var body: some View {
@@ -97,25 +97,39 @@ struct HistoryView: View {
     // MARK: - Helper Functions
     private func generatePlayerOneHistoryStrings() {
         var playerDamage = 0
-        for damage in playerOneDamageHistory {
-            playerDamage += damage
-            playerOneHistory.append("\(playerDamage) (\(damage > 0 ? "+\(damage)" : "\(damage)"))")
+        var history = playerOneDamageHistory
+        history.sort { $0.sortIndex < $1.sortIndex }
+        for damage in history {
+            playerDamage += damage.value
+            playerOneHistory.append("\(playerDamage) (\(damage.value > 0 ? "+\(damage.value)" : "\(damage.value)"))")
         }
     }
     
     private func generatePlayerTwoHistoryStrings() {
         var playerDamage = 0
-        for damage in playerTwoDamageHistory {
-            playerDamage += damage
-            playerTwoHistory.append("\(playerDamage) (\(damage > 0 ? "+\(damage)" : "\(damage)"))")
+        var history = playerTwoDamageHistory
+        history.sort { $0.sortIndex < $1.sortIndex }
+        for damage in history {
+            playerDamage += damage.value
+            playerTwoHistory.append("\(playerDamage) (\(damage.value > 0 ? "+\(damage.value)" : "\(damage.value)"))")
         }
     }
 }
 
 #Preview("One Player") {
-    HistoryView(multiplayer: false, playerOneColor: .playerBlue, playerOneDamageHistory: [1, 2, -5, 4])
+    let damageHistory: [Damage] = [
+        Damage(value: 1, sortIndex: 0),
+        Damage(value: 1, sortIndex: 3),
+        Damage(value: 5, sortIndex: 2),
+    ]
+    HistoryView(multiplayer: false, playerOneColor: .playerBlue, playerOneDamageHistory: damageHistory)
 }
 
 #Preview("Two Players") {
-    HistoryView(multiplayer: true, playerOneColor: .playerBlue, playerTwoColor: .playerPink, playerOneDamageHistory: [1, 2, -5, 4], playerTwoDamageHistory: [10, 20, -15, 12])
+    let damageHistory: [Damage] = [
+        Damage(value: 1, sortIndex: 0),
+        Damage(value: 1, sortIndex: 3),
+        Damage(value: 5, sortIndex: 2),
+    ]
+    HistoryView(multiplayer: true, playerOneColor: .playerBlue, playerTwoColor: .playerPink, playerOneDamageHistory: damageHistory, playerTwoDamageHistory: damageHistory)
 }

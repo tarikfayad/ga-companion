@@ -1,9 +1,3 @@
-//
-//  Player.swift
-//  Grand Archive Companion
-//
-//  Created by Tarik Fayad on 1/20/25.
-//
 import Foundation
 import SwiftData
 
@@ -19,9 +13,9 @@ class Player: Codable {
     var floatingMemory: Int
     
     @Attribute(.transformable(by: NSValueTransformerName.secureUnarchiveFromDataTransformerName.rawValue))
-    var damageHistory: [Int] // The problem child and the reason I needed to write encode and decode functions.
+    var damageHistory: [Damage] // The problem child and the reason I needed to write encode and decode functions.
     
-    init(id: UUID = UUID(), index: Int, damage: Int = 0, levelCounters: Int = 0, preparationCounters: Int = 0, lashCounters: Int = 0, enlightenmentCounters: Int = 0, floatingMemory: Int = 0, damageHistory: [Int] = []) {
+    init(id: UUID = UUID(), index: Int, damage: Int = 0, levelCounters: Int = 0, preparationCounters: Int = 0, lashCounters: Int = 0, enlightenmentCounters: Int = 0, floatingMemory: Int = 0, damageHistory: [Damage] = []) {
         self.id = id
         self.index = index
         self.damage = damage
@@ -58,7 +52,7 @@ class Player: Codable {
         lashCounters = try container.decode(Int.self, forKey: .lashCounters)
         enlightenmentCounters = try container.decode(Int.self, forKey: .enlightenmentCounters)
         floatingMemory = try container.decode(Int.self, forKey: .floatingMemory)
-        damageHistory = try container.decode([Int].self, forKey: .damageHistory)
+        damageHistory = try container.decode([Damage].self, forKey: .damageHistory)
     }
     
     enum CodingKeys: String, CodingKey {
@@ -104,5 +98,54 @@ class Player: Codable {
         } catch {
             print("Failed to delete players: \(error)")
         }
+    }
+    
+    static func arePlayersSaved(context: ModelContext) -> Bool {
+        let fetchDescriptor = FetchDescriptor<Player>()
+        do {
+            if try context.fetch(fetchDescriptor).isEmpty {
+                return false
+            } else {
+                return true
+            }
+        } catch {
+            return false
+        }
+    }
+}
+
+@Model
+class Damage: Codable {
+    var id: UUID
+    var value: Int
+    var sortIndex: Int
+
+    init(id: UUID = UUID(), value: Int, sortIndex: Int) {
+        self.id = id
+        self.value = value
+        self.sortIndex = sortIndex
+    }
+
+    // Encoding logic
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(id, forKey: .id)
+        try container.encode(value, forKey: .value)
+        try container.encode(sortIndex, forKey: .sortIndex)
+    }
+
+    // Decoding logic
+    required init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        id = try container.decode(UUID.self, forKey: .id)
+        value = try container.decode(Int.self, forKey: .value)
+        sortIndex = try container.decode(Int.self, forKey: .sortIndex)
+    }
+
+    // Coding keys
+    enum CodingKeys: String, CodingKey {
+        case id
+        case value
+        case sortIndex
     }
 }

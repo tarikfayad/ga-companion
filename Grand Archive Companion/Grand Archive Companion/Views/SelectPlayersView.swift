@@ -10,7 +10,9 @@ import SwiftUI
 struct SelectPlayersView: View {
     
     @Environment(\.presentationMode) var presentationMode
+    @Environment(\.modelContext) private var modelContext
     
+    @State private var showNewGameSheet = false
     @State private var navigateToPlayerView = false
     @State private var numberOfPlayers: Int = 1
     
@@ -29,11 +31,15 @@ struct SelectPlayersView: View {
                 HStack {
                     PlayerButtonView(playerNumber: 1, tintColor: .playerBlue){
                         numberOfPlayers = 1
-                        navigateToPlayerView = true
+                        if Player.arePlayersSaved(context: modelContext) {
+                            showNewGameSheet = true
+                        } else {navigateToPlayerView = true}
                     }
                     PlayerButtonView(playerNumber: 2, tintColor: .playerPink){
                         numberOfPlayers = 2
-                        navigateToPlayerView = true
+                        if Player.arePlayersSaved(context: modelContext) {
+                            showNewGameSheet = true
+                        } else {navigateToPlayerView = true}
                     }
                 }
             }.foregroundStyle(.white)
@@ -58,6 +64,21 @@ struct SelectPlayersView: View {
             appearance.configureWithTransparentBackground()
             UINavigationBar.appearance().standardAppearance = appearance
             UINavigationBar.appearance().scrollEdgeAppearance = appearance
+        }
+        .alert("Start a New Game?", isPresented: $showNewGameSheet) {
+            Text("It looks like you had a game in progress.\nWould you like to start a new one or load the previous one?")
+            Button {
+                Player.deleteAll(context: modelContext)
+                navigateToPlayerView = true
+            } label:{
+                Text("New Game")
+            }.padding()
+            
+            Button {
+                navigateToPlayerView = true
+            } label:{
+                Text("Load Game")
+            }.padding()
         }
     }
 }
