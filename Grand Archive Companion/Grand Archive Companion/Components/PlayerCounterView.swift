@@ -11,8 +11,7 @@ struct PlayerCounterView: View {
     
     @State var backgroundColor: Color // We'll set the background color based on the player number
     @State var fontColor: Color
-    
-    @State private var damageCounter: Int = 0
+    @Binding var player: Player
     
     @State private var leftIsTouched: Bool = false
     @State private var rightIsTouched: Bool = false
@@ -76,7 +75,7 @@ struct PlayerCounterView: View {
                             }
                         }.animation(.easeInOut(duration: 0.2), value: decrementShowTapCount)
                         
-                        Text(String(damageCounter))
+                        Text(String(player.damage))
                             .frame(minWidth: 200, minHeight: 100)
                             .font(.custom("Helvetica-Bold", size: largeFontSize))
                             .padding(.bottom, -1 * largeFontSize / 10)
@@ -109,8 +108,8 @@ struct PlayerCounterView: View {
                                 .onChanged { _ in leftIsTouched = true }
                                 .onEnded { _ in
                                     leftIsTouched = false
-                                    if damageCounter > 0 { // Only reduce damage counters if they're above 0.
-                                        damageCounter -= 1
+                                    if player.damage > 0 { // Only reduce damage counters if they're above 0.
+                                        player.damage -= 1
                                         handleDecrementTap()
                                     }
                                 }
@@ -127,7 +126,7 @@ struct PlayerCounterView: View {
                                     rightIsTouched = true
                                 }
                                 .onEnded { value in
-                                    damageCounter += 1
+                                    player.damage += 1
                                     handleIncrementTap()
                                     rightIsTouched = false
                                 }
@@ -263,9 +262,10 @@ struct PlayerCounterView: View {
 }
 
 #Preview {
+    @Previewable @State var player = Player(index: 1)
     PlayerCounterView (
         backgroundColor: .blue,
-        fontColor: .white,
+        fontColor: .white, player: $player,
         onIncrementUpdate: { count in
         },
         onDecrementUpdate: { count in
