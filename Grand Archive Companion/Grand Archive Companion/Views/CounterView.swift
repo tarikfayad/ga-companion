@@ -44,12 +44,10 @@ struct CounterView: View {
                                 isSinglePlayer: false,
                                 isTopPlayer: true,
                                 onIncrementUpdate: { count in
-                                    let damage = Damage(value: count, sortIndex:retrieveHighestSortIndex(player: playerTwo)+1)
-                                    playerTwo.damageHistory.append(damage)
+                                    addDamage(to: &playerTwo, value: count)
                                 },
                                 onDecrementUpdate: { count in
-                                    let damage = Damage(value: count, sortIndex:retrieveHighestSortIndex(player: playerTwo)+1)
-                                    playerTwo.damageHistory.append(damage)
+                                    addDamage(to: &playerTwo, value: count)
                                 }
                             )
                             .rotationEffect(.degrees(180))
@@ -61,12 +59,10 @@ struct CounterView: View {
                             player: $playerOne,
                             isSinglePlayer: false,
                             onIncrementUpdate: { count in
-                                let damage = Damage(value: count, sortIndex:retrieveHighestSortIndex(player: playerOne)+1)
-                                playerOne.damageHistory.append(damage)
+                                addDamage(to: &playerOne, value: count)
                             },
                             onDecrementUpdate: { count in
-                                let damage = Damage(value: count, sortIndex:retrieveHighestSortIndex(player: playerOne)+1)
-                                playerOne.damageHistory.append(damage)
+                                addDamage(to: &playerOne, value: count)
                             }
                         )
                     }
@@ -107,12 +103,10 @@ struct CounterView: View {
                         fontColor: .white,
                         player: $playerOne,
                         onIncrementUpdate: { count in
-                            let damage = Damage(value: count, sortIndex:retrieveHighestSortIndex(player: playerOne)+1)
-                            playerOne.damageHistory.append(damage)
+                            addDamage(to: &playerOne, value: count)
                         },
                         onDecrementUpdate: { count in
-                            let damage = Damage(value: count, sortIndex:retrieveHighestSortIndex(player: playerOne)+1)
-                            playerOne.damageHistory.append(damage)
+                            addDamage(to: &playerOne, value: count)
                         }
                     )
                     .padding(.top, -20)
@@ -189,6 +183,11 @@ struct CounterView: View {
                 playerTwo = newPlayerTwo
             }
         }
+    }
+    
+    private func addDamage(to player: inout Player, value: Int) {
+        let damage = Damage(player: player, value: value, sortIndex: retrieveHighestSortIndex(player: player) + 1)
+        player.damageHistory.append(damage)
     }
     
     private func retrieveHighestSortIndex(player: Player) -> Int {

@@ -117,19 +117,53 @@ struct HistoryView: View {
 }
 
 #Preview("One Player") {
-    let damageHistory: [Damage] = [
-        Damage(value: 1, sortIndex: 0),
-        Damage(value: 1, sortIndex: 3),
-        Damage(value: 5, sortIndex: 2),
-    ]
-    HistoryView(multiplayer: false, playerOneColor: .playerBlue, playerOneDamageHistory: damageHistory)
+    createOnePlayerPreview()
 }
 
 #Preview("Two Players") {
+    createTwoPlayersPreview()
+}
+
+// MARK: - Preview Helper Functions
+func createOnePlayerPreview() -> some View {
+    let playerOne = Player(index: 1)
     let damageHistory: [Damage] = [
-        Damage(value: 1, sortIndex: 0),
-        Damage(value: 1, sortIndex: 3),
-        Damage(value: 5, sortIndex: 2),
+        Damage(player: playerOne, value: 1, sortIndex: 0),
+        Damage(player: playerOne, value: 1, sortIndex: 3),
+        Damage(player: playerOne, value: 5, sortIndex: 2),
     ]
-    HistoryView(multiplayer: true, playerOneColor: .playerBlue, playerTwoColor: .playerPink, playerOneDamageHistory: damageHistory, playerTwoDamageHistory: damageHistory)
+    playerOne.damageHistory = damageHistory
+
+    return HistoryView(
+        multiplayer: false,
+        playerOneColor: .playerBlue,
+        playerOneDamageHistory: damageHistory
+    )
+}
+
+func createTwoPlayersPreview() -> some View {
+    let playerOne = Player(index: 1)
+    let playerTwo = Player(index: 2)
+
+    let damageHistoryOne: [Damage] = [
+        Damage(player: playerOne, value: 1, sortIndex: 0),
+        Damage(player: playerOne, value: 1, sortIndex: 3),
+        Damage(player: playerOne, value: 5, sortIndex: 2),
+    ]
+    playerOne.damageHistory = damageHistoryOne
+
+    let damageHistoryTwo: [Damage] = [
+        Damage(player: playerTwo, value: 2, sortIndex: 1),
+        Damage(player: playerTwo, value: 4, sortIndex: 4),
+        Damage(player: playerTwo, value: 3, sortIndex: 5),
+    ]
+    playerTwo.damageHistory = damageHistoryTwo
+
+    return HistoryView(
+        multiplayer: true,
+        playerOneColor: .playerBlue,
+        playerTwoColor: .playerPink,
+        playerOneDamageHistory: damageHistoryOne,
+        playerTwoDamageHistory: damageHistoryTwo
+    )
 }
