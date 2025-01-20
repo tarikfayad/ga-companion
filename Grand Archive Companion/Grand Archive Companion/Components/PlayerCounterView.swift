@@ -11,8 +11,7 @@ struct PlayerCounterView: View {
     
     @State var backgroundColor: Color // We'll set the background color based on the player number
     @State var fontColor: Color
-    
-    @State private var damageCounter: Int = 0
+    @Binding var player: Player
     
     @State private var leftIsTouched: Bool = false
     @State private var rightIsTouched: Bool = false
@@ -28,13 +27,11 @@ struct PlayerCounterView: View {
     @State private var showFloatingMemoryCounter = false
     
     @State private var incrementTapCount: Int = 0
-    @State private var incrementTapHistory: [Int] = []
     @State private var incrementLastTapTime: Date? = nil
     @State private var incrementShowTapCount: Bool = false
     var onIncrementUpdate: (Int) -> Void
     
     @State private var decrementTapCount: Int = 0
-    @State private var decrementTapHistory: [Int] = []
     @State private var decrementLastTapTime: Date? = nil
     @State private var decrementShowTapCount: Bool = false
     var onDecrementUpdate: (Int) -> Void
@@ -76,7 +73,7 @@ struct PlayerCounterView: View {
                             }
                         }.animation(.easeInOut(duration: 0.2), value: decrementShowTapCount)
                         
-                        Text(String(damageCounter))
+                        Text(String(player.damage))
                             .frame(minWidth: 200, minHeight: 100)
                             .font(.custom("Helvetica-Bold", size: largeFontSize))
                             .padding(.bottom, -1 * largeFontSize / 10)
@@ -109,8 +106,8 @@ struct PlayerCounterView: View {
                                 .onChanged { _ in leftIsTouched = true }
                                 .onEnded { _ in
                                     leftIsTouched = false
-                                    if damageCounter > 0 { // Only reduce damage counters if they're above 0.
-                                        damageCounter -= 1
+                                    if player.damage > 0 { // Only reduce damage counters if they're above 0.
+                                        player.damage -= 1
                                         handleDecrementTap()
                                     }
                                 }
@@ -127,7 +124,7 @@ struct PlayerCounterView: View {
                                     rightIsTouched = true
                                 }
                                 .onEnded { value in
-                                    damageCounter += 1
+                                    player.damage += 1
                                     handleIncrementTap()
                                     rightIsTouched = false
                                 }
@@ -154,48 +151,58 @@ struct PlayerCounterView: View {
     func createCounterViews() -> some View {
         return HStack {
             if showLevelCounter {
-                CounterButtonView(iconName: "Level"){
+                CounterButtonView(iconName: "Level", count: player.levelCounters, onValueChange: { value in
+                    player.levelCounters = value
+                }, onLongPress: {
                     withAnimation(.easeInOut(duration: 0.2)) {
                         showLevelCounter.toggle()
                         hapticFeedback.notificationOccurred(.success)
                     }
-                }
+                })
             }
             
             if showPreparationCounter {
-                CounterButtonView(iconName: "Preparation"){
+                CounterButtonView(iconName: "Preparation", count: player.preparationCounters, onValueChange: { value in
+                    player.preparationCounters = value
+                }, onLongPress: {
                     withAnimation(.easeInOut(duration: 0.2)) {
                         showPreparationCounter.toggle()
                         hapticFeedback.notificationOccurred(.success)
                     }
-                }
+                })
             }
             
             if showEnlightenmentCounter {
-                CounterButtonView(iconName: "Enlightenment"){
+                CounterButtonView(iconName: "Enlightenment", count: player.enlightenmentCounters, onValueChange: { value in
+                    player.enlightenmentCounters = value
+                }, onLongPress: {
                     withAnimation(.easeInOut(duration: 0.2)) {
                         showEnlightenmentCounter.toggle()
                         hapticFeedback.notificationOccurred(.success)
                     }
-                }
+                })
             }
             
             if showLashCounter {
-                CounterButtonView(iconName: "Lash"){
+                CounterButtonView(iconName: "Lash", count: player.lashCounters, onValueChange: { value in
+                    player.lashCounters = value
+                }, onLongPress: {
                     withAnimation(.easeInOut(duration: 0.2)) {
                         showLashCounter.toggle()
                         hapticFeedback.notificationOccurred(.success)
                     }
-                }
+                })
             }
             
             if showFloatingMemoryCounter {
-                CounterButtonView(iconName: "FloatingMemory"){
+                CounterButtonView(iconName: "FloatingMemory", count: player.floatingMemory, onValueChange: { value in
+                    player.floatingMemory = value
+                }, onLongPress: {
                     withAnimation(.easeInOut(duration: 0.2)) {
                         showFloatingMemoryCounter.toggle()
                         hapticFeedback.notificationOccurred(.success)
                     }
-                }
+                })
             }
         }
     }
@@ -230,7 +237,6 @@ struct PlayerCounterView: View {
         incrementShowTapCount = true
         
         timer = Timer.scheduledTimer(withTimeInterval: timerDuration, repeats: false) { _ in
-            incrementTapHistory.append(incrementTapCount)
             onIncrementUpdate(incrementTapCount)
             resetTapCount()
         }
@@ -246,7 +252,6 @@ struct PlayerCounterView: View {
         decrementShowTapCount = true
         
         timer = Timer.scheduledTimer(withTimeInterval: timerDuration, repeats: false) { _ in
-            decrementTapHistory.append(decrementTapCount)
             onDecrementUpdate(decrementTapCount * -1)
             resetTapCount()
         }
@@ -263,9 +268,10 @@ struct PlayerCounterView: View {
 }
 
 #Preview {
+    @Previewable @State var player = Player(index: 1)
     PlayerCounterView (
         backgroundColor: .blue,
-        fontColor: .white,
+        fontColor: .white, player: $player,
         onIncrementUpdate: { count in
         },
         onDecrementUpdate: { count in
