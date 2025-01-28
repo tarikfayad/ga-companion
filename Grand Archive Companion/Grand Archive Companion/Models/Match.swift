@@ -17,7 +17,7 @@ class Match: Codable, Identifiable {
     var opponentDeck: Deck
     var notes: String?
     
-    init(id: UUID, date: Date, didUserWin: Bool, userDeck: Deck, opponentDeck: Deck, notes: String? = nil) {
+    init(id: UUID = UUID(), date: Date = Date(), didUserWin: Bool, userDeck: Deck, opponentDeck: Deck, notes: String? = nil) {
         self.id = id
         self.date = date
         self.didUserWin = didUserWin
