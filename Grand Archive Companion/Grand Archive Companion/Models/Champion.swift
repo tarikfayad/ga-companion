@@ -9,7 +9,7 @@ import Foundation
 import SwiftData
 
 @Model
-class Champion: Equatable {
+class Champion: Codable, Equatable {
     var name: String
     var lineage: String
     var jobs: [String] // Called class in game but I can't use class as a variable name
@@ -25,7 +25,7 @@ class Champion: Equatable {
     }
     
     func imageName() -> String {
-        return "\(name.lowercased())+.png"
+        return "\(lineage.lowercased())+.png"
     }
     
     func getChampions() -> [Champion] {
@@ -106,5 +106,33 @@ class Champion: Equatable {
             .init(name: "Zander, Prepared Scout", lineage: "", jobs: ["Assassin"], health: 19, level: 1)
         ]
     return champions
+    }
+    
+    // MARK: - Encodable
+    
+    enum CodingKeys: String, CodingKey {
+        case name
+        case lineage
+        case jobs
+        case health
+        case level
+    }
+    
+    required init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        name = try container.decode(String.self, forKey: .name)
+        lineage = try container.decode(String.self, forKey: .lineage)
+        jobs = try container.decode([String].self, forKey: .jobs)
+        health = try container.decode(Int.self, forKey: .health)
+        level = try container.decode(Int.self, forKey: .level)
+    }
+    
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(name, forKey: .name)
+        try container.encode(lineage, forKey: .lineage)
+        try container.encode(jobs, forKey: .jobs)
+        try container.encode(health, forKey: .health)
+        try container.encode(level, forKey: .level)
     }
 }
