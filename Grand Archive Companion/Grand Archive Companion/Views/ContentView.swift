@@ -35,17 +35,13 @@ struct ContentView: View {
                     .padding()
                     .buttonStyle(.borderedProminent)
                     .tint(.playerBlue)
-//                    @State var imageName: String = "magnifyingglass"
-//                    @State var title: String = "Card Search"
-//                    @State var fontColor: Color = .black
-//                    @State var tintColor: Color = .white
                     
                     HStack {
                         ImageLabelButtonView(imageName: "magnifyingglass", title: "Card Search"){
                             navigateToCardView = true
                         }
                         
-                        ImageLabelButtonView(imageName: "magnifyingglass", title: "Card Search"){}
+                        ImageLabelButtonView(imageName: "clock.arrow.trianglehead.counterclockwise.rotate.90", title: "Match History", fontColor: .white, tintColor: .playerPink){}
                     }.padding(.top, -10)
                 }
             }

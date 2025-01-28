@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ImageLabelButtonView: View {
-    @State var imageName: String = "magnifyingglass"
+    @State var imageName: String = "clock.arrow.trianglehead.counterclockwise.rotate.90"
     @State var title: String = "Card Search"
     @State var fontColor: Color = .black
     @State var tintColor: Color = .white
@@ -21,6 +21,7 @@ struct ImageLabelButtonView: View {
             VStack {
                 Image(systemName: imageName)
                     .resizable()
+                    .scaledToFit()
                     .frame(width: 32, height: 32)
                     .padding(.bottom, 8)
                 Text(title)
