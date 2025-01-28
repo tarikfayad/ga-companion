@@ -8,9 +8,9 @@
 import SwiftUI
 
 struct MatchRowView: View {
-    @State var match: Match?
+    @State var match: Match
     let imageSize: CGFloat = 45
-    let imageStrokeColor: Color = .gray
+    let imageStrokeColor: Color = .white
     
     var body: some View {
         VStack {
@@ -18,7 +18,7 @@ struct MatchRowView: View {
                 Spacer()
                 HStack {
                     ZStack {
-                        Image("lorraine")
+                        Image(match.userDeck.champion.imageName())
                             .resizable()
                             .scaledToFit()
                             .frame(width: imageSize + 10, height: imageSize + 10)
@@ -28,19 +28,14 @@ struct MatchRowView: View {
                         VStack {
                             Spacer()
                             HStack {
-                                Image("fire")
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(width: imageSize / 2, height: imageSize / 2)
-                                    .cornerRadius(imageSize / 4)
-                                    .overlay(Circle().stroke(imageStrokeColor, lineWidth: 3))
-                                
-                                Image("crux")
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(width: imageSize / 2, height: imageSize / 2)
-                                    .cornerRadius(imageSize / 4)
-                                    .overlay(Circle().stroke(imageStrokeColor, lineWidth: 3))
+                                ForEach(match.userDeck.elements, id: \.self){ element in
+                                    Image(element.rawValue)
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(width: imageSize / 2, height: imageSize / 2)
+                                        .cornerRadius(imageSize / 4)
+                                        .overlay(Circle().stroke(imageStrokeColor, lineWidth: 3))
+                                }
                             }
                         }
                     }
@@ -50,7 +45,7 @@ struct MatchRowView: View {
                 
                 HStack {
                     ZStack {
-                        Image("lorraine")
+                        Image(match.opponentDeck.champion.imageName())
                             .resizable()
                             .scaledToFit()
                             .frame(width: imageSize + 10, height: imageSize + 10)
@@ -60,19 +55,14 @@ struct MatchRowView: View {
                         VStack {
                             Spacer()
                             HStack {
-                                Image("fire")
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(width: imageSize / 2, height: imageSize / 2)
-                                    .cornerRadius(imageSize / 4)
-                                    .overlay(Circle().stroke(imageStrokeColor, lineWidth: 3))
-                                
-                                Image("crux")
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(width: imageSize / 2, height: imageSize / 2)
-                                    .cornerRadius(imageSize / 4)
-                                    .overlay(Circle().stroke(imageStrokeColor, lineWidth: 3))
+                                ForEach(match.opponentDeck.elements, id: \.self){ element in
+                                    Image(element.rawValue)
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(width: imageSize / 2, height: imageSize / 2)
+                                        .cornerRadius(imageSize / 4)
+                                        .overlay(Circle().stroke(imageStrokeColor, lineWidth: 3))
+                                }
                             }
                         }
                     }
@@ -81,7 +71,8 @@ struct MatchRowView: View {
             }
             HStack {
                 Spacer()
-                Text("WIN")
+                Text(match.didUserWin ? "WIN" : "LOSE")
+                    .foregroundStyle(match.didUserWin ? .green : .red)
                 Spacer()
             }
         }
@@ -90,8 +81,8 @@ struct MatchRowView: View {
 }
 
 #Preview {
-    List(0..<5) { item in
-        MatchRowView()
-            .background(Color.background)
-    }
+//    List(0..<5) { item in
+//        MatchRowView()
+//            .background(Color.background)
+//    }
 }
