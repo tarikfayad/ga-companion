@@ -10,6 +10,7 @@ import SwiftUI
 struct ContentView: View {
     @State private var navigateToPlayerView = false
     @State private var navigateToCardView = false
+    @State private var navigateToHistoryView = false
     
     var body: some View {
         NavigationStack {
@@ -41,7 +42,9 @@ struct ContentView: View {
                             navigateToCardView = true
                         }
                         
-                        ImageLabelButtonView(imageName: "clock.arrow.trianglehead.counterclockwise.rotate.90", title: "Match History", fontColor: .white, tintColor: .playerPink){}
+                        ImageLabelButtonView(imageName: "clock.arrow.trianglehead.counterclockwise.rotate.90", title: "Match History", fontColor: .white, tintColor: .playerPink){
+                            navigateToHistoryView = true
+                        }
                     }.padding(.top, -10)
                 }
             }
