@@ -13,7 +13,7 @@ enum Element: Codable, CaseIterable {
     case fire
     case wind
     case water
-    case none
+    case norm
     
     // Computed property for associated colors
     var color: Color {
@@ -21,7 +21,7 @@ enum Element: Codable, CaseIterable {
         case .fire: return .red
         case .wind: return .green
         case .water: return .blue
-        case .none: return .gray
+        case .norm: return .gray
         }
     }
 }
@@ -41,8 +41,6 @@ class Deck: Codable {
         self.cards = cards
         self.winRate = winRate
     }
-    
-    // MARK: - Codable
     
     enum CodingKeys: String, CodingKey {
         case name

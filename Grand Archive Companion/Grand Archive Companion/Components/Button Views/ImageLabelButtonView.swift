@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ImageLabelButtonView: View {
     @State var imageName: String = "clock.arrow.trianglehead.counterclockwise.rotate.90"
-    @State var title: String = "Card Search"
+    @State var title: String = "Match History"
     @State var fontColor: Color = .black
     @State var tintColor: Color = .white
     var onButtonTap: () -> Void
@@ -37,5 +37,6 @@ struct ImageLabelButtonView: View {
 
 #Preview {
     ImageLabelButtonView(){}
+        .frame(width: 300, height: 300)
         .background(Color.blue)
 }

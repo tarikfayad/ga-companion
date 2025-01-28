@@ -25,7 +25,7 @@ class Champion: Codable, Equatable {
     }
     
     func imageName() -> String {
-        return "\(lineage.lowercased())+.png"
+        return "\(lineage.lowercased())"
     }
     
     func getChampions() -> [Champion] {
