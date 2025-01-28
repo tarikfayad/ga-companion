@@ -35,15 +35,18 @@ struct ContentView: View {
                     .padding()
                     .buttonStyle(.borderedProminent)
                     .tint(.playerBlue)
+//                    @State var imageName: String = "magnifyingglass"
+//                    @State var title: String = "Card Search"
+//                    @State var fontColor: Color = .black
+//                    @State var tintColor: Color = .white
                     
-                    Button {
-                        navigateToCardView = true
-                    } label: {
-                        Image(systemName: "magnifyingglass")
-                        Text("Card Search")
-                    }
-                    .padding()
-                    .foregroundStyle(.white)
+                    HStack {
+                        ImageLabelButtonView(imageName: "magnifyingglass", title: "Card Search"){
+                            navigateToCardView = true
+                        }
+                        
+                        ImageLabelButtonView(imageName: "magnifyingglass", title: "Card Search"){}
+                    }.padding(.top, -10)
                 }
             }
             .navigationDestination(isPresented: $navigateToPlayerView) {
