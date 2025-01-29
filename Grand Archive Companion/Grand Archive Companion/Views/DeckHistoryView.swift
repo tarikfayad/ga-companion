@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct DeckHistoryView: View {
+    @Environment(\.presentationMode) var presentationMode
+    
     @State var matches: [Match] = []
     
     var body: some View {
@@ -38,6 +40,30 @@ struct DeckHistoryView: View {
                     .padding(.horizontal, -20)
                 }
             }.foregroundStyle(.white)
+        }
+        .navigationBarBackButtonHidden(true)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                Button(action: {
+                    presentationMode.wrappedValue.dismiss() // Go back
+                }) {
+                    HStack {
+                        Image(systemName: "arrow.backward") // Custom back icon
+                    } .foregroundStyle(.white)
+                }
+            }
+            
+            ToolbarItem(placement: .principal) {
+                Text("Match History")
+                    .foregroundStyle(.white)
+                    .fontWeight(.bold)
+            }
+        }
+        .onAppear {
+            let appearance = UINavigationBarAppearance()
+            appearance.configureWithTransparentBackground()
+            UINavigationBar.appearance().standardAppearance = appearance
+            UINavigationBar.appearance().scrollEdgeAppearance = appearance
         }
     }
 }
