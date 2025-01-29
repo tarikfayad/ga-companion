@@ -43,11 +43,11 @@ struct PlayerCounterView: View {
     
     var buttons: [RadialButton] {
         [
-            RadialButton(label: "Lvl", image: Image("Level"), imageSize: menuButtonSize, action: levelTapped),
-            RadialButton(label: "Prep", image: Image("Preparation"), imageSize: menuButtonSize, action: preparationTapped),
-            RadialButton(label: "Enl", image: Image("Enlightenment"), imageSize: menuButtonSize, action: enlightenmentTapped),
-            RadialButton(label: "Lash", image: Image("Lash"), imageSize: menuButtonSize, action: lashTapped),
-            RadialButton(label: "Fl Mem", image: Image("FloatingMemory"), imageSize: menuButtonSize, action: floatingMemoryTapped),
+            RadialButton(label: "Lvl", image: Image("level"), imageSize: menuButtonSize, action: levelTapped),
+            RadialButton(label: "Prep", image: Image("preparation"), imageSize: menuButtonSize, action: preparationTapped),
+            RadialButton(label: "Enl", image: Image("enlightenment"), imageSize: menuButtonSize, action: enlightenmentTapped),
+            RadialButton(label: "Lash", image: Image("lash"), imageSize: menuButtonSize, action: lashTapped),
+            RadialButton(label: "Fl Mem", image: Image("floating-memory"), imageSize: menuButtonSize, action: floatingMemoryTapped),
         ]
     }
     
