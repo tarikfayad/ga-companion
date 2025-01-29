@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct DeckHistoryView: View {
-    @State var matches: [Match]
+    @State var matches: [Match] = []
     
     var body: some View {
         GeometryReader { geometry in

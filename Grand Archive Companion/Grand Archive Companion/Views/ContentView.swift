@@ -54,6 +54,9 @@ struct ContentView: View {
             .navigationDestination(isPresented: $navigateToCardView) {
                 CardSearchView()
             }
+            .navigationDestination(isPresented: $navigateToHistoryView){
+                DeckHistoryView()
+            }
         }
         .onAppear {
             let appearance = UINavigationBarAppearance()
