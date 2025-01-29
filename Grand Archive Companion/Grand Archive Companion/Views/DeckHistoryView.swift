@@ -35,6 +35,7 @@ struct DeckHistoryView: View {
                     }
                     .scrollContentBackground(.hidden)
                     .background(Color.background)
+                    .padding(.horizontal, -20)
                 }
             }.foregroundStyle(.white)
         }
@@ -50,5 +51,5 @@ struct DeckHistoryView: View {
     
     let match = Match.init(didUserWin: true, userDeck: playerDeck, opponentDeck: opponentDeck)
     
-    DeckHistoryView(matches: [match])
+    DeckHistoryView(matches: [match, match, match, match, match, match, match, match, match, match])
 }
