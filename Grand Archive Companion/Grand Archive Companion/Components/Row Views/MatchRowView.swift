@@ -76,7 +76,12 @@ struct MatchRowView: View {
                 Spacer()
             }
         }
+        .padding(.vertical, 10)
         .foregroundColor(.white)
+        .overlay(
+            RoundedRectangle(cornerRadius: 10)
+                .stroke(Color.white.opacity(0.5), lineWidth: 1)
+        )
     }
 }
 
@@ -91,6 +96,8 @@ struct MatchRowView: View {
         
     List(0..<5) { item in
         MatchRowView(match: match)
-            .background(Color.background)
+            .listRowBackground(Color.background)
     }
+    .scrollContentBackground(.hidden)
+    .background(Color.background)
 }
