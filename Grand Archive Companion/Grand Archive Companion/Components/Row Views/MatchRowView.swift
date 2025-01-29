@@ -39,7 +39,9 @@ struct MatchRowView: View {
                             }
                         }
                     }
-                }.frame(minWidth: 100)
+                }
+                .frame(minWidth: 110)
+                .padding(.trailing, 10)
                 
                 Text("vs")
                 
@@ -66,7 +68,9 @@ struct MatchRowView: View {
                             }
                         }
                     }
-                }.frame(minWidth: 100)
+                }
+                .frame(minWidth: 110)
+                .padding(.leading, 10)
                 Spacer()
             }
             HStack {

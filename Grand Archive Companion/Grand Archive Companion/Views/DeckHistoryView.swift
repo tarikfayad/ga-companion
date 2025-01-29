@@ -18,6 +18,13 @@ struct DeckHistoryView: View {
                 Color.background.ignoresSafeArea(.all)
                 VStack {
                     Spacer()
+                    Menu("Filter by Deck") {
+                        Button("Option 1") { print("Option 1 selected") }
+                        Button("Option 2") { print("Option 2 selected") }
+                        Button("Option 3") { print("Option 3 selected") }
+                    }.frame(width: geometry.size.width - 30, height: 35)
+                        .background(Color.secondary)
+                    
                     HStack {
                         Text("You")
                             .frame(width: geometry.size.width / 2 - 20, height: 35)
@@ -58,7 +65,18 @@ struct DeckHistoryView: View {
                     .foregroundStyle(.white)
                     .fontWeight(.bold)
             }
+            
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button(action: {
+                    // Allow user to save a match
+                }) {
+                    HStack {
+                        Image(systemName: "plus") // Custom back icon
+                    } .foregroundStyle(.white)
+                }
+            }
         }
+        .navigationBarTitleDisplayMode(.inline)
         .onAppear {
             let appearance = UINavigationBarAppearance()
             appearance.configureWithTransparentBackground()
