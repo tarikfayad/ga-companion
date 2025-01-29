@@ -11,7 +11,9 @@ struct DeckHistoryView: View {
     var body: some View {
         ZStack {
             Color.background.ignoresSafeArea(.all)
-            Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+            HStack {
+                Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+            }
         }.foregroundStyle(.white)
     }
 }
