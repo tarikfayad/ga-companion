@@ -19,7 +19,7 @@ struct MatchRowView: View {
                 HStack {
                     ZStack {
                         HStack {
-                            ForEach(match.userDeck.champions, id: \.self){ champion in
+                            ForEach(filterChampionsByLineage(match.userDeck.champions), id: \.self){ champion in
                                 Image(champion.imageName())
                                     .resizable()
                                     .scaledToFit()
@@ -52,7 +52,7 @@ struct MatchRowView: View {
                 HStack {
                     ZStack {
                         HStack {
-                            ForEach(match.opponentDeck.champions, id: \.self){ champion in
+                            ForEach(filterChampionsByLineage(match.opponentDeck.champions), id: \.self){ champion in
                                 Image(champion.imageName())
                                     .resizable()
                                     .scaledToFit()
@@ -94,6 +94,21 @@ struct MatchRowView: View {
             RoundedRectangle(cornerRadius: 10)
                 .stroke(Color.white.opacity(0.5), lineWidth: 1)
         )
+    }
+    
+    // Helper functions
+    func filterChampionsByLineage(_ champions: [Champion]) -> [Champion] {
+        var seenLineages: Set<String> = []
+        var filteredChampions: [Champion] = []
+
+        for champion in champions {
+            if !seenLineages.contains(champion.lineage) {
+                seenLineages.insert(champion.lineage)
+                filteredChampions.append(champion)
+            }
+        }
+
+        return filteredChampions
     }
 }
 
