@@ -9,8 +9,11 @@ import SwiftUI
 
 struct DeckCreationView: View {
     @State private var deckName: String = ""
-    @State private var selectedChampion: Champion?
-    @State private var baseElement: Element?
+    @State private var searchText = ""
+    @State private var selectedChampions: Set<Champion> = []
+    @State private var isShowingChampions: Bool = false
+    @State private var elements: Set<Element> = []
+    @State private var isShowingElements: Bool = false
     @State private var userDidWin: Bool = false
     @State var deckString: String = "Your Deck"
     
@@ -25,28 +28,68 @@ struct DeckCreationView: View {
             TextField("Enter a deck name...", text: $deckName)
                 .preferredColorScheme(.dark)
             HStack {
-                Menu("Champion ") { // This is toxic but unless I include a blank space after the word Champion then it gets truncated
-                    ForEach(Champion.generateAllChampions()) { champion in
-                        Button(champion.name) { print(champion.name) }
-                    }
+                Button {
+                    isShowingChampions.toggle()
+                } label: {
+                    Text("Champions")
                 }
                 .frame(height: 30)
                 .frame(maxWidth: .infinity)
                 .layoutPriority(1)
                 .background(Color.secondary)
-                
-                Menu("Deck Elements") {
-                    ForEach(Element.allCases, id: \.self) { element in
-                        let capitalizedElement = element.rawValue.capitalized
-                        Button(capitalizedElement) {
-                            baseElement = element
+                .popover(isPresented: $isShowingChampions) {
+                    VStack {
+                        List(Champion.generateAllChampions(), id: \.self) { champion in
+                            HStack {
+                                Text(champion.name)
+                                    .frame(maxWidth: .infinity)
+                                Spacer()
+                                if selectedChampions.contains(champion) {
+                                    Image(systemName: "checkmark")
+                                        .foregroundColor(.green)
+                                }
+                            }
+                            .contentShape(Rectangle())
+                            .onTapGesture {
+                                toggleChampionSelection(for: champion)
+                            }
                         }
                     }
+                    .background(Color.secondary)
+                    .presentationDragIndicator(.visible)
+                }
+                
+                Button {
+                    isShowingElements.toggle()
+                } label: {
+                    Text("Deck Elements")
                 }
                 .frame(height: 30)
                 .frame(maxWidth: .infinity)
                 .layoutPriority(1)
                 .background(Color.secondary)
+                .popover(isPresented: $isShowingElements) {
+                    VStack {
+                        List(Element.allCases, id: \.self) { element in
+                            HStack {
+                                let capitalizedElement = element.rawValue.capitalized
+                                Text(capitalizedElement)
+                                    .frame(maxWidth: .infinity)
+                                Spacer()
+                                if elements.contains(element) {
+                                    Image(systemName: "checkmark")
+                                        .foregroundColor(.green)
+                                }
+                            }
+                            .contentShape(Rectangle())
+                            .onTapGesture {
+                                toggleElementSelection(for: element)
+                            }
+                        }
+                    }
+                    .background(Color.secondary)
+                    .presentationDragIndicator(.visible)
+                }
             }
             
             if isUserDeck {
@@ -65,6 +108,23 @@ struct DeckCreationView: View {
             RoundedRectangle(cornerRadius: 10)
                 .stroke(Color.white.opacity(0.5), lineWidth: 1)
         )
+    }
+    
+    // Helper Functions
+    private func toggleChampionSelection(for item: Champion) {
+        if selectedChampions.contains(item) {
+            selectedChampions.remove(item)
+        } else {
+            selectedChampions.insert(item)
+        }
+    }
+    
+    private func toggleElementSelection(for item: Element) {
+        if elements.contains(item) {
+            elements.remove(item)
+        } else {
+            elements.insert(item)
+        }
     }
 }
 

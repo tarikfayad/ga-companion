@@ -105,7 +105,7 @@ class Champion: Codable, Equatable {
             .init(name: "Zander, Deft Executor", lineage: "Zander", jobs: ["Assassin"], health: 22, level: 2),
             .init(name: "Zander, Prepared Scout", lineage: "", jobs: ["Assassin"], health: 19, level: 1)
         ]
-        return champions.reversed()
+        return champions
     }
     
     // MARK: - Encodable
@@ -134,5 +134,15 @@ class Champion: Codable, Equatable {
         try container.encode(jobs, forKey: .jobs)
         try container.encode(health, forKey: .health)
         try container.encode(level, forKey: .level)
+    }
+}
+
+extension Champion: Hashable {
+    static func == (lhs: Champion, rhs: Champion) -> Bool {
+        return lhs.name == rhs.name // Compare by unique name
+    }
+
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(name) // Use name for hashing
     }
 }
