@@ -28,7 +28,7 @@ class Champion: Codable, Equatable {
         return "\(lineage.lowercased())"
     }
     
-    func getChampions() -> [Champion] {
+    static func generateAllChampions() -> [Champion] {
         let champions: [Champion] = [
             .init(name: "Aithne, Spirit of Fire", lineage: "", jobs: ["Spirit"], health: 15, level: 0),
             .init(name: "Allen, Beast Beckoner", lineage: "", jobs: ["Tamer"], health: 22, level: 2),
@@ -105,7 +105,7 @@ class Champion: Codable, Equatable {
             .init(name: "Zander, Deft Executor", lineage: "Zander", jobs: ["Assassin"], health: 22, level: 2),
             .init(name: "Zander, Prepared Scout", lineage: "", jobs: ["Assassin"], health: 19, level: 1)
         ]
-    return champions
+        return champions.reversed()
     }
     
     // MARK: - Encodable

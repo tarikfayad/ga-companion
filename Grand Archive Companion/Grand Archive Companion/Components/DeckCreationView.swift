@@ -26,19 +26,22 @@ struct DeckCreationView: View {
                 .preferredColorScheme(.dark)
             HStack {
                 Menu("Champion ") { // This is toxic but unless I include a blank space after the word Champion then it gets truncated
-                    Button("Option 1") { print("Option 1 selected") }
-                    Button("Option 2") { print("Option 2 selected") }
-                    Button("Option 3") { print("Option 3 selected") }
+                    ForEach(Champion.generateAllChampions()) { champion in
+                        Button(champion.name) { print(champion.name) }
+                    }
                 }
                 .frame(height: 30)
                 .frame(maxWidth: .infinity)
                 .layoutPriority(1)
                 .background(Color.secondary)
                 
-                Menu("Base Element") {
-                    Button("Option 1") { print("Option 1 selected") }
-                    Button("Option 2") { print("Option 2 selected") }
-                    Button("Option 3") { print("Option 3 selected") }
+                Menu("Deck Elements") {
+                    ForEach(Element.allCases, id: \.self) { element in
+                        let capitalizedElement = element.rawValue.capitalized
+                        Button(capitalizedElement) {
+                            baseElement = element
+                        }
+                    }
                 }
                 .frame(height: 30)
                 .frame(maxWidth: .infinity)
