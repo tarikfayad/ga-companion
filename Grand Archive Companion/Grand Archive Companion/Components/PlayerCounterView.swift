@@ -151,7 +151,7 @@ struct PlayerCounterView: View {
     func createCounterViews() -> some View {
         return HStack {
             if showLevelCounter {
-                CounterButtonView(iconName: "Level", count: player.levelCounters, onValueChange: { value in
+                CounterButtonView(iconName: "level", count: player.levelCounters, onValueChange: { value in
                     player.levelCounters = value
                 }, onLongPress: {
                     withAnimation(.easeInOut(duration: 0.2)) {
@@ -162,7 +162,7 @@ struct PlayerCounterView: View {
             }
             
             if showPreparationCounter {
-                CounterButtonView(iconName: "Preparation", count: player.preparationCounters, onValueChange: { value in
+                CounterButtonView(iconName: "preparation", count: player.preparationCounters, onValueChange: { value in
                     player.preparationCounters = value
                 }, onLongPress: {
                     withAnimation(.easeInOut(duration: 0.2)) {
@@ -173,7 +173,7 @@ struct PlayerCounterView: View {
             }
             
             if showEnlightenmentCounter {
-                CounterButtonView(iconName: "Enlightenment", count: player.enlightenmentCounters, onValueChange: { value in
+                CounterButtonView(iconName: "enlightenment", count: player.enlightenmentCounters, onValueChange: { value in
                     player.enlightenmentCounters = value
                 }, onLongPress: {
                     withAnimation(.easeInOut(duration: 0.2)) {
@@ -184,7 +184,7 @@ struct PlayerCounterView: View {
             }
             
             if showLashCounter {
-                CounterButtonView(iconName: "Lash", count: player.lashCounters, onValueChange: { value in
+                CounterButtonView(iconName: "lash", count: player.lashCounters, onValueChange: { value in
                     player.lashCounters = value
                 }, onLongPress: {
                     withAnimation(.easeInOut(duration: 0.2)) {
@@ -195,7 +195,7 @@ struct PlayerCounterView: View {
             }
             
             if showFloatingMemoryCounter {
-                CounterButtonView(iconName: "FloatingMemory", count: player.floatingMemory, onValueChange: { value in
+                CounterButtonView(iconName: "floating-memory", count: player.floatingMemory, onValueChange: { value in
                     player.floatingMemory = value
                 }, onLongPress: {
                     withAnimation(.easeInOut(duration: 0.2)) {
