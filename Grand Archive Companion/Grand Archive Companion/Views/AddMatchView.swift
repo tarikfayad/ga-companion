@@ -26,6 +26,14 @@ struct AddMatchView: View {
                 
                 DeckCreationView(deckString: "Opponent's Deck", isUserDeck: false)
                     .padding(.horizontal, 5)
+                
+                Button {} label: {
+                    Text("Save Match")
+                        .frame(width:270, height:27)
+                }
+                .padding()
+                .buttonStyle(.borderedProminent)
+                .tint(.playerBlue)
             }
         }
         .foregroundStyle(.white)

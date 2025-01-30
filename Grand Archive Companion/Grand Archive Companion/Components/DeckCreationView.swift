@@ -25,8 +25,24 @@ struct DeckCreationView: View {
                 .font(.system(size: 24, weight: .bold, design: .default))
                 .padding(.top, 10)
             
+            if isUserDeck {
+                Menu("Select a Saved Deck") {
+                    
+                }
+                .frame(width: 180, height: 25)
+                .background(Color.secondary.opacity(0.2))
+            }
+            
             TextField("Enter a deck name...", text: $deckName)
                 .preferredColorScheme(.dark)
+                .overlay(
+                    Rectangle()
+                        .frame(height: 1)
+                        .foregroundStyle(Color.secondary)
+                        .offset(y: 12)
+                )
+                .padding(.vertical, 5)
+            
             HStack {
                 Button {
                     isShowingChampions.toggle()
