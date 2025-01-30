@@ -14,9 +14,21 @@ struct AddMatchView: View {
     var body: some View {
         ZStack {
             Color.background.ignoresSafeArea(.all)
-            
-            Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+            VStack {
+                DeckCreationView()
+                    .padding(.horizontal, 5)
+                
+                Text("VS")
+                    .font(.title2)
+                    .fontWeight(.bold)
+                    .foregroundColor(.secondary)
+                    .padding()
+                
+                DeckCreationView(deckString: "Opponent's Deck", isUserDeck: false)
+                    .padding(.horizontal, 5)
+            }
         }
+        .foregroundStyle(.white)
         .navigationBarBackButtonHidden(true)
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {

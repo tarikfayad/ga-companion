@@ -100,5 +100,7 @@ struct DeckHistoryView: View {
     
     let match = Match.init(didUserWin: true, userDeck: playerDeck, opponentDeck: opponentDeck)
     
-    DeckHistoryView(matches: [match, match, match, match, match, match, match, match, match, match])
+    NavigationStack {
+        DeckHistoryView(matches: [match, match, match, match, match, match, match, match, match, match])
+    }
 }
