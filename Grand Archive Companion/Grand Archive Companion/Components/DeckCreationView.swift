@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct DeckCreationView: View {
+    @Environment(\.modelContext) private var modelContext
+    
     @State private var deckName: String = ""
     @State private var searchText = ""
     @State private var selectedChampions: Set<Champion> = []
@@ -18,6 +20,7 @@ struct DeckCreationView: View {
     @State var deckString: String = "Your Deck"
     
     @State var isUserDeck: Bool = true
+    @State var userDecks: [Deck] = []
     
     var body: some View {
         VStack {
@@ -25,9 +28,16 @@ struct DeckCreationView: View {
                 .font(.system(size: 24, weight: .bold, design: .default))
                 .padding(.top, 10)
             
-            if isUserDeck {
+            if isUserDeck && userDecks.count > 0 {
                 Menu("Select a Saved Deck") {
-                    
+                    ForEach(userDecks, id: \.self) { deck in
+                        Button {
+                            selectDeck(deck)
+                        }
+                        label: {
+                            Text(deck.name)
+                        }
+                    }
                 }
                 .frame(width: 180, height: 25)
                 .background(Color.secondary.opacity(0.2))
@@ -124,6 +134,11 @@ struct DeckCreationView: View {
             RoundedRectangle(cornerRadius: 10)
                 .stroke(Color.white.opacity(0.5), lineWidth: 1)
         )
+        .onAppear {
+            if isUserDeck {
+                userDecks = Deck.load(context: modelContext)
+            }
+        }
     }
     
     // Helper Functions
@@ -141,6 +156,11 @@ struct DeckCreationView: View {
         } else {
             elements.insert(item)
         }
+    }
+    
+    private func selectDeck(_ deck: Deck) {
+        deckName = deck.name
+        selectedChampions = Set(deck.champions)
     }
 }
 

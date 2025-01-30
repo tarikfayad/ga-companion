@@ -54,4 +54,23 @@ class Match: Codable, Identifiable {
         try container.encode(opponentDeck, forKey: .opponentDeck)
         try container.encodeIfPresent(notes, forKey: .notes)
     }
+    
+    static func save(matches: [Match], context: ModelContext) {
+        matches.forEach { context.insert($0) }
+        do {
+            try context.save()
+        } catch {
+            print("Failed to save matches: \(error)")
+        }
+    }
+    
+    static func load(context: ModelContext) -> [Match] {
+        let fetchDescriptor = FetchDescriptor<Match>()
+        do {
+            return try context.fetch(fetchDescriptor)
+        } catch {
+            print("Failed to load matches: \(error)")
+            return []
+        }
+    }
 }

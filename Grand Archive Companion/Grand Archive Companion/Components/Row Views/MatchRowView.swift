@@ -18,12 +18,16 @@ struct MatchRowView: View {
                 Spacer()
                 HStack {
                     ZStack {
-                        Image(match.userDeck.champion.imageName())
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: imageSize + 10, height: imageSize + 10)
-                            .cornerRadius(imageSize / 2)
-                            .overlay(Circle().stroke(imageStrokeColor, lineWidth: 2))
+                        HStack {
+                            ForEach(match.userDeck.champions, id: \.self){ champion in
+                                Image(champion.imageName())
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: imageSize + 10, height: imageSize + 10)
+                                    .cornerRadius(imageSize / 2)
+                                    .overlay(Circle().stroke(imageStrokeColor, lineWidth: 2))
+                            }
+                        }
                         
                         VStack {
                             Spacer()
@@ -47,12 +51,16 @@ struct MatchRowView: View {
                 
                 HStack {
                     ZStack {
-                        Image(match.opponentDeck.champion.imageName())
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: imageSize + 10, height: imageSize + 10)
-                            .cornerRadius(imageSize / 2)
-                            .overlay(Circle().stroke(imageStrokeColor, lineWidth: 2))
+                        HStack {
+                            ForEach(match.opponentDeck.champions, id: \.self){ champion in
+                                Image(champion.imageName())
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: imageSize + 10, height: imageSize + 10)
+                                    .cornerRadius(imageSize / 2)
+                                    .overlay(Circle().stroke(imageStrokeColor, lineWidth: 2))
+                            }
+                        }
                         
                         VStack {
                             Spacer()
@@ -91,10 +99,10 @@ struct MatchRowView: View {
 
 #Preview {
     let playerChampion = Champion.init(name: "Lorraine, Crux Knight", lineage: "Lorraine", jobs: ["Warrior"], health: 28, level: 3)
-    let playerDeck = Deck(name: "Deck 1", champion: playerChampion, elements: [.fire, .crux])
+    let playerDeck = Deck(name: "Deck 1", champions: [playerChampion], elements: [.fire, .crux])
     
     let opponentChampion = Champion.init(name: "Lorraine, Crux Knight", lineage: "Lorraine", jobs: ["Warrior"], health: 28, level: 3)
-    let opponentDeck = Deck(name: "Deck 1", champion: opponentChampion, elements: [.fire, .crux])
+    let opponentDeck = Deck(name: "Deck 1", champions: [opponentChampion], elements: [.fire, .crux])
     
     let match = Match.init(didUserWin: true, userDeck: playerDeck, opponentDeck: opponentDeck)
         

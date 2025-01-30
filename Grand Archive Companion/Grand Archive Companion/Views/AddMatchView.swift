@@ -9,7 +9,7 @@ import SwiftUI
 
 struct AddMatchView: View {
     @Environment(\.presentationMode) var presentationMode
-//    @Environment(\.modelContext) private var modelContext
+    @Environment(\.modelContext) private var modelContext
     
     var body: some View {
         ZStack {
