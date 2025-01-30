@@ -11,6 +11,7 @@ struct DeckHistoryView: View {
     @Environment(\.presentationMode) var presentationMode
     
     @State var matches: [Match] = []
+    @State private var navigateToCreateMatchView = false
     
     var body: some View {
         GeometryReader { geometry in
@@ -22,17 +23,17 @@ struct DeckHistoryView: View {
                         Button("Option 1") { print("Option 1 selected") }
                         Button("Option 2") { print("Option 2 selected") }
                         Button("Option 3") { print("Option 3 selected") }
-                    }.frame(width: geometry.size.width - 30, height: 35)
+                    }.frame(width: max(geometry.size.width - 30, 0), height: 35)
                         .background(Color.secondary)
                     
                     HStack {
                         Text("You")
-                            .frame(width: geometry.size.width / 2 - 20, height: 35)
+                            .frame(width: max(geometry.size.width / 2 - 20, 0), height: 35)
                             .font(.system(size: 20, weight: .bold, design: .default))
                             .background(.playerBlue)
                         
                         Text("Opponent")
-                            .frame(width: geometry.size.width / 2 - 20, height: 35)
+                            .frame(width: max(geometry.size.width / 2 - 20, 0), height: 35)
                             .font(.system(size: 20, weight: .bold, design: .default))
                             .background(.playerPink)
                     }
@@ -47,6 +48,9 @@ struct DeckHistoryView: View {
                     .padding(.horizontal, -20)
                 }
             }.foregroundStyle(.white)
+        }
+        .navigationDestination(isPresented: $navigateToCreateMatchView){
+            AddMatchView()
         }
         .navigationBarBackButtonHidden(true)
         .toolbar {
@@ -69,6 +73,7 @@ struct DeckHistoryView: View {
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button(action: {
                     // Allow user to save a match
+                    navigateToCreateMatchView = true
                 }) {
                     HStack {
                         Image(systemName: "plus") // Custom back icon
