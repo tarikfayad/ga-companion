@@ -10,6 +10,9 @@ import SwiftUI
 struct AddMatchView: View {
     @Environment(\.presentationMode) var presentationMode
     @Environment(\.modelContext) private var modelContext
+    @Environment(\.dismiss) private var dismiss
+    
+    @State private var showSaveError: Bool = false
     
     @State private var matchNotes: String = "Enter deck notes here..."
     
@@ -81,10 +84,30 @@ struct AddMatchView: View {
             UINavigationBar.appearance().standardAppearance = appearance
             UINavigationBar.appearance().scrollEdgeAppearance = appearance
         }
+        .alert("Error!", isPresented: $showSaveError) {
+            Button("OK") {
+                showSaveError = false
+            }
+        } message: {
+            Text("Please fill in all the fields (except notes) and try again.")
+        }
     }
     
     func saveMatch() {
-        // Save match logic
+        if (userDeckName != "" && userSelectedChampions.count > 0 && userSelectedElements.count > 0 && opponentDeckName != "" && opponentSelectedChampions.count > 0 && opponentSelectedElements.count > 0) {
+            
+            // Create user and opponent decks
+            let userDeck = Deck(name: userDeckName, champions: Array(userSelectedChampions), elements: Array(userSelectedElements))
+            let opponentDeck = Deck(name: opponentDeckName, champions: Array(opponentSelectedChampions), elements: Array(opponentSelectedElements))
+            
+            // Create the match
+            let newMatch = Match(didUserWin: userDidWin, userDeck: userDeck, opponentDeck: opponentDeck, notes: matchNotes)
+            
+            Match.save(matches: [newMatch], context: modelContext)
+            dismiss()
+        } else {
+            showSaveError.toggle()
+        }
     }
 }
 
