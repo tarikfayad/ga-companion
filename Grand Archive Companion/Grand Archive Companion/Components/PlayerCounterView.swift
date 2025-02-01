@@ -142,16 +142,22 @@ struct PlayerCounterView: View {
                     }.padding(.bottom, isTopPlayer ? 35 : 0)
                 }
                 
-            } .foregroundStyle(fontColor)
+            }
+            .foregroundStyle(fontColor)
+            .onChange(of: player) {
+                if player.levelCounters > 0 { showLevelCounter = true }
+                if player.preparationCounters > 0 { showPreparationCounter = true }
+                if player.enlightenmentCounters > 0 { showEnlightenmentCounter = true }
+                if player.lashCounters > 0 { showLashCounter = true }
+                if player.floatingMemory > 0 { showFloatingMemoryCounter = true }
+            }
         }
     }
     
     func createCounterViews() -> some View {
         return HStack {
             if showLevelCounter {
-                CounterButtonView(iconName: "level", count: player.levelCounters, onValueChange: { value in
-                    player.levelCounters = value
-                }, onLongPress: {
+                CounterButtonView(iconName: "level", count: $player.levelCounters, onLongPress: {
                     withAnimation(.easeInOut(duration: 0.2)) {
                         showLevelCounter.toggle()
                         hapticFeedback.notificationOccurred(.success)
@@ -160,9 +166,7 @@ struct PlayerCounterView: View {
             }
             
             if showPreparationCounter {
-                CounterButtonView(iconName: "preparation", count: player.preparationCounters, onValueChange: { value in
-                    player.preparationCounters = value
-                }, onLongPress: {
+                CounterButtonView(iconName: "preparation", count: $player.preparationCounters, onLongPress: {
                     withAnimation(.easeInOut(duration: 0.2)) {
                         showPreparationCounter.toggle()
                         hapticFeedback.notificationOccurred(.success)
@@ -171,9 +175,7 @@ struct PlayerCounterView: View {
             }
             
             if showEnlightenmentCounter {
-                CounterButtonView(iconName: "enlightenment", count: player.enlightenmentCounters, onValueChange: { value in
-                    player.enlightenmentCounters = value
-                }, onLongPress: {
+                CounterButtonView(iconName: "enlightenment", count: $player.enlightenmentCounters, onLongPress: {
                     withAnimation(.easeInOut(duration: 0.2)) {
                         showEnlightenmentCounter.toggle()
                         hapticFeedback.notificationOccurred(.success)
@@ -182,9 +184,7 @@ struct PlayerCounterView: View {
             }
             
             if showLashCounter {
-                CounterButtonView(iconName: "lash", count: player.lashCounters, onValueChange: { value in
-                    player.lashCounters = value
-                }, onLongPress: {
+                CounterButtonView(iconName: "lash", count: $player.lashCounters, onLongPress: {
                     withAnimation(.easeInOut(duration: 0.2)) {
                         showLashCounter.toggle()
                         hapticFeedback.notificationOccurred(.success)
@@ -193,9 +193,7 @@ struct PlayerCounterView: View {
             }
             
             if showFloatingMemoryCounter {
-                CounterButtonView(iconName: "floating-memory", count: player.floatingMemory, onValueChange: { value in
-                    player.floatingMemory = value
-                }, onLongPress: {
+                CounterButtonView(iconName: "floating-memory", count: $player.floatingMemory, onLongPress: {
                     withAnimation(.easeInOut(duration: 0.2)) {
                         showFloatingMemoryCounter.toggle()
                         hapticFeedback.notificationOccurred(.success)

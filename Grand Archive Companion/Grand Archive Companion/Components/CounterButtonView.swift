@@ -23,12 +23,11 @@ private struct CounterButtonStyle: ViewModifier {
 struct CounterButtonView: View {
     
     @State var iconName: String
-    @State var count: Int = 0
+    @Binding var count: Int
     
     @State private var size: CGSize = CGSize(width: 30, height: 30)
     @State private var isPressed: Bool = false
     
-    var onValueChange: (_ value: Int) -> Void
     var onLongPress: () -> Void
     
     var body: some View {
@@ -69,16 +68,15 @@ struct CounterButtonView: View {
     
     private func incrementValue() {
         count += 1
-        onValueChange(count) // Passing along the current token value
     }
     
     private func decrementValue() {
         if count == 0 { return }
         count -= 1
-        onValueChange(count) // Passing along the current token value
     }
 }
 
 #Preview {
-    CounterButtonView(iconName: "Level", onValueChange: { _ in }, onLongPress: {})
+    @Previewable @State var count = 1
+    CounterButtonView(iconName: "Level", count: $count, onLongPress: {})
 }
