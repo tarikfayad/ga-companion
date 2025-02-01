@@ -11,7 +11,7 @@ struct PlayerCounterView: View {
     
     @State var backgroundColor: Color // We'll set the background color based on the player number
     @State var fontColor: Color
-    @Binding var player: Player
+    @ObservedObject var player: Player
     
     @State private var leftIsTouched: Bool = false
     @State private var rightIsTouched: Bool = false
@@ -29,12 +29,10 @@ struct PlayerCounterView: View {
     @State private var incrementTapCount: Int = 0
     @State private var incrementLastTapTime: Date? = nil
     @State private var incrementShowTapCount: Bool = false
-    var onIncrementUpdate: (Int) -> Void
     
     @State private var decrementTapCount: Int = 0
     @State private var decrementLastTapTime: Date? = nil
     @State private var decrementShowTapCount: Bool = false
-    var onDecrementUpdate: (Int) -> Void
     
     @State private var timer: Timer? = nil
     private let timerDuration = 0.5
@@ -237,7 +235,7 @@ struct PlayerCounterView: View {
         incrementShowTapCount = true
         
         timer = Timer.scheduledTimer(withTimeInterval: timerDuration, repeats: false) { _ in
-            onIncrementUpdate(incrementTapCount)
+            addDamage(to: player, value: incrementTapCount)
             resetTapCount()
         }
         
@@ -252,7 +250,7 @@ struct PlayerCounterView: View {
         decrementShowTapCount = true
         
         timer = Timer.scheduledTimer(withTimeInterval: timerDuration, repeats: false) { _ in
-            onDecrementUpdate(decrementTapCount * -1)
+            addDamage(to: player, value: decrementTapCount * -1)
             resetTapCount()
         }
         
@@ -265,16 +263,21 @@ struct PlayerCounterView: View {
         incrementTapCount = 0
         decrementTapCount = 0
     }
+    
+    private func addDamage(to player: Player, value: Int) {
+        let damage = Damage(player: player, value: value, sortIndex: retrieveHighestSortIndex(player: player) + 1)
+        player.damageHistory.append(damage)
+    }
+    
+    private func retrieveHighestSortIndex(player: Player) -> Int {
+        return player.damageHistory.max(by: { $0.sortIndex < $1.sortIndex })?.sortIndex ?? 0
+    }
 }
 
 #Preview {
     @Previewable @State var player = Player(index: 1)
     PlayerCounterView (
         backgroundColor: .blue,
-        fontColor: .white, player: $player,
-        onIncrementUpdate: { count in
-        },
-        onDecrementUpdate: { count in
-        }
+        fontColor: .white, player: player
     )
 }
