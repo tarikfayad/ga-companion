@@ -10,13 +10,14 @@ import SwiftUI
 struct DeckCreationView: View {
     @Environment(\.modelContext) private var modelContext
     
-    @State private var deckName: String = ""
+    @Binding var deckName: String
+    @Binding var selectedChampions: Set<Champion>
+    @Binding var elements: Set<Element>
+    @Binding var userDidWin: Bool
+    
     @State private var searchText = ""
-    @State private var selectedChampions: Set<Champion> = []
     @State private var isShowingChampions: Bool = false
-    @State private var elements: Set<Element> = []
     @State private var isShowingElements: Bool = false
-    @State private var userDidWin: Bool = false
     @State var deckString: String = "Your Deck"
     
     @State var isUserDeck: Bool = true
@@ -50,7 +51,7 @@ struct DeckCreationView: View {
                         .frame(height: 1)
                         .foregroundStyle(Color.secondary)
                         .offset(y: 12)
-                )
+                ) 
                 .padding(.vertical, 5)
             
             HStack {
@@ -130,10 +131,6 @@ struct DeckCreationView: View {
         }
         .padding()
         .foregroundStyle(.white)
-        .overlay(
-            RoundedRectangle(cornerRadius: 10)
-                .stroke(Color.white.opacity(0.5), lineWidth: 1)
-        )
         .onAppear {
             if isUserDeck {
                 userDecks = Deck.load(context: modelContext)
@@ -165,6 +162,11 @@ struct DeckCreationView: View {
 }
 
 #Preview {
-    DeckCreationView()
+    @Previewable @State var deckName: String = ""
+    @Previewable @State var selectedChampions: Set<Champion> = []
+    @Previewable @State var elements: Set<Element> = []
+    @Previewable @State var userDidWin: Bool = false
+    
+    DeckCreationView(deckName: $deckName, selectedChampions: $selectedChampions, elements: $elements, userDidWin: $userDidWin, deckString: "Your Deck", isUserDeck: true)
         .background(Color.gray.opacity(0.2))
 }
