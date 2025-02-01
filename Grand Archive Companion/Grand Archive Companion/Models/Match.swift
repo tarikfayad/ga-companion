@@ -56,7 +56,11 @@ class Match: Codable, Identifiable {
     }
     
     static func save(matches: [Match], context: ModelContext) {
-        matches.forEach { context.insert($0) }
+        matches.forEach {
+            context.insert($0.userDeck)
+            context.insert($0.opponentDeck)
+            context.insert($0)
+        }
         do {
             try context.save()
         } catch {
