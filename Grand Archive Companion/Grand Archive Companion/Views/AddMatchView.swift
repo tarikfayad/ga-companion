@@ -34,19 +34,32 @@ struct AddMatchView: View {
             Color.background.ignoresSafeArea(.all)
             VStack {
                 DeckCreationView(deckName: $userDeckName, selectedChampions: $userSelectedChampions, elements: $userSelectedElements, userDidWin: $userDidWin, deckString: "Your Deck", isUserDeck: true)
+                    .frame(width: UIScreen.main.bounds.width - 30)
                     .padding(.horizontal, 5)
+                    .background(
+                        RoundedRectangle(cornerRadius: 12)
+                            .fill(Color.gray.opacity(0.1))
+                    )
                 
                 Text("VS")
                     .font(.system(size: 18))
                     .fontWeight(.bold)
                     .foregroundColor(.white)
-                    .padding(.top, 10)
+//                    .padding(.top, 10)
                 
                 DeckCreationView(deckName: $opponentDeckName, selectedChampions: $opponentSelectedChampions, elements: $opponentSelectedElements, userDidWin: .constant(false), deckString: "Opponent's Deck", isUserDeck: false)
-                    .padding(.horizontal, 5)
+                    .frame(width: UIScreen.main.bounds.width - 30)
+                    .background(
+                        RoundedRectangle(cornerRadius: 12)
+                            .fill(Color.gray.opacity(0.1))
+                    )
+                    .padding(.bottom, 20)
                 
+                Text("NOTES")
+                    .font(.system(size: 12))
+                    
                 TextEditor(text: $matchNotes)
-                    .frame(width: 350, height: 150)
+                    .frame(width: UIScreen.main.bounds.width - 30, height: 150)
                     .scrollContentBackground(.hidden)
                     .background(Color.secondary.opacity(0.1))
                     .cornerRadius(10)

@@ -59,6 +59,7 @@ struct DeckCreationView: View {
                     isShowingChampions.toggle()
                 } label: {
                     Text("Champions")
+                    Image(systemName: "person.circle")
                 }
                 .frame(height: 30)
                 .frame(maxWidth: .infinity)
@@ -90,6 +91,7 @@ struct DeckCreationView: View {
                     isShowingElements.toggle()
                 } label: {
                     Text("Deck Elements")
+                    Image(systemName: "flame.fill")
                 }
                 .frame(height: 30)
                 .frame(maxWidth: .infinity)
