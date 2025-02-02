@@ -21,6 +21,7 @@ struct DeckCreationView: View {
     
     @State var isUserDeck: Bool = true
     @State var userDecks: [Deck] = []
+    @State var opponentDecks: [Deck] = []
     
     var body: some View {
         VStack {
@@ -30,6 +31,26 @@ struct DeckCreationView: View {
             if isUserDeck && userDecks.count > 0 {
                 Menu("Load a Saved Deck") {
                     ForEach(userDecks, id: \.self) { deck in
+                        Button {
+                            selectDeck(deck)
+                        }
+                        label: {
+                            Text(deck.name)
+                        }
+                    }
+                }
+                .frame(width: 180, height: 25)
+                .background(
+                    RoundedRectangle(cornerRadius: 10)
+                        .fill(.white)
+                        
+                )
+                .foregroundStyle(.black)
+            }
+            
+            if !isUserDeck && opponentDecks.count > 0 {
+                Menu("Load a Saved Deck") {
+                    ForEach(opponentDecks, id: \.self) { deck in
                         Button {
                             selectDeck(deck)
                         }
@@ -154,8 +175,10 @@ struct DeckCreationView: View {
         .foregroundStyle(.white)
         .onAppear {
             if isUserDeck {
-                userDecks = Deck.load(context: modelContext)
-            } 
+                userDecks = Deck.loadUserDecks(context: modelContext)
+            } else {
+                opponentDecks = Deck.loadOpponentDecks(context: modelContext)
+            }
         }
     }
     

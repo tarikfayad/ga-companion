@@ -121,8 +121,8 @@ struct AddMatchView: View {
         if (userDeckName != "" && userSelectedChampions.count > 0 && userSelectedElements.count > 0 && opponentDeckName != "" && opponentSelectedChampions.count > 0 && opponentSelectedElements.count > 0) {
             
             // Create user and opponent decks
-            let userDeck = Deck(name: userDeckName, champions: Array(userSelectedChampions), elements: Array(userSelectedElements))
-            let opponentDeck = Deck(name: opponentDeckName, champions: Array(opponentSelectedChampions), elements: Array(opponentSelectedElements))
+            let userDeck = Deck(name: userDeckName, isUserDeck: true, champions: Array(userSelectedChampions), elements: Array(userSelectedElements))
+            let opponentDeck = Deck(name: opponentDeckName, isUserDeck: false, champions: Array(opponentSelectedChampions), elements: Array(opponentSelectedElements))
             
             // Create the match
             let newMatch = Match(didUserWin: userDidWin, userDeck: userDeck, opponentDeck: opponentDeck, notes: matchNotes)

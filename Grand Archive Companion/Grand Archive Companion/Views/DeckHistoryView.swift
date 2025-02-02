@@ -131,10 +131,10 @@ struct DeckHistoryView: View {
 
 #Preview {
     let playerChampion = Champion.init(name: "Lorraine, Crux Knight", lineage: "Lorraine", jobs: ["Warrior"], health: 28, level: 3)
-    let playerDeck = Deck(name: "Deck 1", champions: [playerChampion], elements: [.fire, .crux])
+    let playerDeck = Deck(name: "Deck 1", isUserDeck: true, champions: [playerChampion], elements: [.fire, .crux])
     
     let opponentChampion = Champion.init(name: "Lorraine, Crux Knight", lineage: "Lorraine", jobs: ["Warrior"], health: 28, level: 3)
-    let opponentDeck = Deck(name: "Deck 1", champions: [opponentChampion, playerChampion], elements: [.fire, .crux, .water])
+    let opponentDeck = Deck(name: "Deck 1", isUserDeck: false, champions: [opponentChampion, playerChampion], elements: [.fire, .crux, .water])
     
     let match = Match.init(didUserWin: true, userDeck: playerDeck, opponentDeck: opponentDeck)
     

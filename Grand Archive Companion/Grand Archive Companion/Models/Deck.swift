@@ -13,13 +13,15 @@ import SwiftUI
 class Deck {
     var id: UUID = UUID()
     var name: String
+    var isUserDeck: Bool = false
     var champions: [Champion]
     var elements: [Element]
     var cards: [Card] // This won't get use for now. Long term I'll let people store what cards they have in their deck and import from SIlvie.
     
-    init(id: UUID = UUID(), name: String, champions: [Champion], elements: [Element], cards: [Card] = []) {
+    init(id: UUID = UUID(), name: String, isUserDeck: Bool = false, champions: [Champion], elements: [Element], cards: [Card] = []) {
         self.id = id
         self.name = name
+        self.isUserDeck = isUserDeck
         self.champions = champions
         self.elements = elements
         self.cards = cards
@@ -36,6 +38,34 @@ class Deck {
     
     static func load(context: ModelContext) -> [Deck] {
         let fetchDescriptor = FetchDescriptor<Deck>()
+        do {
+            let decks = try context.fetch(fetchDescriptor)
+            print("Successfully loaded \(decks.count) decks")
+            return decks
+        } catch {
+            print("Failed to load decks: \(error)")
+            return []
+        }
+    }
+    
+    static func loadUserDecks(context: ModelContext) -> [Deck] {
+        let fetchDescriptor = FetchDescriptor<Deck>(
+            predicate: #Predicate { $0.isUserDeck }
+        )
+        do {
+            let decks = try context.fetch(fetchDescriptor)
+            print("Successfully loaded \(decks.count) decks")
+            return decks
+        } catch {
+            print("Failed to load decks: \(error)")
+            return []
+        }
+    }
+    
+    static func loadOpponentDecks(context: ModelContext) -> [Deck] {
+        let fetchDescriptor = FetchDescriptor<Deck>(
+            predicate: #Predicate { $0.isUserDeck == false }
+        )
         do {
             let decks = try context.fetch(fetchDescriptor)
             print("Successfully loaded \(decks.count) decks")
