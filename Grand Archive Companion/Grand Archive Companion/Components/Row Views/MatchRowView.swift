@@ -16,75 +16,143 @@ struct MatchRowView: View {
         VStack {
             HStack {
                 Spacer()
-                HStack {
-                    ZStack {
-                        HStack {
-                            ForEach(filterChampionsByLineage(match.userDeck.champions), id: \.self){ champion in
-                                Image(champion.imageName())
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(width: imageSize + 10, height: imageSize + 10)
-                                    .cornerRadius(imageSize / 2)
-                                    .overlay(Circle().stroke(imageStrokeColor, lineWidth: 2))
+                VStack {
+                    HStack {
+                        ZStack {
+                            let filteredChamps = filterChampionsByLineage(match.userDeck.champions)
+                            
+                            if filteredChamps.count > 2 {
+                                VStack {
+                                    HStack {
+                                        ForEach(filteredChamps.prefix(2), id: \.self){ champion in
+                                            Image(champion.imageName())
+                                                .resizable()
+                                                .scaledToFit()
+                                                .frame(width: imageSize - 10, height: imageSize - 10)
+                                                .cornerRadius(imageSize / 2)
+                                                .overlay(Circle().stroke(imageStrokeColor, lineWidth: 2))
+                                        }
+                                    }
+                                    
+                                    HStack {
+                                        ForEach(filteredChamps.dropFirst(2), id: \.self){ champion in
+                                            Image(champion.imageName())
+                                                .resizable()
+                                                .scaledToFit()
+                                                .frame(width: imageSize - 10, height: imageSize - 10)
+                                                .cornerRadius(imageSize / 2)
+                                                .overlay(Circle().stroke(imageStrokeColor, lineWidth: 2))
+                                        }
+                                    }
+                                }
+                            } else {
+                                HStack {
+                                    ForEach(filteredChamps, id: \.self){ champion in
+                                        Image(champion.imageName())
+                                            .resizable()
+                                            .scaledToFit()
+                                            .frame(width: imageSize + 10, height: imageSize + 10)
+                                            .cornerRadius(imageSize / 2)
+                                            .overlay(Circle().stroke(imageStrokeColor, lineWidth: 2))
+                                    }
+                                }
                             }
-                        }
-                        
-                        VStack {
-                            Spacer()
-                            HStack {
-                                ForEach(match.userDeck.elements, id: \.self){ element in
-                                    Image(element.rawValue)
-                                        .resizable()
-                                        .scaledToFit()
-                                        .frame(width: imageSize / 2, height: imageSize / 2)
-                                        .cornerRadius(imageSize / 4)
-                                        .overlay(Circle().stroke(imageStrokeColor, lineWidth: 2))
+                            
+                            VStack {
+                                Spacer()
+                                HStack {
+                                    ForEach(match.userDeck.elements, id: \.self){ element in
+                                        Image(element.rawValue)
+                                            .resizable()
+                                            .scaledToFit()
+                                            .frame(width: imageSize / 2, height: imageSize / 2)
+                                            .cornerRadius(imageSize / 4)
+                                            .overlay(Circle().stroke(imageStrokeColor, lineWidth: 2))
+                                    }
                                 }
                             }
                         }
                     }
+                    .frame(minWidth: 100)
+                    .padding(.trailing, 10)
+                    
+                    Text(match.userDeck.name)
+                        .font(.caption)
+                        .multilineTextAlignment(.center)
                 }
-                .frame(minWidth: 110)
-                .padding(.trailing, 10)
                 
-                Text("vs")
+                VStack {
+                    Spacer()
+                    Text("vs")
+                    Text(match.didUserWin ? "WIN" : "LOSE")
+                        .foregroundStyle(match.didUserWin ? .green : .red)
+                    Spacer()
+                }
                 
-                HStack {
-                    ZStack {
-                        HStack {
-                            ForEach(filterChampionsByLineage(match.opponentDeck.champions), id: \.self){ champion in
-                                Image(champion.imageName())
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(width: imageSize + 10, height: imageSize + 10)
-                                    .cornerRadius(imageSize / 2)
-                                    .overlay(Circle().stroke(imageStrokeColor, lineWidth: 2))
+                VStack {
+                    HStack {
+                        ZStack {
+                            let filteredChamps = filterChampionsByLineage(match.opponentDeck.champions)
+                            
+                            if filteredChamps.count > 2 {
+                                VStack {
+                                    HStack {
+                                        ForEach(filteredChamps.prefix(2), id: \.self){ champion in
+                                            Image(champion.imageName())
+                                                .resizable()
+                                                .scaledToFit()
+                                                .frame(width: imageSize - 10, height: imageSize - 10)
+                                                .cornerRadius(imageSize / 2)
+                                                .overlay(Circle().stroke(imageStrokeColor, lineWidth: 2))
+                                        }
+                                    }
+                                    
+                                    HStack {
+                                        ForEach(filteredChamps.dropFirst(2), id: \.self){ champion in
+                                            Image(champion.imageName())
+                                                .resizable()
+                                                .scaledToFit()
+                                                .frame(width: imageSize - 10, height: imageSize - 10)
+                                                .cornerRadius(imageSize / 2)
+                                                .overlay(Circle().stroke(imageStrokeColor, lineWidth: 2))
+                                        }
+                                    }
+                                }
+                            } else {
+                                HStack {
+                                    ForEach(filteredChamps, id: \.self){ champion in
+                                        Image(champion.imageName())
+                                            .resizable()
+                                            .scaledToFit()
+                                            .frame(width: imageSize + 10, height: imageSize + 10)
+                                            .cornerRadius(imageSize / 2)
+                                            .overlay(Circle().stroke(imageStrokeColor, lineWidth: 2))
+                                    }
+                                }
                             }
-                        }
-                        
-                        VStack {
-                            Spacer()
-                            HStack {
-                                ForEach(match.opponentDeck.elements, id: \.self){ element in
-                                    Image(element.rawValue)
-                                        .resizable()
-                                        .scaledToFit()
-                                        .frame(width: imageSize / 2, height: imageSize / 2)
-                                        .cornerRadius(imageSize / 4)
-                                        .overlay(Circle().stroke(imageStrokeColor, lineWidth: 2))
+                            
+                            VStack {
+                                Spacer()
+                                HStack {
+                                    ForEach(match.opponentDeck.elements, id: \.self){ element in
+                                        Image(element.rawValue)
+                                            .resizable()
+                                            .scaledToFit()
+                                            .frame(width: imageSize / 2, height: imageSize / 2)
+                                            .cornerRadius(imageSize / 4)
+                                            .overlay(Circle().stroke(imageStrokeColor, lineWidth: 2))
+                                    }
                                 }
                             }
                         }
                     }
+                    .frame(minWidth: 100)
+                    .padding(.leading, 10)
+                    
+                    Text(match.opponentDeck.name)
+                        .font(.caption)
+                        .multilineTextAlignment(.center)
                 }
-                .frame(minWidth: 110)
-                .padding(.leading, 10)
-                Spacer()
-            }
-            HStack {
-                Spacer()
-                Text(match.didUserWin ? "WIN" : "LOSE")
-                    .foregroundStyle(match.didUserWin ? .green : .red)
                 Spacer()
             }
         }
