@@ -108,6 +108,16 @@ class Champion: Codable, Equatable {
         return champions
     }
     
+    static func retrieveChampionsWithLineages() -> [Champion] {
+        var champs: [Champion] = []
+        
+        for champion in generateAllChampions() {
+            if champion.lineage != "" { champs.append(champion) }
+        }
+        
+        return champs
+    }
+    
     // MARK: - Encodable
     
     enum CodingKeys: String, CodingKey {

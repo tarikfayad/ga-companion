@@ -66,7 +66,7 @@ struct DeckCreationView: View {
                 .background(Color.secondary)
                 .popover(isPresented: $isShowingChampions) {
                     VStack {
-                        List(Champion.generateAllChampions(), id: \.self) { champion in
+                        List(Champion.retrieveChampionsWithLineages(), id: \.self) { champion in
                             HStack {
                                 Text(champion.name)
                                     .frame(maxWidth: .infinity)
