@@ -27,10 +27,9 @@ struct DeckCreationView: View {
         VStack {
             Text(deckString)
                 .font(.system(size: 20, weight: .bold, design: .default))
-                .padding(.top, 10)
             
             if isUserDeck && userDecks.count > 0 {
-                Menu("Select a Saved Deck") {
+                Menu("Load a Saved Deck") {
                     ForEach(userDecks, id: \.self) { deck in
                         Button {
                             selectDeck(deck)
@@ -41,7 +40,12 @@ struct DeckCreationView: View {
                     }
                 }
                 .frame(width: 180, height: 25)
-                .background(Color.secondary.opacity(0.2))
+                .background(
+                    RoundedRectangle(cornerRadius: 10)
+                        .fill(.white)
+                        
+                )
+                .foregroundStyle(.black)
             }
             
             TextField("Enter a deck name...", text: $deckName)
