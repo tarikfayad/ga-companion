@@ -16,6 +16,7 @@ struct AddMatchView: View {
     @State private var showSaveError: Bool = false
     
     @State private var matchNotes: String = "Enter deck notes here..."
+    @FocusState private var isFocused: Bool
     
     // User deck variables
     @State private var userDeckName: String = ""
@@ -36,9 +37,9 @@ struct AddMatchView: View {
                     .padding(.horizontal, 5)
                 
                 Text("VS")
-                    .font(.title2)
+                    .font(.system(size: 18))
                     .fontWeight(.bold)
-                    .foregroundColor(.secondary)
+                    .foregroundColor(.white)
                     .padding(.top, 10)
                 
                 DeckCreationView(deckName: $opponentDeckName, selectedChampions: $opponentSelectedChampions, elements: $opponentSelectedElements, userDidWin: .constant(false), deckString: "Opponent's Deck", isUserDeck: false)
@@ -46,7 +47,15 @@ struct AddMatchView: View {
                 
                 TextEditor(text: $matchNotes)
                     .frame(width: 350, height: 150)
+                    .scrollContentBackground(.hidden)
                     .background(Color.secondary.opacity(0.1))
+                    .cornerRadius(10)
+                    .focused($isFocused)
+                    .onChange(of: isFocused) { focused in
+                        if focused && matchNotes == "Enter deck notes here..." {
+                            matchNotes = ""
+                        }
+                    }
                 
                 Button {
                     saveMatch()

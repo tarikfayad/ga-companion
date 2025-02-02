@@ -26,7 +26,7 @@ struct DeckCreationView: View {
     var body: some View {
         VStack {
             Text(deckString)
-                .font(.system(size: 24, weight: .bold, design: .default))
+                .font(.system(size: 20, weight: .bold, design: .default))
                 .padding(.top, 10)
             
             if isUserDeck && userDecks.count > 0 {
@@ -121,12 +121,29 @@ struct DeckCreationView: View {
             
             if isUserDeck {
                 HStack {
-                    Text("Lost / Won")
-                    Toggle("Lose : Win", isOn: $userDidWin)
-                        .labelsHidden()
-                        .background(userDidWin ? Color.green : Color.red)
-                        .clipShape(RoundedRectangle(cornerRadius: 16))
-                }.padding(.horizontal, 5)
+                    Text("Lost")
+                        .font(.system(size: 14, weight: .bold))
+                        .foregroundColor(userDidWin ? .gray : .white)
+                        .padding(8)
+                        .background(userDidWin ? Color.clear : Color.red)
+                        .cornerRadius(8)
+                        .onTapGesture {
+                            userDidWin = false
+                        }
+                    
+                    Text("Won")
+                        .font(.system(size: 14, weight: .bold))
+                        .foregroundColor(userDidWin ? .white : .gray)
+                        .padding(8)
+                        .background(userDidWin ? Color.green : Color.clear)
+                        .cornerRadius(8)
+                        .onTapGesture {
+                            userDidWin = true
+                        }
+                }
+                .background(Color.secondary.opacity(0.2))
+                .cornerRadius(8)
+                .padding(.top, 5)
             }
         }
         .padding()
