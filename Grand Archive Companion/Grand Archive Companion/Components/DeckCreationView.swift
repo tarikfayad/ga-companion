@@ -179,6 +179,7 @@ struct DeckCreationView: View {
     private func selectDeck(_ deck: Deck) {
         deckName = deck.name
         selectedChampions = Set(deck.champions)
+        elements = Set(deck.elements)
     }
 }
 

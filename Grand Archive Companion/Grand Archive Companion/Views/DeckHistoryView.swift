@@ -14,6 +14,9 @@ struct DeckHistoryView: View {
     @State var matches: [Match] = []
     @State var filteredMatches: [Match] = []
     @State var decks: [Deck] = []
+    
+    @State private var menuTitle: String = "Filter by Deck"
+    @State private var selectedDeck: Deck?
     @State private var navigateToCreateMatchView = false
     
     var body: some View {
@@ -22,13 +25,16 @@ struct DeckHistoryView: View {
                 Color.background.ignoresSafeArea(.all)
                 VStack {
                     Spacer()
-                    Menu("Filter by Deck") {
+                    Menu(menuTitle) {
                         Button("Clear Filter") {
+                            menuTitle = "Filter by Deck"
                             filteredMatches = matches
                         }
                         ForEach(decks, id: \.self) { deck in
                             Button(deck.name) {
                                 filteredMatches = filterMatchesByDeck(deck)
+                                menuTitle = deck.name + " Results"
+                                selectedDeck = deck
                             }
                         }
                     }.frame(width: max(geometry.size.width - 30, 0), height: 35)
@@ -45,6 +51,14 @@ struct DeckHistoryView: View {
                             .font(.system(size: 20, weight: .bold, design: .default))
                             .background(.playerPink)
                     }
+                    
+                    if menuTitle != "Filter by Deck" {
+                        let percent = String(format: "%.2f", Deck.winRate(deck: selectedDeck!, context: modelContext))
+                        Text("\(percent)% Win Rate")
+                            .font(.caption)
+                            .textCase(.uppercase)
+                    }
+                    
                     List {
                         ForEach(filteredMatches, id: \.self) { match in
                             MatchRowView(match: match)

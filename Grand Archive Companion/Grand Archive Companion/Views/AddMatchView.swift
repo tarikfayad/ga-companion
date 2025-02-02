@@ -7,6 +7,7 @@
 
 import SwiftUI
 import SwiftData
+import ProgressHUD
 
 struct AddMatchView: View {
     @Environment(\.presentationMode) var presentationMode
@@ -128,6 +129,7 @@ struct AddMatchView: View {
             
             Deck.save(decks: [userDeck, opponentDeck], context: modelContext) // Inserting them into the context and saving them before saving the match. Could be done in the Match save function as well.
             Match.save(matches: [newMatch], context: modelContext)
+            ProgressHUD.succeed("Match Saved!", delay: 1.5)
             dismiss()
         } else {
             showSaveError.toggle()

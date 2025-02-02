@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F33573832D4FB1110098AB4B /* ProgressHUD in Frameworks */ = {isa = PBXBuildFile; productRef = F33573822D4FB1110098AB4B /* ProgressHUD */; };
 		F348C3242D3DE22F009D7EC9 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F348C3232D3DE22F009D7EC9 /* Launch Screen.storyboard */; };
 		F3AF34082D3B12EB00875AED /* SDWebImageSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = F3AF34072D3B12EB00875AED /* SDWebImageSwiftUI */; };
 /* End PBXBuildFile section */
@@ -30,6 +31,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F3AF34082D3B12EB00875AED /* SDWebImageSwiftUI in Frameworks */,
+				F33573832D4FB1110098AB4B /* ProgressHUD in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -74,6 +76,7 @@
 			name = "Grand Archive Companion";
 			packageProductDependencies = (
 				F3AF34072D3B12EB00875AED /* SDWebImageSwiftUI */,
+				F33573822D4FB1110098AB4B /* ProgressHUD */,
 			);
 			productName = "Grand Archive Companion";
 			productReference = F397039B2D37059E0042CB5C /* Grand Archive Companion.app */;
@@ -105,6 +108,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				F3AF34062D3B12EB00875AED /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */,
+				F33573812D4FB1110098AB4B /* XCRemoteSwiftPackageReference "ProgressHUD" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = F397039C2D37059E0042CB5C /* Products */;
@@ -355,6 +359,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		F33573812D4FB1110098AB4B /* XCRemoteSwiftPackageReference "ProgressHUD" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/relatedcode/ProgressHUD.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 14.1.3;
+			};
+		};
 		F3AF34062D3B12EB00875AED /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SDWebImage/SDWebImageSwiftUI";
@@ -366,6 +378,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		F33573822D4FB1110098AB4B /* ProgressHUD */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F33573812D4FB1110098AB4B /* XCRemoteSwiftPackageReference "ProgressHUD" */;
+			productName = ProgressHUD;
+		};
 		F3AF34072D3B12EB00875AED /* SDWebImageSwiftUI */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = F3AF34062D3B12EB00875AED /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */;

@@ -16,15 +16,13 @@ class Deck {
     var champions: [Champion]
     var elements: [Element]
     var cards: [Card] // This won't get use for now. Long term I'll let people store what cards they have in their deck and import from SIlvie.
-    var winRate: Double?
     
-    init(id: UUID = UUID(), name: String, champions: [Champion], elements: [Element], cards: [Card] = [], winRate: Double = 0) {
+    init(id: UUID = UUID(), name: String, champions: [Champion], elements: [Element], cards: [Card] = []) {
         self.id = id
         self.name = name
         self.champions = champions
         self.elements = elements
         self.cards = cards
-        self.winRate = winRate
     }
     
     static func save(decks: [Deck], context: ModelContext) {
@@ -45,6 +43,26 @@ class Deck {
         } catch {
             print("Failed to load decks: \(error)")
             return []
+        }
+    }
+    
+    static func winRate(deck: Deck, context: ModelContext) -> Double {
+        let deckID = deck.id // cannot reference a model object inside of a predicate so doing so here
+        let fetchDescriptor = FetchDescriptor<Match>(
+            predicate: #Predicate { $0.userDeck.id == deckID }
+        )
+        do {
+            let matches = try context.fetch(fetchDescriptor)
+            var wins: Int = 0
+            for match in matches {
+                if match.didUserWin {
+                    wins += 1
+                }
+            }
+            return Double(wins) / Double(matches.count) * 100
+        } catch {
+            print("Failed to load win rate: \(error)")
+            return 0
         }
     }
 }
