@@ -15,7 +15,6 @@ struct DeckCreationView: View {
     @Binding var elements: Set<Element>
     @Binding var userDidWin: Bool
     
-    @State private var searchText = ""
     @State private var isShowingChampions: Bool = false
     @State private var isShowingElements: Bool = false
     @State var deckString: String = "Your Deck"
@@ -76,10 +75,9 @@ struct DeckCreationView: View {
                                 Text(champion.name)
                                     .frame(maxWidth: .infinity)
                                 Spacer()
-                                if selectedChampions.contains(champion) {
-                                    Image(systemName: "checkmark")
-                                        .foregroundColor(.green)
-                                }
+                                Image(systemName: "checkmark.square.fill")
+                                    .foregroundColor(.green)
+                                    .opacity(selectedChampions.contains(champion) ? 1 : 0)
                             }
                             .contentShape(Rectangle())
                             .onTapGesture {
@@ -109,10 +107,10 @@ struct DeckCreationView: View {
                                 Text(capitalizedElement)
                                     .frame(maxWidth: .infinity)
                                 Spacer()
-                                if elements.contains(element) {
-                                    Image(systemName: "checkmark")
-                                        .foregroundColor(.green)
-                                }
+                                
+                                Image(systemName: "checkmark.square.fill")
+                                    .foregroundColor(.green)
+                                    .opacity(elements.contains(element) ? 1 : 0)
                             }
                             .contentShape(Rectangle())
                             .onTapGesture {
