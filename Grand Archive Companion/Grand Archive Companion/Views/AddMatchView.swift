@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct AddMatchView: View {
     @Environment(\.presentationMode) var presentationMode
@@ -103,6 +104,7 @@ struct AddMatchView: View {
             // Create the match
             let newMatch = Match(didUserWin: userDidWin, userDeck: userDeck, opponentDeck: opponentDeck, notes: matchNotes)
             
+            Deck.save(decks: [userDeck, opponentDeck], context: modelContext) // Inserting them into the context and saving them before saving the match. Could be done in the Match save function as well.
             Match.save(matches: [newMatch], context: modelContext)
             dismiss()
         } else {

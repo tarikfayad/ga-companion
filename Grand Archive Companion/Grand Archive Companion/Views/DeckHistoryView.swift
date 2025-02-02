@@ -9,6 +9,7 @@ import SwiftUI
 
 struct DeckHistoryView: View {
     @Environment(\.presentationMode) var presentationMode
+    @Environment(\.modelContext) private var modelContext
     
     @State var matches: [Match] = []
     @State private var navigateToCreateMatchView = false
@@ -87,6 +88,8 @@ struct DeckHistoryView: View {
             appearance.configureWithTransparentBackground()
             UINavigationBar.appearance().standardAppearance = appearance
             UINavigationBar.appearance().scrollEdgeAppearance = appearance
+            
+            matches = Match.load(context: modelContext)
         }
     }
 }
