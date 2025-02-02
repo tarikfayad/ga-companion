@@ -34,7 +34,7 @@ struct AddMatchView: View {
             Color.background.ignoresSafeArea(.all)
             VStack {
                 DeckCreationView(deckName: $userDeckName, selectedChampions: $userSelectedChampions, elements: $userSelectedElements, userDidWin: $userDidWin, deckString: "Your Deck", isUserDeck: true)
-                    .frame(width: UIScreen.main.bounds.width - 30)
+                    .frame(width: UIScreen.main.bounds.width - 40)
                     .padding(.horizontal, 5)
                     .background(
                         RoundedRectangle(cornerRadius: 12)
@@ -45,7 +45,7 @@ struct AddMatchView: View {
                     .font(.system(size: 18))
                     .fontWeight(.bold)
                     .foregroundColor(.white)
-//                    .padding(.top, 10)
+                    .padding(.vertical, 10)
                 
                 DeckCreationView(deckName: $opponentDeckName, selectedChampions: $opponentSelectedChampions, elements: $opponentSelectedElements, userDidWin: .constant(false), deckString: "Opponent's Deck", isUserDeck: false)
                     .frame(width: UIScreen.main.bounds.width - 30)
@@ -74,7 +74,7 @@ struct AddMatchView: View {
                     saveMatch()
                 } label: {
                     Text("Save Match")
-                        .frame(width:270, height:27)
+                        .frame(width:UIScreen.main.bounds.width - 50, height:27)
                 }
                 .padding()
                 .buttonStyle(.borderedProminent)

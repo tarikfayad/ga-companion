@@ -12,6 +12,8 @@ struct DeckHistoryView: View {
     @Environment(\.modelContext) private var modelContext
     
     @State var matches: [Match] = []
+    @State var filteredMatches: [Match] = []
+    @State var decks: [Deck] = []
     @State private var navigateToCreateMatchView = false
     
     var body: some View {
@@ -21,9 +23,14 @@ struct DeckHistoryView: View {
                 VStack {
                     Spacer()
                     Menu("Filter by Deck") {
-                        Button("Option 1") { print("Option 1 selected") }
-                        Button("Option 2") { print("Option 2 selected") }
-                        Button("Option 3") { print("Option 3 selected") }
+                        Button("Clear Filter") {
+                            filteredMatches = matches
+                        }
+                        ForEach(decks, id: \.self) { deck in
+                            Button(deck.name) {
+                                filteredMatches = filterMatchesByDeck(deck)
+                            }
+                        }
                     }.frame(width: max(geometry.size.width - 30, 0), height: 35)
                         .background(Color.secondary)
                     
@@ -39,7 +46,7 @@ struct DeckHistoryView: View {
                             .background(.playerPink)
                     }
                     List {
-                        ForEach(matches, id: \.self) { match in
+                        ForEach(filteredMatches, id: \.self) { match in
                             MatchRowView(match: match)
                         }
                         .listRowBackground(Color.background)
@@ -90,7 +97,21 @@ struct DeckHistoryView: View {
             UINavigationBar.appearance().scrollEdgeAppearance = appearance
             
             matches = Match.load(context: modelContext)
+            filteredMatches = matches
+            
+            var myDecks: Set<Deck> = []
+            for match in matches {
+                myDecks.insert(match.userDeck)
+            }
+            decks = Array(myDecks).sorted { $0.name < $1.name }
         }
+    }
+    
+    private func filterMatchesByDeck(_ deck: Deck?) -> [Match] {
+        guard let deck else {
+            return matches
+        }
+        return matches.filter { $0.userDeck == deck }
     }
 }
 
