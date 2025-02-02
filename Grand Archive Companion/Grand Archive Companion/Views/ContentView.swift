@@ -47,7 +47,7 @@ struct ContentView: View {
                         }
                         
                         ImageLabelButtonView(imageName: "info.circle", title: "Deck Stats", fontColor: .white, tintColor: .playerGreen, buttonSize: 78){
-                            
+                            // Go to deck stats view
                         }
                     }.padding(.top, -10)
                 }
