@@ -12,7 +12,7 @@ Supports 1 or 2 players.
 - Record match history and track deck win rates
 
 ## Roadmap
-### Unordered, but these are the features I'd currently like to support.
+Unordered, but these are the features I'd currently like to support.
 - [ ] Allow users to select saved opponent decks
 - [ ] Fix a small UI quirk when one player has 3+ champs and the other has 1-2 (elements don't sit flush as they should)
 - [ ] View saved notes on decks
