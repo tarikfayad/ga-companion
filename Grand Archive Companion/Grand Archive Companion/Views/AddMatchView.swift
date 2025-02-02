@@ -60,7 +60,7 @@ struct AddMatchView: View {
                     .font(.system(size: 12))
                     
                 TextEditor(text: $matchNotes)
-                    .frame(width: UIScreen.main.bounds.width - 30, height: 150)
+                    .frame(width: UIScreen.main.bounds.width - 30, height: 100)
                     .scrollContentBackground(.hidden)
                     .background(Color.secondary.opacity(0.1))
                     .cornerRadius(10)

@@ -28,29 +28,11 @@ struct DeckCreationView: View {
             Text(deckString)
                 .font(.system(size: 20, weight: .bold, design: .default))
             
-            if isUserDeck && userDecks.count > 0 {
-                Menu("Load a Saved Deck") {
-                    ForEach(userDecks, id: \.self) { deck in
-                        Button {
-                            selectDeck(deck)
-                        }
-                        label: {
-                            Text(deck.name)
-                        }
-                    }
-                }
-                .frame(width: 180, height: 25)
-                .background(
-                    RoundedRectangle(cornerRadius: 10)
-                        .fill(.white)
-                        
-                )
-                .foregroundStyle(.black)
-            }
+            let decks = isUserDeck ? Deck.loadUserDecks(context: modelContext) : Deck.loadOpponentDecks(context: modelContext)
             
-            if !isUserDeck && opponentDecks.count > 0 {
+            if decks.count > 0 {
                 Menu("Load a Saved Deck") {
-                    ForEach(opponentDecks, id: \.self) { deck in
+                    ForEach(decks, id: \.self) { deck in
                         Button {
                             selectDeck(deck)
                         }
@@ -173,13 +155,6 @@ struct DeckCreationView: View {
         }
         .padding()
         .foregroundStyle(.white)
-        .onAppear {
-            if isUserDeck {
-                userDecks = Deck.loadUserDecks(context: modelContext)
-            } else {
-                opponentDecks = Deck.loadOpponentDecks(context: modelContext)
-            }
-        }
     }
     
     // Helper Functions
