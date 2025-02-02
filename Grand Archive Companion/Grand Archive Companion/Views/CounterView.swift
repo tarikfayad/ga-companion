@@ -54,6 +54,7 @@ struct CounterView: View {
     
     @State private var navigateToCardSearchView = false
     @State private var navigateToHistoryView = false
+    @State private var navigateToAddMatchView = false
     
     init(numberOfPlayers: Int) {
         _numberOfPlayers = State(initialValue: numberOfPlayers)
@@ -97,6 +98,10 @@ struct CounterView: View {
                                 CircleButtonView(imageName: "arrow.counterclockwise.circle", tintColor: Color.black, padding: 10, buttonSize: 30){
                                     navigateToHistoryView = true
                                 }
+                                
+                                CircleButtonView(imageName: "square.and.arrow.down.fill", tintColor: Color.black, padding: 10, buttonSize: 30){
+                                    navigateToAddMatchView = true
+                                }
                             }
                         }
                         
@@ -134,6 +139,9 @@ struct CounterView: View {
                                 }
                                 CircleButtonView(imageName: "arrow.counterclockwise.circle", tintColor: Color.black, padding: 10, buttonSize: 30){
                                     navigateToHistoryView = true
+                                }
+                                CircleButtonView(imageName: "square.and.arrow.down.fill", tintColor: Color.black, padding: 10, buttonSize: 30){
+                                    navigateToAddMatchView = true
                                 }
                             }
                             Spacer()
@@ -174,6 +182,9 @@ struct CounterView: View {
                 } else {
                     HistoryView(multiplayer: true, playerOneColor: .playerBlue, playerTwoColor: .playerPink, playerOneDamageHistory: playerOne.damageHistory, playerTwoDamageHistory: playerTwo.damageHistory)
                 }
+            }
+            .navigationDestination(isPresented: $navigateToAddMatchView) {
+                AddMatchView()
             }
             
             if isFirstLaunch {

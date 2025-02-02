@@ -10,6 +10,7 @@ import SwiftUI
 struct ContentView: View {
     @State private var navigateToPlayerView = false
     @State private var navigateToCardView = false
+    @State private var navigateToHistoryView = false
     
     var body: some View {
         NavigationStack {
@@ -36,14 +37,15 @@ struct ContentView: View {
                     .buttonStyle(.borderedProminent)
                     .tint(.playerBlue)
                     
-                    Button {
-                        navigateToCardView = true
-                    } label: {
-                        Image(systemName: "magnifyingglass")
-                        Text("Card Search")
-                    }
-                    .padding()
-                    .foregroundStyle(.white)
+                    HStack {
+                        ImageLabelButtonView(imageName: "magnifyingglass", title: "Card Search"){
+                            navigateToCardView = true
+                        }
+                        
+                        ImageLabelButtonView(imageName: "clock.arrow.trianglehead.counterclockwise.rotate.90", title: "Match History", fontColor: .white, tintColor: .playerPink){
+                            navigateToHistoryView = true
+                        }
+                    }.padding(.top, -10)
                 }
             }
             .navigationDestination(isPresented: $navigateToPlayerView) {
@@ -51,6 +53,9 @@ struct ContentView: View {
             }
             .navigationDestination(isPresented: $navigateToCardView) {
                 CardSearchView()
+            }
+            .navigationDestination(isPresented: $navigateToHistoryView){
+                DeckHistoryView()
             }
         }
         .onAppear {
