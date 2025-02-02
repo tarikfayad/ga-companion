@@ -155,7 +155,7 @@ struct DeckCreationView: View {
         .onAppear {
             if isUserDeck {
                 userDecks = Deck.load(context: modelContext)
-            }
+            } 
         }
     }
     
