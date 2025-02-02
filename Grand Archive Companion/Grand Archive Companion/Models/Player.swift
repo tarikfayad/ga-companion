@@ -2,7 +2,7 @@ import Foundation
 import SwiftData
 
 @Model
-class Player: Codable {
+class Player: Codable, ObservableObject {
     var id: UUID = UUID() // Unique identifier
     var index: Int
     var damage: Int

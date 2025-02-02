@@ -11,7 +11,7 @@ struct PlayerCounterView: View {
     
     @State var backgroundColor: Color // We'll set the background color based on the player number
     @State var fontColor: Color
-    @Binding var player: Player
+    @ObservedObject var player: Player
     
     @State private var leftIsTouched: Bool = false
     @State private var rightIsTouched: Bool = false
@@ -29,12 +29,10 @@ struct PlayerCounterView: View {
     @State private var incrementTapCount: Int = 0
     @State private var incrementLastTapTime: Date? = nil
     @State private var incrementShowTapCount: Bool = false
-    var onIncrementUpdate: (Int) -> Void
     
     @State private var decrementTapCount: Int = 0
     @State private var decrementLastTapTime: Date? = nil
     @State private var decrementShowTapCount: Bool = false
-    var onDecrementUpdate: (Int) -> Void
     
     @State private var timer: Timer? = nil
     private let timerDuration = 0.5
@@ -144,16 +142,22 @@ struct PlayerCounterView: View {
                     }.padding(.bottom, isTopPlayer ? 35 : 0)
                 }
                 
-            } .foregroundStyle(fontColor)
+            }
+            .foregroundStyle(fontColor)
+            .onChange(of: player) {
+                if player.levelCounters > 0 { showLevelCounter = true }
+                if player.preparationCounters > 0 { showPreparationCounter = true }
+                if player.enlightenmentCounters > 0 { showEnlightenmentCounter = true }
+                if player.lashCounters > 0 { showLashCounter = true }
+                if player.floatingMemory > 0 { showFloatingMemoryCounter = true }
+            }
         }
     }
     
     func createCounterViews() -> some View {
         return HStack {
             if showLevelCounter {
-                CounterButtonView(iconName: "level", count: player.levelCounters, onValueChange: { value in
-                    player.levelCounters = value
-                }, onLongPress: {
+                CounterButtonView(iconName: "level", count: $player.levelCounters, onLongPress: {
                     withAnimation(.easeInOut(duration: 0.2)) {
                         showLevelCounter.toggle()
                         hapticFeedback.notificationOccurred(.success)
@@ -162,9 +166,7 @@ struct PlayerCounterView: View {
             }
             
             if showPreparationCounter {
-                CounterButtonView(iconName: "preparation", count: player.preparationCounters, onValueChange: { value in
-                    player.preparationCounters = value
-                }, onLongPress: {
+                CounterButtonView(iconName: "preparation", count: $player.preparationCounters, onLongPress: {
                     withAnimation(.easeInOut(duration: 0.2)) {
                         showPreparationCounter.toggle()
                         hapticFeedback.notificationOccurred(.success)
@@ -173,9 +175,7 @@ struct PlayerCounterView: View {
             }
             
             if showEnlightenmentCounter {
-                CounterButtonView(iconName: "enlightenment", count: player.enlightenmentCounters, onValueChange: { value in
-                    player.enlightenmentCounters = value
-                }, onLongPress: {
+                CounterButtonView(iconName: "enlightenment", count: $player.enlightenmentCounters, onLongPress: {
                     withAnimation(.easeInOut(duration: 0.2)) {
                         showEnlightenmentCounter.toggle()
                         hapticFeedback.notificationOccurred(.success)
@@ -184,9 +184,7 @@ struct PlayerCounterView: View {
             }
             
             if showLashCounter {
-                CounterButtonView(iconName: "lash", count: player.lashCounters, onValueChange: { value in
-                    player.lashCounters = value
-                }, onLongPress: {
+                CounterButtonView(iconName: "lash", count: $player.lashCounters, onLongPress: {
                     withAnimation(.easeInOut(duration: 0.2)) {
                         showLashCounter.toggle()
                         hapticFeedback.notificationOccurred(.success)
@@ -195,9 +193,7 @@ struct PlayerCounterView: View {
             }
             
             if showFloatingMemoryCounter {
-                CounterButtonView(iconName: "floating-memory", count: player.floatingMemory, onValueChange: { value in
-                    player.floatingMemory = value
-                }, onLongPress: {
+                CounterButtonView(iconName: "floating-memory", count: $player.floatingMemory, onLongPress: {
                     withAnimation(.easeInOut(duration: 0.2)) {
                         showFloatingMemoryCounter.toggle()
                         hapticFeedback.notificationOccurred(.success)
@@ -237,7 +233,7 @@ struct PlayerCounterView: View {
         incrementShowTapCount = true
         
         timer = Timer.scheduledTimer(withTimeInterval: timerDuration, repeats: false) { _ in
-            onIncrementUpdate(incrementTapCount)
+            addDamage(to: player, value: incrementTapCount)
             resetTapCount()
         }
         
@@ -252,7 +248,7 @@ struct PlayerCounterView: View {
         decrementShowTapCount = true
         
         timer = Timer.scheduledTimer(withTimeInterval: timerDuration, repeats: false) { _ in
-            onDecrementUpdate(decrementTapCount * -1)
+            addDamage(to: player, value: decrementTapCount * -1)
             resetTapCount()
         }
         
@@ -265,16 +261,21 @@ struct PlayerCounterView: View {
         incrementTapCount = 0
         decrementTapCount = 0
     }
+    
+    private func addDamage(to player: Player, value: Int) {
+        let damage = Damage(player: player, value: value, sortIndex: retrieveHighestSortIndex(player: player) + 1)
+        player.damageHistory.append(damage)
+    }
+    
+    private func retrieveHighestSortIndex(player: Player) -> Int {
+        return player.damageHistory.max(by: { $0.sortIndex < $1.sortIndex })?.sortIndex ?? 0
+    }
 }
 
 #Preview {
     @Previewable @State var player = Player(index: 1)
     PlayerCounterView (
         backgroundColor: .blue,
-        fontColor: .white, player: $player,
-        onIncrementUpdate: { count in
-        },
-        onDecrementUpdate: { count in
-        }
+        fontColor: .white, player: player
     )
 }

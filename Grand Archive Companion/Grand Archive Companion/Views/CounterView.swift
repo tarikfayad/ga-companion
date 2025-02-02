@@ -8,11 +8,43 @@
 import SwiftUI
 import SwiftData
 
+// Extension methods to detect devie shake.
+extension UIDevice {
+    static let deviceDidShakeNotification = Notification.Name(rawValue: "deviceDidShakeNotification")
+}
+
+extension UIWindow {
+    open override func motionEnded(_ motion: UIEvent.EventSubtype, with event: UIEvent?) {
+        if motion == .motionShake {
+            NotificationCenter.default.post(name: UIDevice.deviceDidShakeNotification, object: nil)
+        }
+    }
+}
+
+struct DeviceShakeViewModifier: ViewModifier {
+    let action: () -> Void
+    
+    func body(content: Content) -> some View {
+        content
+            .onAppear()
+            .onReceive(NotificationCenter.default.publisher(for: UIDevice.deviceDidShakeNotification)){ _ in
+                action()
+            }
+    }
+}
+
+extension View {
+    func onDeviceShake(_ action: @escaping () -> Void) -> some View {
+        self.modifier(DeviceShakeViewModifier(action: action))
+    }
+}
+
 struct CounterView: View {
     
     @Environment(\.presentationMode) var presentationMode
     @Environment(\.modelContext) private var modelContext
     @State private var isFirstLaunch: Bool = true
+    @State private var showResetMenu: Bool = false
     
     @Query private var players: [Player] // Fetch all Player models
     
@@ -43,15 +75,9 @@ struct CounterView: View {
                                 PlayerCounterView (
                                     backgroundColor: .playerPink,
                                     fontColor: .white,
-                                    player: $playerTwo,
+                                    player: playerTwo,
                                     isSinglePlayer: false,
-                                    isTopPlayer: true,
-                                    onIncrementUpdate: { count in
-                                        addDamage(to: &playerTwo, value: count)
-                                    },
-                                    onDecrementUpdate: { count in
-                                        addDamage(to: &playerTwo, value: count)
-                                    }
+                                    isTopPlayer: true
                                 )
                                 .rotationEffect(.degrees(180))
                                 .ignoresSafeArea(.all)
@@ -59,14 +85,8 @@ struct CounterView: View {
                             PlayerCounterView (
                                 backgroundColor: .playerBlue,
                                 fontColor: .white,
-                                player: $playerOne,
-                                isSinglePlayer: false,
-                                onIncrementUpdate: { count in
-                                    addDamage(to: &playerOne, value: count)
-                                },
-                                onDecrementUpdate: { count in
-                                    addDamage(to: &playerOne, value: count)
-                                }
+                                player: playerOne,
+                                isSinglePlayer: false
                             )
                         }
                         VStack {
@@ -108,13 +128,7 @@ struct CounterView: View {
                         PlayerCounterView (
                             backgroundColor: .playerBlue,
                             fontColor: .white,
-                            player: $playerOne,
-                            onIncrementUpdate: { count in
-                                addDamage(to: &playerOne, value: count)
-                            },
-                            onDecrementUpdate: { count in
-                                addDamage(to: &playerOne, value: count)
-                            }
+                            player: playerOne
                         )
                         .padding(.top, -20)
                         
@@ -262,8 +276,27 @@ struct CounterView: View {
                 }
             }
         }
+        .onDeviceShake {
+            showResetMenu.toggle()
+        }
+        .alert("New Game?", isPresented: $showResetMenu) {
+            Button {
+                resetGame()
+            } label:{
+                Text("Reset")
+            }.padding()
+            
+            Button(role: .cancel) {
+            } label:{
+                Text("Cancel")
+            }.padding()
+        } message: {
+            Text("Would you like to erase all history and reset the game?")
+        }
+        
     }
     
+    // Helper methods for view setup.
     private func setupPlayers() {
         // Load all players from the context
         let fetchedPlayers = Player.load(context: modelContext)
@@ -289,13 +322,9 @@ struct CounterView: View {
         }
     }
     
-    private func addDamage(to player: inout Player, value: Int) {
-        let damage = Damage(player: player, value: value, sortIndex: retrieveHighestSortIndex(player: player) + 1)
-        player.damageHistory.append(damage)
-    }
-    
-    private func retrieveHighestSortIndex(player: Player) -> Int {
-        return player.damageHistory.max(by: { $0.sortIndex < $1.sortIndex })?.sortIndex ?? 0
+    private func resetGame() {
+        Player.deleteAll(context: modelContext)
+        setupPlayers()
     }
     
     private func checkFirstLaunch() {
