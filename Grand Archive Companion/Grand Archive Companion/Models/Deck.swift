@@ -95,4 +95,28 @@ class Deck {
             return 0
         }
     }
+    
+    static func winRate(deck: Deck, champion: Champion, context: ModelContext) -> Double {
+        let deckID = deck.id // cannot reference a model object inside of a predicate so doing so here
+        let fetchDescriptor = FetchDescriptor<Match>(
+            predicate: #Predicate { $0.userDeck.id == deckID }
+        )
+        do {
+            let matches = try context.fetch(fetchDescriptor)
+            var wins: Int = 0
+            var totalMatches: Int = 0
+            for match in matches {
+                if match.opponentDeck.champions.contains(champion) {
+                    totalMatches += 1
+                    if match.didUserWin {
+                        wins += 1
+                    }
+                }
+            }
+            return Double(wins) / Double(totalMatches) * 100
+        } catch {
+            print("Failed to load win rate vs \(champion.name): \(error)")
+            return 0
+        }
+    }
 }
