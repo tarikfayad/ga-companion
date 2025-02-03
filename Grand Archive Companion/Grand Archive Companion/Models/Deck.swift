@@ -36,6 +36,7 @@ class Deck {
         }
     }
     
+    // Function to load all deck objects
     static func load(context: ModelContext) -> [Deck] {
         let fetchDescriptor = FetchDescriptor<Deck>()
         do {
@@ -117,6 +118,25 @@ class Deck {
         } catch {
             print("Failed to load win rate vs \(champion.name): \(error)")
             return 0
+        }
+    }
+    
+    // Retrieve all the matchups that a deck has played.
+    static func getAllPlayedChampions(deck: Deck, context: ModelContext) -> [Champion] {
+        let deckID = deck.id
+        let fetchDescriptor = FetchDescriptor<Match>(
+            predicate: #Predicate { $0.userDeck.id == deckID }
+        )
+        do {
+            let matches = try context.fetch(fetchDescriptor)
+            var champions: Set<Champion> = []
+            for match in matches {
+                champions.formUnion(match.opponentDeck.champions)
+            }
+            return Array(champions).sorted { $0.name < $1.name }
+        } catch {
+            print("Failed to load list of champions played: \(error)")
+            return []
         }
     }
 }
