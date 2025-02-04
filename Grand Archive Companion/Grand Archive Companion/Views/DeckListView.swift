@@ -37,7 +37,7 @@ struct DeckListView: View {
                 }
             }
             .scrollContentBackground(.hidden)
-            .searchable(text: $searchText, placement: .navigationBarDrawer, prompt: "Filter by deck name...")
+            .searchable(text: $searchText, placement: .navigationBarDrawer, prompt: "Filter by deck name or champion...")
             .disableAutocorrection(true)
             .onSubmit(of: .search) {
                  filterDecks()
