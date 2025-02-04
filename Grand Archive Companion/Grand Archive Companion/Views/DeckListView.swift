@@ -15,6 +15,7 @@ struct DeckListView: View {
     @State private var debouncedSearch: (() -> Void)?
     @State private var searchText: String = ""
     @State private var decks: [Deck] = []
+    @State private var filteredDecks: [Deck] = []
     @State private var isLoading: Bool = false
     @State private var navigateToDeckView = false
     @State private var selectedDeck: Deck?
@@ -23,7 +24,7 @@ struct DeckListView: View {
         ZStack {
             Color.background.ignoresSafeArea(.all)
             
-            List(decks, id: \.self) { deck in
+            List(filteredDecks, id: \.self) { deck in
                 if isLoading {
                     ProgressView("Searching for decks...")
                 } else {
@@ -39,7 +40,7 @@ struct DeckListView: View {
             .searchable(text: $searchText, placement: .navigationBarDrawer, prompt: "Filter by deck name...")
             .disableAutocorrection(true)
             .onSubmit(of: .search) {
-                // filterDecks()
+                 filterDecks()
             }
             .onChange(of: searchText) { newValue in
                 // MARK: Deprecated but much easier to use than alternatives. Will change when needed.
@@ -65,10 +66,11 @@ struct DeckListView: View {
             }
             
             debouncedSearch = debounce(delay: 0.5) {
-                // filterDecks()
+                 filterDecks()
             }
             
             decks = Deck.load(context: modelContext)
+            filteredDecks = decks
         }
         .navigationDestination(isPresented: $navigateToDeckView) {
             if let selectedDeck = selectedDeck {
@@ -90,17 +92,16 @@ struct DeckListView: View {
         }
     }
     
-//    func filterDecks() {
-//        Task {
-//            isLoading = true
-//            do {
-//                decks = try await performCardSearch(for: searchText)
-//            } catch {
-//                print("Failed to fetch cards: \(error)")
-//            }
-//            isLoading = false
-//        }
-//    }
+    func filterDecks() {
+        Task {
+            isLoading = true
+            filteredDecks = decks.filter { deck in
+                deck.name.contains(searchText) || deck.champions.contains(where: { $0.name.contains(searchText) })
+            }
+            if searchText == "" { filteredDecks = decks }
+            isLoading = false
+        }
+    }
     
     func debounce(delay: TimeInterval, action: @escaping () -> Void) -> () -> Void {
         var lastFireTime = DispatchTime.now()
