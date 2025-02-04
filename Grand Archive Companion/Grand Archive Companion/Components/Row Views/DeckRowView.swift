@@ -46,7 +46,10 @@ struct DeckRowView: View {
 }
 
 #Preview {
+    let playerChampion = Champion.init(name: "Lorraine, Crux Knight", lineage: "Lorraine", jobs: ["Warrior"], health: 28, level: 3)
+    let playerDeck = Deck(name: "Deck 1", isUserDeck: true, champions: [playerChampion], elements: [.fire, .crux])
+    
     List(0..<5) { item in
-//        DeckRowView()
+        DeckRowView(deck: playerDeck)
     }
 }
