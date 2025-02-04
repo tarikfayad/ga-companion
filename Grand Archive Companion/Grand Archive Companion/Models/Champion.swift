@@ -118,6 +118,20 @@ class Champion: Codable, Equatable {
         return champs
     }
     
+    static func filterChampionsByLineage(_ champions: [Champion]) -> [Champion] {
+        var seenLineages: Set<String> = []
+        var filteredChampions: [Champion] = []
+
+        for champion in champions {
+            if !seenLineages.contains(champion.lineage) {
+                seenLineages.insert(champion.lineage)
+                filteredChampions.append(champion)
+            }
+        }
+
+        return filteredChampions
+    }
+    
     // MARK: - Encodable
     
     enum CodingKeys: String, CodingKey {

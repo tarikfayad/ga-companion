@@ -11,13 +11,49 @@ struct DeckRowView: View {
     @State var deck: Deck
     @Environment(\.modelContext) private var modelContext
     
+    var imageStrokeColor: Color = .white
+    
     var body: some View {
         ZStack {
             HStack {
-                Image(deck.champions[0].imageName())
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 60, height: 60)
+                let filteredChamps = Champion.filterChampionsByLineage(deck.champions)
+                
+                if filteredChamps.count > 2 {
+                    VStack {
+                        HStack {
+                            ForEach(filteredChamps.prefix(2), id: \.self) { champion in
+                                Image(champion.imageName())
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 30, height: 30)
+                                    .cornerRadius(15)
+                                    .overlay(Circle().stroke(imageStrokeColor, lineWidth: 2))
+                            }
+                        }
+                        HStack {
+                            ForEach(filteredChamps.dropFirst(2), id: \.self) { champion in
+                                Image(champion.imageName())
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 30, height: 30)
+                                    .cornerRadius(15)
+                                    .overlay(Circle().stroke(imageStrokeColor, lineWidth: 2))
+                            }
+                        }
+                    }
+                } else {
+                    HStack {
+                        ForEach(filteredChamps, id: \.self) { champion in
+                            Image(champion.imageName())
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: filteredChamps.count == 2 ? 35 : 65, height: filteredChamps.count == 2 ? 30 : 65)
+                                .cornerRadius(filteredChamps.count == 2 ? 17.5 : 32.5)
+                                .overlay(Circle().stroke(imageStrokeColor, lineWidth: 2))
+                        }
+                    }
+                }
+                
                 VStack {
                     HStack {
                         Text(deck.name)

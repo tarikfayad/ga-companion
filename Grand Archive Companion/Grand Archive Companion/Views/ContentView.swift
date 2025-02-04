@@ -11,6 +11,7 @@ struct ContentView: View {
     @State private var navigateToPlayerView = false
     @State private var navigateToCardView = false
     @State private var navigateToHistoryView = false
+    @State private var navigateToDeckListView = false
     
     var body: some View {
         NavigationStack {
@@ -47,7 +48,7 @@ struct ContentView: View {
                         }
                         
                         ImageLabelButtonView(imageName: "info.circle", title: "Deck Stats", fontColor: .white, tintColor: .playerGreen, buttonSize: 78){
-                            // Go to deck stats view
+                            navigateToDeckListView = true
                         }
                     }.padding(.top, -10)
                 }
@@ -60,6 +61,9 @@ struct ContentView: View {
             }
             .navigationDestination(isPresented: $navigateToHistoryView){
                 DeckHistoryView()
+            }
+            .navigationDestination(isPresented: $navigateToDeckListView){
+                DeckListView()
             }
         }
         .onAppear {
