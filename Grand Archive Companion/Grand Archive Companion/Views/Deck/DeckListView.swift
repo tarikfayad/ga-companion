@@ -49,7 +49,7 @@ struct DeckListView: View {
             }
             .overlay {
                 if decks.isEmpty {
-                    ContentUnavailableView("Deck List", systemImage: "magnifyingglass.circle", description: Text("You haven't saved any decks yet."))
+                    ContentUnavailableView("Decks", systemImage: "magnifyingglass.circle", description: Text("You haven't saved any decks yet."))
                         .foregroundStyle(.white)
                 }
             }
@@ -74,7 +74,7 @@ struct DeckListView: View {
         }
         .navigationDestination(isPresented: $navigateToDeckView) {
             if let selectedDeck = selectedDeck {
-                DeckRowView(deck: selectedDeck)
+                DeckDetailView(deck: selectedDeck)
             }
         }
         .navigationBarBackButtonHidden(true)

@@ -66,7 +66,7 @@ struct DeckRowView: View {
                     HStack {
                         Text(deck.elements.map(\.rawValue).joined(separator: " / "))
                         Text("•")
-                        Text(String(Deck.winRate(deck: deck, context: modelContext)) + "%")
+                        Text(String(format: "%.2f", Deck.winRate(deck: deck, context: modelContext)) + "%")
                             .foregroundStyle(.gray)
                         Spacer()
                     }
