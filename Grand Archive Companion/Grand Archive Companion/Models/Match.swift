@@ -46,4 +46,17 @@ class Match: Identifiable {
             return []
         }
     }
+    
+    static func loadMatchesForDeck(_ deck: Deck, context: ModelContext) -> [Match] {
+        let deckID = deck.id // cannot reference a model object inside of a predicate so doing so here
+        let fetchDescriptor = FetchDescriptor<Match>(
+            predicate: #Predicate { $0.userDeck.id == deckID || $0.opponentDeck.id == deckID }
+        )
+        do {
+            return try context.fetch(fetchDescriptor)
+        } catch {
+            print("Failed to load matches for deck: \(error)")
+            return []
+        }
+    }
 }
