@@ -24,17 +24,21 @@ struct AddMatchView: View {
     @State private var userSelectedChampions: Set<Champion> = []
     @State private var userSelectedElements: Set<Element> = []
     @State private var userDidWin: Bool = false
+    @State private var userDeck: Deck?
     
     // Opponent deck variables
     @State private var opponentDeckName: String = ""
     @State private var opponentSelectedChampions: Set<Champion> = []
     @State private var opponentSelectedElements: Set<Element> = []
+    @State private var opponentDeck: Deck?
     
     var body: some View {
         ZStack {
             Color.background.ignoresSafeArea(.all)
             VStack {
-                DeckCreationView(deckName: $userDeckName, selectedChampions: $userSelectedChampions, elements: $userSelectedElements, userDidWin: $userDidWin, deckString: "Your Deck", isUserDeck: true)
+                DeckCreationView(deckName: $userDeckName, selectedChampions: $userSelectedChampions, elements: $userSelectedElements, userDidWin: $userDidWin, deckString: "Your Deck", isUserDeck: true) { deck in
+                    self.userDeck = deck
+                }
                     .frame(width: UIScreen.main.bounds.width - 40)
                     .padding(.horizontal, 5)
                     .background(
@@ -48,7 +52,9 @@ struct AddMatchView: View {
                     .foregroundColor(.white)
                     .padding(.vertical, 10)
                 
-                DeckCreationView(deckName: $opponentDeckName, selectedChampions: $opponentSelectedChampions, elements: $opponentSelectedElements, userDidWin: .constant(false), deckString: "Opponent's Deck", isUserDeck: false)
+                DeckCreationView(deckName: $opponentDeckName, selectedChampions: $opponentSelectedChampions, elements: $opponentSelectedElements, userDidWin: .constant(false), deckString: "Opponent's Deck", isUserDeck: false) { deck in
+                    self.opponentDeck = deck
+                }
                     .frame(width: UIScreen.main.bounds.width - 30)
                     .background(
                         RoundedRectangle(cornerRadius: 12)
@@ -121,13 +127,19 @@ struct AddMatchView: View {
         if (userDeckName != "" && userSelectedChampions.count > 0 && userSelectedElements.count > 0 && opponentDeckName != "" && opponentSelectedChampions.count > 0 && opponentSelectedElements.count > 0) {
             
             // Create user and opponent decks
-            let userDeck = Deck(name: userDeckName, isUserDeck: true, champions: Array(userSelectedChampions), elements: Array(userSelectedElements))
-            let opponentDeck = Deck(name: opponentDeckName, isUserDeck: false, champions: Array(opponentSelectedChampions), elements: Array(opponentSelectedElements))
+            var newUserDeck, newOpponentDeck: Deck!
+            if userDeck != nil { newUserDeck = userDeck } else {
+               newUserDeck = Deck(name: userDeckName, isUserDeck: true, champions: Array(userSelectedChampions), elements: Array(userSelectedElements))
+            }
+            
+            if opponentDeck != nil { newOpponentDeck = opponentDeck } else {
+                newOpponentDeck = Deck(name: opponentDeckName, isUserDeck: false, champions: Array(opponentSelectedChampions), elements: Array(opponentSelectedElements))
+            }
             
             // Create the match
-            let newMatch = Match(didUserWin: userDidWin, userDeck: userDeck, opponentDeck: opponentDeck, notes: matchNotes)
+            let newMatch = Match(didUserWin: userDidWin, userDeck: newUserDeck, opponentDeck: newOpponentDeck, notes: matchNotes)
             
-            Deck.save(decks: [userDeck, opponentDeck], context: modelContext) // Inserting them into the context and saving them before saving the match. Could be done in the Match save function as well.
+            Deck.save(decks: [newUserDeck, newOpponentDeck], context: modelContext) // Inserting them into the context and saving them before saving the match. Could be done in the Match save function as well.
             Match.save(matches: [newMatch], context: modelContext)
             ProgressHUD.succeed("Match Saved!", delay: 1.5)
             dismiss()

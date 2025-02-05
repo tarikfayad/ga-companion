@@ -23,6 +23,8 @@ struct DeckCreationView: View {
     @State var userDecks: [Deck] = []
     @State var opponentDecks: [Deck] = []
     
+    var onDeckSelect: (Deck) -> Void
+    
     var body: some View {
         VStack {
             Text(deckString)
@@ -178,6 +180,7 @@ struct DeckCreationView: View {
         deckName = deck.name
         selectedChampions = Set(deck.champions)
         elements = Set(deck.elements)
+        onDeckSelect(deck)
     }
 }
 
@@ -187,6 +190,6 @@ struct DeckCreationView: View {
     @Previewable @State var elements: Set<Element> = []
     @Previewable @State var userDidWin: Bool = false
     
-    DeckCreationView(deckName: $deckName, selectedChampions: $selectedChampions, elements: $elements, userDidWin: $userDidWin, deckString: "Your Deck", isUserDeck: true)
+    DeckCreationView(deckName: $deckName, selectedChampions: $selectedChampions, elements: $elements, userDidWin: $userDidWin, deckString: "Your Deck", isUserDeck: true) {_ in}
         .background(Color.gray.opacity(0.2))
 }
