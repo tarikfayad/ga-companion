@@ -129,11 +129,11 @@ class Deck {
         )
         do {
             let matches = try context.fetch(fetchDescriptor)
-            var champions: Set<Champion> = []
+            var champions: [Champion] = []
             for match in matches {
-                champions.formUnion(match.opponentDeck.champions)
+                champions.append(contentsOf: match.opponentDeck.champions)
             }
-            return Array(champions).sorted { $0.name < $1.name }
+            return Champion.filterChampionsByLineage(champions)
         } catch {
             print("Failed to load list of champions played: \(error)")
             return []

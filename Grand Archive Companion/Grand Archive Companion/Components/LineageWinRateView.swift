@@ -24,10 +24,11 @@ struct LineageWinRateView: View {
             Text(String(format: "%.0f%%", winRate))
                 .font(.caption)
                 .foregroundColor(.white)
+                .fontWeight(.bold)
                 .background(
                     Circle()
                         .fill(.playerPink)
-                        .frame(width: imageSize/2.5, height: imageSize/2.5)
+                        .frame(width: imageSize/2, height: imageSize/2)
                         .overlay(Circle().stroke(.white, lineWidth: 2))
                 )
                 .padding(.top, imageSize - 10)

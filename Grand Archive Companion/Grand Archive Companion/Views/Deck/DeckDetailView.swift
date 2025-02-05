@@ -14,7 +14,6 @@ struct DeckDetailView: View {
     @State var deck: Deck
     
     @State private var cards: [Card] = []
-    @State private var isLoading: Bool = false
     @State private var matches: [Match] = []
     @State private var playedChampions: [Champion] = []
     
@@ -23,21 +22,17 @@ struct DeckDetailView: View {
             Color.background.ignoresSafeArea(.all)
             
             VStack{
-                if isLoading {
-                    ProgressView("Loading Champion Images")
-                } else {
-                    CardPageView(cards: cards) // Pageview of all the Champion cards
-                        .frame(width: UIScreen.main.bounds.width * 0.75)
-                }
+                CardPageView(cards: cards) // Pageview of all the Champion cards
+                    .frame(width: UIScreen.main.bounds.width * 0.75)
                 
                 Text("WIN RATE")
                     .font(.caption)
-                Text(String(format: "%.2f", Deck.winRate(deck: deck, context: modelContext)))
+                Text(String(format: "%.2f%", Deck.winRate(deck: deck, context: modelContext)))
                 
                 ScrollView(.horizontal, showsIndicators: true) {
                     HStack {
                         ForEach(playedChampions, id: \.id) { champion in
-                            LineageWinRateView(champion: champion, winRate: Deck.winRate(deck: deck, champion: champion, context: modelContext), imageSize: 75)
+                            LineageWinRateView(champion: champion, winRate: Deck.winRate(deck: deck, champion: champion, context: modelContext), imageSize: 70)
                         }
                     }
                 }
@@ -77,7 +72,6 @@ struct DeckDetailView: View {
     
     func loadChampionCards() {
         Task {
-            isLoading = true
             do {
                 for champion in deck.champions {
                     let champ = try await performCardSearch(for: champion.name)
@@ -86,7 +80,6 @@ struct DeckDetailView: View {
             } catch {
                 print("Failed to fetch cards: \(error)")
             }
-            isLoading = false
         }
     }
 }
