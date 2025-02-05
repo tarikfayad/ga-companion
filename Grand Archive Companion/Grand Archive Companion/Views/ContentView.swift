@@ -60,10 +60,10 @@ struct ContentView: View {
                 CardSearchView()
             }
             .navigationDestination(isPresented: $navigateToHistoryView){
-                DeckHistoryView()
+                MatchHistoryView()
             }
             .navigationDestination(isPresented: $navigateToDeckListView){
-                DeckListView()
+                DeckHistoryView()
             }
         }
         .onAppear {

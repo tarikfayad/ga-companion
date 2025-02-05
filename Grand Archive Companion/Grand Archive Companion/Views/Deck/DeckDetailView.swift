@@ -21,34 +21,44 @@ struct DeckDetailView: View {
         ZStack {
             Color.background.ignoresSafeArea(.all)
             
-            VStack{
-                CardPageView(cards: cards) // Pageview of all the Champion cards
-                    .frame(width: UIScreen.main.bounds.width * 0.75)
-                
-                Text("WIN RATE")
-                    .font(.caption)
-                Text(String(format: "%.2f%", Deck.winRate(deck: deck, context: modelContext)))
-                
-                ScrollView(.horizontal, showsIndicators: true) {
-                    HStack {
-                        ForEach(playedChampions, id: \.id) { champion in
-                            LineageWinRateView(champion: champion, winRate: Deck.winRate(deck: deck, champion: champion, context: modelContext), imageSize: 70)
+            ScrollView {
+                VStack{
+                    Text("CHAMPIONS")
+                        .font(.caption)
+                    CardPageView(cards: cards) // Pageview of all the Champion cards
+                        .frame(width: UIScreen.main.bounds.width * 0.75, height: UIScreen.main.bounds.width * 0.75 * 1.36)
+                    
+                    Divider()
+                        .frame(width: UIScreen.main.bounds.width * 0.5)
+                        .overlay(.secondary)
+                        .padding(.vertical, 5)
+                    
+                    Text("WIN RATE")
+                        .font(.caption)
+                    Text(String(format: "%.2f", Deck.winRate(deck: deck, context: modelContext)) + "%")
+                    
+                    ScrollView(.horizontal, showsIndicators: true) {
+                        HStack {
+                            ForEach(playedChampions, id: \.id) { champion in
+                                LineageWinRateView(champion: champion, winRate: Deck.winRate(deck: deck, champion: champion, context: modelContext), imageSize: 70)
+                            }
                         }
+                        .frame(height: 100)
                     }
-                    .frame(height: 100)
-                }
-                
-                Text("MATCHES")
-                    .font(.caption)
-                List {
-                    ForEach(matches, id: \.id) { match in
-                        MatchRowView(match: match)
+                    
+                    Text("MATCHES")
+                        .font(.caption)
+                    List {
+                        ForEach(matches, id: \.id) { match in
+                            MatchRowView(match: match)
+                        }
+                        .listRowBackground(Color.background)
                     }
-                    .listRowBackground(Color.background)
+                    .frame(minHeight: 300, maxHeight: 500)
+                    .scrollContentBackground(.hidden)
+                    .background(Color.background)
+                    .padding(.horizontal, -20)
                 }
-                .scrollContentBackground(.hidden)
-                .background(Color.background)
-                .padding(.horizontal, -20)
             }
         }
         .foregroundStyle(.white)
