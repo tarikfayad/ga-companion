@@ -35,7 +35,20 @@ struct DeckDetailView: View {
                             LineageWinRateView(champion: champion, winRate: Deck.winRate(deck: deck, champion: champion, context: modelContext), imageSize: 70)
                         }
                     }
+                    .frame(height: 100)
                 }
+                
+                Text("MATCHES")
+                    .font(.caption)
+                List {
+                    ForEach(matches, id: \.id) { match in
+                        MatchRowView(match: match)
+                    }
+                    .listRowBackground(Color.background)
+                }
+                .scrollContentBackground(.hidden)
+                .background(Color.background)
+                .padding(.horizontal, -20)
             }
         }
         .foregroundStyle(.white)
