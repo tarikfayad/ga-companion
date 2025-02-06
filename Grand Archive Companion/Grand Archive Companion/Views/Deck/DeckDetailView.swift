@@ -20,71 +20,68 @@ struct DeckDetailView: View {
     @State private var playedChampions: [Champion] = []
     
     var body: some View {
-        ZStack {
-            Color.background.ignoresSafeArea(.all)
-            
-            ScrollView {
-                VStack{
-                    Text("CHAMPIONS")
+        ScrollView {
+            VStack{
+                Text("CHAMPIONS")
+                    .font(.caption)
+                CardPageView(cards: cards) // Pageview of all the Champion cards
+                    .frame(width: UIScreen.main.bounds.width * 0.75, height: UIScreen.main.bounds.width * 0.75 * 1.36)
+                
+                Divider()
+                    .frame(width: UIScreen.main.bounds.width * 0.5)
+                    .overlay(.secondary)
+                    .padding(.vertical, 5)
+                
+                Text("WIN RATE")
+                    .font(.caption)
+                ZStack {
+                    Circle()
+                        .stroke(Color.gray.opacity(0.3), lineWidth: 5) // Background ring
+                    Circle()
+                        .trim(from: 0, to: CGFloat(Deck.winRate(deck: deck, context: modelContext) / 100))
+                        .stroke(.playerYellow, lineWidth: 5) // Win rate progress
+                        .rotationEffect(.degrees(-90))
+                    Text(String(format: "%.0f%%", Deck.winRate(deck: deck, context: modelContext)))
                         .font(.caption)
-                    CardPageView(cards: cards) // Pageview of all the Champion cards
-                        .frame(width: UIScreen.main.bounds.width * 0.75, height: UIScreen.main.bounds.width * 0.75 * 1.36)
-                    
-                    Divider()
-                        .frame(width: UIScreen.main.bounds.width * 0.5)
-                        .overlay(.secondary)
-                        .padding(.vertical, 5)
-                    
-                    Text("WIN RATE")
-                        .font(.caption)
-                    ZStack {
-                        Circle()
-                            .stroke(Color.gray.opacity(0.3), lineWidth: 5) // Background ring
-                        Circle()
-                            .trim(from: 0, to: CGFloat(Deck.winRate(deck: deck, context: modelContext) / 100))
-                            .stroke(.playerYellow, lineWidth: 5) // Win rate progress
-                            .rotationEffect(.degrees(-90))
-                        Text(String(format: "%.0f%%", Deck.winRate(deck: deck, context: modelContext)))
-                            .font(.caption)
-                            .foregroundStyle(.white)
-                    }
-                    .frame(width: 40, height: 40)
-                    .onTapGesture {
-                        filterMatchesByChampion(champion: nil)
-                    }
-                    
-                    ScrollView(.horizontal, showsIndicators: true) {
-                        HStack {
-                            ForEach(playedChampions, id: \.id) { champion in
-                                LineageWinRateView(champion: champion, winRate: Deck.winRate(deck: deck, champion: champion, context: modelContext), imageSize: 70, isSelected: isSelected(champion: champion)) { champion in
-                                    filterMatchesByChampion(champion: champion)
-                                }
-                                    .padding(.horizontal, 5)
-                            }
-                        }
-                        .frame(height: 100)
-                    }.padding(.bottom, 10)
-                    
-                    Text("MATCHES")
-                        .font(.caption)
-                    Divider()
-                        .frame(width: UIScreen.main.bounds.width * 0.5)
-                        .overlay(.secondary)
-                        .padding(.vertical, 5)
-                    List {
-                        ForEach(filteredMatches, id: \.id) { match in
-                            MatchRowView(match: match)
-                        }
-                        .listRowBackground(Color.background)
-                    }
-                    .frame(minHeight: 300, maxHeight: 800)
-                    .scrollContentBackground(.hidden)
-                    .background(Color.background)
-                    .listStyle(.plain)
-                    .padding(.horizontal, 0)
+                        .foregroundStyle(.white)
                 }
+                .frame(width: 40, height: 40)
+                .onTapGesture {
+                    filterMatchesByChampion(champion: nil)
+                }
+                
+                ScrollView(.horizontal, showsIndicators: true) {
+                    HStack {
+                        ForEach(playedChampions, id: \.id) { champion in
+                            LineageWinRateView(champion: champion, winRate: Deck.winRate(deck: deck, champion: champion, context: modelContext), imageSize: 70, isSelected: isSelected(champion: champion)) { champion in
+                                filterMatchesByChampion(champion: champion)
+                            }
+                                .padding(.horizontal, 5)
+                        }
+                    }
+                    .frame(height: 100)
+                }.padding(.bottom, 10)
+                
+                Text("MATCHES")
+                    .font(.caption)
+                Divider()
+                    .frame(width: UIScreen.main.bounds.width * 0.5)
+                    .overlay(.secondary)
+                    .padding(.vertical, 5)
+                List {
+                    ForEach(filteredMatches, id: \.id) { match in
+                        MatchRowView(match: match)
+                    }
+                    .listRowBackground(Color.background)
+                }
+                .frame(minHeight: 300, maxHeight: 800)
+                .scrollContentBackground(.hidden)
+                .background(Color.background)
+                .listStyle(.plain)
+                .padding(.horizontal, 0)
             }
         }
+        .applyBackground()
         .foregroundStyle(.white)
         .onAppear {
             loadChampionCards()

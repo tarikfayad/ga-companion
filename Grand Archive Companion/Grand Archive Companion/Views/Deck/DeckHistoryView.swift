@@ -21,37 +21,34 @@ struct DeckHistoryView: View {
     @State private var selectedDeck: Deck?
 
     var body: some View {
-        ZStack {
-            Color.background.ignoresSafeArea(.all)
-            
-            List(filteredDecks, id: \.self) { deck in
-                if isLoading {
-                    ProgressView("Searching for decks...")
-                } else {
-                    DeckRowView(deck: deck)
-                        .listRowBackground(Color.background)
-                        .onTapGesture {
-                            selectedDeck = deck
-                            navigateToDeckView = true
-                        }
-                }
+        List(filteredDecks, id: \.self) { deck in
+            if isLoading {
+                ProgressView("Searching for decks...")
+            } else {
+                DeckRowView(deck: deck)
+                    .listRowBackground(Color.background)
+                    .onTapGesture {
+                        selectedDeck = deck
+                        navigateToDeckView = true
+                    }
             }
-            .scrollContentBackground(.hidden)
-            .searchable(text: $searchText, placement: .navigationBarDrawer, prompt: "Filter by deck name or champion...")
-            .disableAutocorrection(true)
-            .onSubmit(of: .search) {
-                 filterDecks()
-            }
-            .onChange(of: searchText) { newValue in
-                // MARK: Deprecated but much easier to use than alternatives. Will change when needed.
-                searchText = newValue
-                debouncedSearch?()
-            }
-            .overlay {
-                if decks.isEmpty {
-                    ContentUnavailableView("Decks", systemImage: "magnifyingglass.circle", description: Text("You haven't saved any decks yet."))
-                        .foregroundStyle(.white)
-                }
+        }
+        .applyBackground()
+        .scrollContentBackground(.hidden)
+        .searchable(text: $searchText, placement: .navigationBarDrawer, prompt: "Filter by deck name or champion...")
+        .disableAutocorrection(true)
+        .onSubmit(of: .search) {
+             filterDecks()
+        }
+        .onChange(of: searchText) { newValue in
+            // MARK: Deprecated but much easier to use than alternatives. Will change when needed.
+            searchText = newValue
+            debouncedSearch?()
+        }
+        .overlay {
+            if decks.isEmpty {
+                ContentUnavailableView("Decks", systemImage: "magnifyingglass.circle", description: Text("You haven't saved any decks yet."))
+                    .foregroundStyle(.white)
             }
         }
         .onAppear {

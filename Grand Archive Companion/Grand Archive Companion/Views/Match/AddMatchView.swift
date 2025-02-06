@@ -33,61 +33,59 @@ struct AddMatchView: View {
     @State private var opponentDeck: Deck?
     
     var body: some View {
-        ZStack {
-            Color.background.ignoresSafeArea(.all)
-            VStack {
-                DeckCreationView(deckName: $userDeckName, selectedChampions: $userSelectedChampions, elements: $userSelectedElements, userDidWin: $userDidWin, deckString: "Your Deck", isUserDeck: true) { deck in
-                    self.userDeck = deck
-                }
-                    .frame(width: UIScreen.main.bounds.width - 40)
-                    .padding(.horizontal, 5)
-                    .background(
-                        RoundedRectangle(cornerRadius: 12)
-                            .fill(Color.gray.opacity(0.1))
-                    )
-                
-                Text("VS")
-                    .font(.system(size: 18))
-                    .fontWeight(.bold)
-                    .foregroundColor(.white)
-                    .padding(.vertical, 10)
-                
-                DeckCreationView(deckName: $opponentDeckName, selectedChampions: $opponentSelectedChampions, elements: $opponentSelectedElements, userDidWin: .constant(false), deckString: "Opponent's Deck", isUserDeck: false) { deck in
-                    self.opponentDeck = deck
-                }
-                    .frame(width: UIScreen.main.bounds.width - 30)
-                    .background(
-                        RoundedRectangle(cornerRadius: 12)
-                            .fill(Color.gray.opacity(0.1))
-                    )
-                    .padding(.bottom, 20)
-                
-                Text("NOTES")
-                    .font(.system(size: 12))
-                    
-                TextEditor(text: $matchNotes)
-                    .frame(width: UIScreen.main.bounds.width - 30, height: 100)
-                    .scrollContentBackground(.hidden)
-                    .background(Color.secondary.opacity(0.1))
-                    .cornerRadius(10)
-                    .focused($isFocused)
-                    .onChange(of: isFocused) { focused in
-                        if focused && matchNotes == "Enter deck notes here..." {
-                            matchNotes = ""
-                        }
-                    }
-                
-                Button {
-                    saveMatch()
-                } label: {
-                    Text("Save Match")
-                        .frame(width:UIScreen.main.bounds.width - 50, height:27)
-                }
-                .padding()
-                .buttonStyle(.borderedProminent)
-                .tint(.playerBlue)
+        VStack {
+            DeckCreationView(deckName: $userDeckName, selectedChampions: $userSelectedChampions, elements: $userSelectedElements, userDidWin: $userDidWin, deckString: "Your Deck", isUserDeck: true) { deck in
+                self.userDeck = deck
             }
+                .frame(width: UIScreen.main.bounds.width - 40)
+                .padding(.horizontal, 5)
+                .background(
+                    RoundedRectangle(cornerRadius: 12)
+                        .fill(Color.gray.opacity(0.1))
+                )
+            
+            Text("VS")
+                .font(.system(size: 18))
+                .fontWeight(.bold)
+                .foregroundColor(.white)
+                .padding(.vertical, 10)
+            
+            DeckCreationView(deckName: $opponentDeckName, selectedChampions: $opponentSelectedChampions, elements: $opponentSelectedElements, userDidWin: .constant(false), deckString: "Opponent's Deck", isUserDeck: false) { deck in
+                self.opponentDeck = deck
+            }
+                .frame(width: UIScreen.main.bounds.width - 30)
+                .background(
+                    RoundedRectangle(cornerRadius: 12)
+                        .fill(Color.gray.opacity(0.1))
+                )
+                .padding(.bottom, 20)
+            
+            Text("NOTES")
+                .font(.system(size: 12))
+                
+            TextEditor(text: $matchNotes)
+                .frame(width: UIScreen.main.bounds.width - 30, height: 100)
+                .scrollContentBackground(.hidden)
+                .background(Color.secondary.opacity(0.1))
+                .cornerRadius(10)
+                .focused($isFocused)
+                .onChange(of: isFocused) { focused in
+                    if focused && matchNotes == "Enter deck notes here..." {
+                        matchNotes = ""
+                    }
+                }
+            
+            Button {
+                saveMatch()
+            } label: {
+                Text("Save Match")
+                    .frame(width:UIScreen.main.bounds.width - 50, height:27)
+            }
+            .padding()
+            .buttonStyle(.borderedProminent)
+            .tint(.playerBlue)
         }
+        .applyBackground()
         .foregroundStyle(.white)
         .navigationBarBackButtonHidden(true)
         .toolbar {

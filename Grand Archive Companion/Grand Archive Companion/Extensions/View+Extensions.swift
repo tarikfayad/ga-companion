@@ -18,6 +18,10 @@ extension View {
         }
     }
     
+    func applyBackground() -> some View {
+            self.modifier(BackgroundModifier())
+        }
+    
     func applyBlockStyling() -> some View {
         self
             .frame(width: UIScreen.main.bounds.width - 12)
