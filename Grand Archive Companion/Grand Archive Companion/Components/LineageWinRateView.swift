@@ -22,7 +22,7 @@ struct LineageWinRateView: View {
                 .overlay(Circle().stroke(.white, lineWidth: 2))
             
             Text(String(format: "%.0f%%", winRate))
-                .font(.caption)
+                .font(.system(size: 10))
                 .foregroundColor(.white)
                 .fontWeight(.bold)
                 .background(
@@ -32,8 +32,6 @@ struct LineageWinRateView: View {
                         .overlay(Circle().stroke(.white, lineWidth: 2))
                 )
                 .padding(.top, imageSize - 10)
-            
-                
         }
     }
 }
