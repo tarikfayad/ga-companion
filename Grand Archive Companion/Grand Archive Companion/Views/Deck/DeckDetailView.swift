@@ -16,6 +16,7 @@ struct DeckDetailView: View {
     @State var selectedMatch: Match?
     
     @State private var cards: [Card] = []
+    @State private var champsLoaded: Bool = false
     @State private var matches: [Match] = []
     @State private var filteredMatches: [Match] = []
     @State private var playedChampions: [Champion] = []
@@ -89,7 +90,10 @@ struct DeckDetailView: View {
         .applyBackground()
         .foregroundStyle(.white)
         .onAppear {
-            loadChampionCards()
+            if !champsLoaded {
+                champsLoaded = true // Stopping champs from double loading when popping match details
+                loadChampionCards()
+            }
             matches = Match.loadMatchesForDeck(deck, context: modelContext).reversed() // Putting the most recent matches at the top
             filteredMatches = matches
             playedChampions = Deck.getAllPlayedChampions(deck: deck, context: modelContext)
