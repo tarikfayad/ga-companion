@@ -188,7 +188,11 @@ struct CounterView: View {
                 }
             }
             .navigationDestination(isPresented: $navigateToAddMatchView) {
-                AddMatchView()
+                if numberOfPlayers > 1 {
+                    AddMatchView(playerOneDamageHistory: playerOne.damageHistory, playerTwoDamageHistory: playerTwo.damageHistory)
+                } else {
+                    AddMatchView(playerOneDamageHistory: playerOne.damageHistory)
+                }
             }
             
             if isFirstLaunch {

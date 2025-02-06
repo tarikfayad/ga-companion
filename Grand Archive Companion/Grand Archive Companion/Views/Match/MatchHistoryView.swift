@@ -110,7 +110,7 @@ struct MatchHistoryView: View {
             UINavigationBar.appearance().standardAppearance = appearance
             UINavigationBar.appearance().scrollEdgeAppearance = appearance
             
-            matches = Match.load(context: modelContext)
+            matches = Match.load(context: modelContext).reversed() // Show latest matches at the top
             filteredMatches = matches
             
             var myDecks: Set<Deck> = []

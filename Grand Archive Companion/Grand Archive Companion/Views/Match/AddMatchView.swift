@@ -25,12 +25,14 @@ struct AddMatchView: View {
     @State private var userSelectedElements: Set<Element> = []
     @State private var userDidWin: Bool = false
     @State private var userDeck: Deck?
+    @State var playerOneDamageHistory: [Damage]?
     
     // Opponent deck variables
     @State private var opponentDeckName: String = ""
     @State private var opponentSelectedChampions: Set<Champion> = []
     @State private var opponentSelectedElements: Set<Element> = []
     @State private var opponentDeck: Deck?
+    @State var playerTwoDamageHistory: [Damage]?
     
     var body: some View {
         VStack {
@@ -112,12 +114,12 @@ struct AddMatchView: View {
             UINavigationBar.appearance().standardAppearance = appearance
             UINavigationBar.appearance().scrollEdgeAppearance = appearance
         }
-        .alert("Error!", isPresented: $showSaveError) {
+        .alert("Save Error!", isPresented: $showSaveError) {
             Button("OK") {
                 showSaveError = false
             }
         } message: {
-            Text("Please fill in all the fields (except notes) and try again.")
+            Text("Please make sure champions, elements, and deck names are provided for both decks and try again.")
         }
     }
     
@@ -136,6 +138,9 @@ struct AddMatchView: View {
             
             // Create the match
             let newMatch = Match(didUserWin: userDidWin, userDeck: newUserDeck, opponentDeck: newOpponentDeck, notes: matchNotes)
+            
+            if let playerOneDamageHistory = playerOneDamageHistory { newMatch.playerOneDamageHistory = playerOneDamageHistory }
+            if let playerTwoDamageHistory = playerTwoDamageHistory { newMatch.playerTwoDamageHistory = playerTwoDamageHistory }
             
             Deck.save(decks: [newUserDeck, newOpponentDeck], context: modelContext) // Inserting them into the context and saving them before saving the match. Could be done in the Match save function as well.
             Match.save(matches: [newMatch], context: modelContext)

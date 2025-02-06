@@ -16,6 +16,8 @@ class Match: Identifiable {
     var userDeck: Deck
     var opponentDeck: Deck
     var notes: String?
+    var playerOneDamageHistory: [Damage]?
+    var playerTwoDamageHistory: [Damage]?
     
     init(id: UUID = UUID(), date: Date = Date(), didUserWin: Bool, userDeck: Deck, opponentDeck: Deck, notes: String? = nil) {
         self.id = id
