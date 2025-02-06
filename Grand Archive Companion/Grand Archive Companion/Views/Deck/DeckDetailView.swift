@@ -12,6 +12,7 @@ struct DeckDetailView: View {
     @Environment(\.presentationMode) var presentationMode
     
     @State var deck: Deck
+    @State var selectedChampion: Champion?
     
     @State private var cards: [Card] = []
     @State private var matches: [Match] = []
@@ -55,7 +56,7 @@ struct DeckDetailView: View {
                     ScrollView(.horizontal, showsIndicators: true) {
                         HStack {
                             ForEach(playedChampions, id: \.id) { champion in
-                                LineageWinRateView(champion: champion, winRate: Deck.winRate(deck: deck, champion: champion, context: modelContext), imageSize: 70) { champion in
+                                LineageWinRateView(champion: champion, winRate: Deck.winRate(deck: deck, champion: champion, context: modelContext), imageSize: 70, isSelected: isSelected(champion: champion)) { champion in
                                     filterMatchesByChampion(champion: champion)
                                 }
                                     .padding(.horizontal, 5)
@@ -131,6 +132,7 @@ struct DeckDetailView: View {
     }
     
     private func filterMatchesByChampion(champion: Champion?) {
+        selectedChampion = champion
         if let champion = champion { // Safely unwrap
             filteredMatches = matches.filter { match in
                 match.opponentDeck.champions.contains { opponentChampion in
@@ -140,6 +142,10 @@ struct DeckDetailView: View {
         } else {
             filteredMatches = matches
         }
+    }
+    
+    private func isSelected(champion: Champion) -> Bool {
+        return champion == selectedChampion
     }
 }
 
