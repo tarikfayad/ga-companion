@@ -11,7 +11,7 @@ class Player: Codable, ObservableObject {
     var lashCounters: Int
     var enlightenmentCounters: Int
     var floatingMemory: Int
-    @Relationship(deleteRule: .cascade) var damageHistory: [Damage] // The problem child and the reason I needed to write encode and decode functions.
+    @Relationship(deleteRule: .nullify) var damageHistory: [Damage] // The problem child and the reason I needed to write encode and decode functions.
     
     init(id: UUID = UUID(), index: Int, damage: Int = 0, levelCounters: Int = 0, preparationCounters: Int = 0, lashCounters: Int = 0, enlightenmentCounters: Int = 0, floatingMemory: Int = 0, damageHistory: [Damage] = []) {
         self.id = id
@@ -116,6 +116,7 @@ class Player: Codable, ObservableObject {
 @Model
 class Damage: Codable {
     @Relationship(inverse: \Player.damageHistory) var player: Player?
+    @Relationship var match: Match?
     var id: UUID = UUID()
     var value: Int
     var sortIndex: Int

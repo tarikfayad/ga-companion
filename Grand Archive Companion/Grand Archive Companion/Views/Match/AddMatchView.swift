@@ -15,6 +15,7 @@ struct AddMatchView: View {
     @Environment(\.dismiss) private var dismiss
     
     @State private var showSaveError: Bool = false
+    @State var comingFromCounter: Bool = false
     
     @State private var matchNotes: String = "Enter deck notes here..."
     @FocusState private var isFocused: Bool
@@ -25,12 +26,14 @@ struct AddMatchView: View {
     @State private var userSelectedElements: Set<Element> = []
     @State private var userDidWin: Bool = false
     @State private var userDeck: Deck?
+    @State var playerOneDamageHistory: [Damage]?
     
     // Opponent deck variables
     @State private var opponentDeckName: String = ""
     @State private var opponentSelectedChampions: Set<Champion> = []
     @State private var opponentSelectedElements: Set<Element> = []
     @State private var opponentDeck: Deck?
+    @State var playerTwoDamageHistory: [Damage]?
     
     var body: some View {
         VStack {
@@ -112,12 +115,12 @@ struct AddMatchView: View {
             UINavigationBar.appearance().standardAppearance = appearance
             UINavigationBar.appearance().scrollEdgeAppearance = appearance
         }
-        .alert("Error!", isPresented: $showSaveError) {
+        .alert("Save Error!", isPresented: $showSaveError) {
             Button("OK") {
                 showSaveError = false
             }
         } message: {
-            Text("Please fill in all the fields (except notes) and try again.")
+            Text("Please make sure champions, elements, and deck names are provided for both decks and try again.")
         }
     }
     
@@ -135,12 +138,24 @@ struct AddMatchView: View {
             }
             
             // Create the match
-            let newMatch = Match(didUserWin: userDidWin, userDeck: newUserDeck, opponentDeck: newOpponentDeck, notes: matchNotes)
+            let newMatch = Match(didUserWin: userDidWin,
+                                 userDeck: newUserDeck,
+                                 opponentDeck: newOpponentDeck,
+                                 notes: matchNotes,
+                                 playerOneDamageHistory: playerOneDamageHistory ?? [],
+                                 playerTwoDamageHistory: playerTwoDamageHistory ?? [])
             
             Deck.save(decks: [newUserDeck, newOpponentDeck], context: modelContext) // Inserting them into the context and saving them before saving the match. Could be done in the Match save function as well.
             Match.save(matches: [newMatch], context: modelContext)
             ProgressHUD.succeed("Match Saved!", delay: 1.5)
+            
             dismiss()
+            if comingFromCounter {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                    NotificationCenter.default.post(name: .navigateBackToPlayers, object: nil)
+                }
+            }
+            
         } else {
             showSaveError.toggle()
         }

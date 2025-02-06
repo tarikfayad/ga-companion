@@ -13,11 +13,13 @@ struct DeckDetailView: View {
     
     @State var deck: Deck
     @State var selectedChampion: Champion?
+    @State var selectedMatch: Match?
     
     @State private var cards: [Card] = []
     @State private var matches: [Match] = []
     @State private var filteredMatches: [Match] = []
     @State private var playedChampions: [Champion] = []
+    @State private var navigateToMatchDetails: Bool = false
     
     var body: some View {
         ScrollView {
@@ -70,7 +72,10 @@ struct DeckDetailView: View {
                     .padding(.vertical, 5)
                 List {
                     ForEach(filteredMatches, id: \.id) { match in
-                        MatchRowView(match: match)
+                        MatchRowView(match: match) { match in
+                            selectedMatch = match
+                            navigateToMatchDetails = true
+                        }
                     }
                     .listRowBackground(Color.background)
                 }
@@ -113,6 +118,11 @@ struct DeckDetailView: View {
             }
         }
         .navigationBarTitleDisplayMode(.inline)
+        .navigationDestination(isPresented: $navigateToMatchDetails) {
+            if let selectedMatch = selectedMatch {
+                MatchDetailView(match: selectedMatch)
+            }
+        }
     }
     
     private func loadChampionCards() {

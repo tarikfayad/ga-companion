@@ -23,6 +23,7 @@ struct DeckCreationView: View {
     @State var userDecks: [Deck] = []
     @State var opponentDecks: [Deck] = []
     
+    @State private var savedDecks: [Deck] = []
     var onDeckSelect: (Deck) -> Void
     
     var body: some View {
@@ -30,11 +31,9 @@ struct DeckCreationView: View {
             Text(deckString)
                 .font(.system(size: 20, weight: .bold, design: .default))
             
-            let decks = isUserDeck ? Deck.loadUserDecks(context: modelContext) : Deck.loadOpponentDecks(context: modelContext)
-            
-            if decks.count > 0 {
+            if savedDecks.count > 0 {
                 Menu("Load a Saved Deck") {
-                    ForEach(decks, id: \.self) { deck in
+                    ForEach(savedDecks, id: \.self) { deck in
                         Button {
                             selectDeck(deck)
                         }
@@ -157,6 +156,9 @@ struct DeckCreationView: View {
         }
         .padding()
         .foregroundStyle(.white)
+        .onAppear {
+            savedDecks = isUserDeck ? Deck.loadUserDecks(context: modelContext) : Deck.loadOpponentDecks(context: modelContext)
+        }
     }
     
     // Helper Functions

@@ -21,6 +21,8 @@ struct HistoryView: View {
     var playerTwoDamageHistory: [Damage] = []
     @State var playerTwoHistory: [String] = []
     
+    var isLoadingFromMatchHistory: Bool = false
+    
     var body: some View {
         GeometryReader { geometry in
             ZStack {
@@ -82,11 +84,13 @@ struct HistoryView: View {
                         }
                     }
                     
-                    CircleButtonView(imageName: "xmark", tintColor: .black, padding: 15, buttonSize: 20){dismiss()}
+                    if !isLoadingFromMatchHistory {
+                        CircleButtonView(imageName: "xmark", tintColor: .black, padding: 15, buttonSize: 20){dismiss()}
+                    }
                 }
             }
         }
-        .toolbar(.hidden)
+        .toolbar(isLoadingFromMatchHistory ? .visible : .hidden)
         .navigationBarBackButtonHidden(true)
         .onAppear {
             generatePlayerOneHistoryStrings()

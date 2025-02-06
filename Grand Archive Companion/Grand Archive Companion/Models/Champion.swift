@@ -12,14 +12,19 @@ import SwiftData
 class Champion: Codable, Equatable {
     var name: String
     var lineage: String
-    var jobs: [String] // Called class in game but I can't use class as a variable name
+    var jobsString: String
     var health: Int
     var level: Int
+    
+    var jobs: [String] { // Called class in game but I can't use class as a variable name
+            get { jobsString.components(separatedBy: ",") } // Convert string to array
+            set { jobsString = newValue.joined(separator: ",") } // Convert array to string
+        }
     
     init(name: String, lineage: String, jobs: [String], health: Int, level: Int) {
         self.name = name
         self.lineage = lineage
-        self.jobs = jobs
+        self.jobsString = jobs.joined(separator: ",")
         self.health = health
         self.level = level
     }
@@ -33,7 +38,7 @@ class Champion: Codable, Equatable {
             .init(name: "Aithne, Spirit of Fire", lineage: "", jobs: ["Spirit"], health: 15, level: 0),
             .init(name: "Allen, Beast Beckoner", lineage: "Allen", jobs: ["Tamer"], health: 22, level: 2), // Doesn't have a lineage on the actual card
             .init(name: "Arisanna, Astral Zenith", lineage:"Arisanna", jobs: ["Cleric"], health: 25, level: 3),
-            .init(name: "Arisanna, Herbalist Prodigy", lineage:"Arianna", jobs: ["Cleric"], health: 19, level: 1), // Doesn't have a lineage on the
+            .init(name: "Arisanna, Herbalist Prodigy", lineage:"Arisanna", jobs: ["Cleric"], health: 19, level: 1), // Doesn't have a lineage on the
             .init(name: "Arisanna, Lucent Arbiter", lineage:"Arisanna", jobs: ["Cleric"], health: 25, level: 3),
             .init(name: "Arisanna, Master Alchemist", lineage: "Arisanna", jobs: ["Cleric"], health: 22, level: 2),
             .init(name: "Brissa, Spirit of Wind", lineage: "", jobs: ["Spirit"], health: 15, level: 0),
@@ -137,16 +142,16 @@ class Champion: Codable, Equatable {
     enum CodingKeys: String, CodingKey {
         case name
         case lineage
-        case jobs
+        case jobsString
         case health
         case level
     }
-    
+        
     required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         name = try container.decode(String.self, forKey: .name)
         lineage = try container.decode(String.self, forKey: .lineage)
-        jobs = try container.decode([String].self, forKey: .jobs)
+        jobsString = try container.decode(String.self, forKey: .jobsString)
         health = try container.decode(Int.self, forKey: .health)
         level = try container.decode(Int.self, forKey: .level)
     }
@@ -155,7 +160,7 @@ class Champion: Codable, Equatable {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(name, forKey: .name)
         try container.encode(lineage, forKey: .lineage)
-        try container.encode(jobs, forKey: .jobs)
+        try container.encode(jobsString, forKey: .jobsString) // Encode as string
         try container.encode(health, forKey: .health)
         try container.encode(level, forKey: .level)
     }
