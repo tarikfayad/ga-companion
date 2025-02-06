@@ -9,6 +9,10 @@ import SwiftUI
 import SwiftData
 
 // Extension methods to detect devie shake.
+extension Notification.Name {
+    static let navigateBackToPlayers = Notification.Name("navigateBackToPlayers")
+}
+
 extension UIDevice {
     static let deviceDidShakeNotification = Notification.Name(rawValue: "deviceDidShakeNotification")
 }
@@ -45,6 +49,7 @@ struct CounterView: View {
     @Environment(\.modelContext) private var modelContext
     @State private var isFirstLaunch: Bool = true
     @State private var showResetMenu: Bool = false
+    @State private var notificationRecieved: Bool = false
     
     @Query private var players: [Player] // Fetch all Player models
     
@@ -171,6 +176,13 @@ struct CounterView: View {
                 checkFirstLaunch()
                 setupPlayers()
                 UIApplication.shared.isIdleTimerDisabled = true // Screen will stay awake while on this screen
+                NotificationCenter.default.addObserver(forName: .navigateBackToPlayers, object: nil, queue: .main) { _ in
+                        // Ensure CounterView is still the active view before dismissing
+                        if !notificationRecieved {
+                            notificationRecieved = true
+                            presentationMode.wrappedValue.dismiss()
+                        }
+                    }
             }
             .onDisappear {
                 UIApplication.shared.isIdleTimerDisabled = false // Screen will no longer stay awake after leaving this screen
@@ -189,9 +201,9 @@ struct CounterView: View {
             }
             .navigationDestination(isPresented: $navigateToAddMatchView) {
                 if numberOfPlayers > 1 {
-                    AddMatchView(playerOneDamageHistory: playerOne.damageHistory, playerTwoDamageHistory: playerTwo.damageHistory)
+                    AddMatchView(comingFromCounter: true, playerOneDamageHistory: playerOne.damageHistory, playerTwoDamageHistory: playerTwo.damageHistory)
                 } else {
-                    AddMatchView(playerOneDamageHistory: playerOne.damageHistory)
+                    AddMatchView(comingFromCounter: true, playerOneDamageHistory: playerOne.damageHistory)
                 }
             }
             
