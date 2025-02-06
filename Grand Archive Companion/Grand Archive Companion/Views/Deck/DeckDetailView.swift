@@ -80,7 +80,7 @@ struct DeckDetailView: View {
                     }
                     .listRowBackground(Color.background)
                 }
-                .frame(minHeight: 300, maxHeight: 800)
+                .frame(minHeight: 300, maxHeight: .infinity)
                 .scrollContentBackground(.hidden)
                 .background(Color.background)
                 .listStyle(.plain)
