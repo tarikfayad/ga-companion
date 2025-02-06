@@ -130,18 +130,21 @@ struct MatchDetailView: View {
                 Text("NOTES")
                     .font(.caption)
                 Text(notes)
+                    .padding([.bottom, .horizontal])
             }
             
             if let playerOneDamageHistory = match.playerOneDamageHistory, !playerOneDamageHistory.isEmpty {
+                Text("DAMAGE HISTORY")
+                    .font(.caption)
                 Divider()
                     .frame(width: UIScreen.main.bounds.width * 0.5)
                     .overlay(.secondary)
                     .padding(.vertical, 5)
                 
                 if let playerTwoDamageHistory = match.playerTwoDamageHistory, !playerTwoDamageHistory.isEmpty {
-                    HistoryView(multiplayer: true, playerOneColor: .playerBlue, playerTwoColor: .playerPink, playerOneDamageHistory: playerOneDamageHistory, playerTwoDamageHistory: playerTwoDamageHistory)
+                    HistoryView(multiplayer: true, playerOneColor: .playerBlue, playerTwoColor: .playerPink, playerOneDamageHistory: playerOneDamageHistory, playerTwoDamageHistory: playerTwoDamageHistory, isLoadingFromMatchHistory: true)
                 } else {
-                    HistoryView(multiplayer: false, playerOneColor: .playerBlue, playerOneDamageHistory: playerOneDamageHistory)
+                    HistoryView(multiplayer: false, playerOneColor: .playerBlue, playerOneDamageHistory: playerOneDamageHistory, isLoadingFromMatchHistory: true)
                 }
             }
             
