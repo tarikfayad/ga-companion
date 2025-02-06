@@ -15,8 +15,8 @@ Supports 1 or 2 players.
 Unordered, but these are the features I'd currently like to support.
 - [x] Allow users to select saved opponent decks
 - [ ] Fix a small UI quirk when one player has 3+ champs and the other has 1-2 (elements don't sit flush as they should)
-- [ ] View saved notes on decks
-- [ ] More detailed Deck statistics (win/loss per matchup etc.)
+- [x] View saved notes on matches
+- [x] More detailed Deck statistics (win/loss per matchup etc.)
 - [ ] Saving full deck lists
 - [ ] Importing decks from Silvie
 - [ ] iCloud saving for matches and decks
