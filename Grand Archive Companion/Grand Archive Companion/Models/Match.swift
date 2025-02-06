@@ -16,16 +16,18 @@ class Match: Identifiable {
     var userDeck: Deck
     var opponentDeck: Deck
     var notes: String?
-    var playerOneDamageHistory: [Damage]?
-    var playerTwoDamageHistory: [Damage]?
+    @Relationship(deleteRule: .cascade) var playerOneDamageHistory: [Damage]
+    @Relationship(deleteRule: .cascade) var playerTwoDamageHistory: [Damage]
     
-    init(id: UUID = UUID(), date: Date = Date(), didUserWin: Bool, userDeck: Deck, opponentDeck: Deck, notes: String? = nil) {
+    init(id: UUID = UUID(), date: Date = Date(), didUserWin: Bool, userDeck: Deck, opponentDeck: Deck, notes: String? = nil, playerOneDamageHistory: [Damage] = [], playerTwoDamageHistory: [Damage] = []) {
         self.id = id
         self.date = date
         self.didUserWin = didUserWin
         self.userDeck = userDeck
         self.opponentDeck = opponentDeck
         self.notes = notes
+        self.playerOneDamageHistory = playerOneDamageHistory
+        self.playerTwoDamageHistory = playerTwoDamageHistory
     }
     
     static func save(matches: [Match], context: ModelContext) {

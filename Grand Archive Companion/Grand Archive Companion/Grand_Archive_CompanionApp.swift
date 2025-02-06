@@ -24,6 +24,6 @@ struct Grand_Archive_CompanionApp: App {
                             }
                     }
                 }
-        }.modelContainer(for: [Player.self, Deck.self, Match.self])
+        }.modelContainer(for: [Player.self, Deck.self, Match.self, Damage.self])
     }
 }

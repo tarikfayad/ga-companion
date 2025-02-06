@@ -137,10 +137,12 @@ struct AddMatchView: View {
             }
             
             // Create the match
-            let newMatch = Match(didUserWin: userDidWin, userDeck: newUserDeck, opponentDeck: newOpponentDeck, notes: matchNotes)
-            
-            if let playerOneDamageHistory = playerOneDamageHistory { newMatch.playerOneDamageHistory = playerOneDamageHistory }
-            if let playerTwoDamageHistory = playerTwoDamageHistory { newMatch.playerTwoDamageHistory = playerTwoDamageHistory }
+            let newMatch = Match(didUserWin: userDidWin,
+                                 userDeck: newUserDeck,
+                                 opponentDeck: newOpponentDeck,
+                                 notes: matchNotes,
+                                 playerOneDamageHistory: playerOneDamageHistory ?? [],
+                                 playerTwoDamageHistory: playerTwoDamageHistory ?? [])
             
             Deck.save(decks: [newUserDeck, newOpponentDeck], context: modelContext) // Inserting them into the context and saving them before saving the match. Could be done in the Match save function as well.
             Match.save(matches: [newMatch], context: modelContext)

@@ -67,8 +67,17 @@ struct MatchDetailView: View {
                     .frame(maxWidth: .infinity)
                     .frame(height: deckHeight)
                     
-                    Text("VS")
-                        .font(.system(size: 13, weight: .bold, design: .default))
+                    VStack {
+                        Text("VS")
+                            .font(.system(size: 13, weight: .bold, design: .default))
+                        
+                        Spacer()
+                        
+                        Text(match.didUserWin ? "WON" : "LOST")
+                            .font(.system(size: 13, weight: .bold, design: .default))
+                            .foregroundStyle(match.didUserWin ? .green : .red)
+                            
+                    }
                     
                     VStack {
                         Text("OPPONENT DECK")
@@ -128,7 +137,7 @@ struct MatchDetailView: View {
                         .padding([.bottom, .horizontal])
                 }
                 
-                if let playerOneDamageHistory = match.playerOneDamageHistory {
+                if match.playerOneDamageHistory.count > 0 {
                     Text("DAMAGE HISTORY")
                         .font(.caption)
                     Divider()
@@ -136,11 +145,11 @@ struct MatchDetailView: View {
                         .overlay(.secondary)
                         .padding(.vertical, 5)
                     
-                    if let playerTwoDamageHistory = match.playerTwoDamageHistory {
-                        HistoryView(multiplayer: true, playerOneColor: .playerBlue, playerTwoColor: .playerPink, playerOneDamageHistory: playerOneDamageHistory, playerTwoDamageHistory: playerTwoDamageHistory, isLoadingFromMatchHistory: true)
+                    if match.playerTwoDamageHistory.count > 0 {
+                        HistoryView(multiplayer: true, playerOneColor: .playerBlue, playerTwoColor: .playerPink, playerOneDamageHistory: match.playerOneDamageHistory, playerTwoDamageHistory: match.playerTwoDamageHistory, isLoadingFromMatchHistory: true)
                             .frame(minHeight: 300, maxHeight: 800)
                     } else {
-                        HistoryView(multiplayer: false, playerOneColor: .playerBlue, playerOneDamageHistory: playerOneDamageHistory, isLoadingFromMatchHistory: true)
+                        HistoryView(multiplayer: false, playerOneColor: .playerBlue, playerOneDamageHistory: match.playerOneDamageHistory, isLoadingFromMatchHistory: true)
                             .frame(minHeight: 300, maxHeight: 800)
                     }
                 }
