@@ -15,6 +15,7 @@ struct DeckDetailView: View {
     
     @State private var cards: [Card] = []
     @State private var matches: [Match] = []
+    @State private var filteredMatches: [Match] = []
     @State private var playedChampions: [Champion] = []
     
     var body: some View {
@@ -33,7 +34,7 @@ struct DeckDetailView: View {
                         .overlay(.secondary)
                         .padding(.vertical, 5)
                     
-                    Text("WIN RATES")
+                    Text("WIN RATE")
                         .font(.caption)
                     ZStack {
                         Circle()
@@ -47,11 +48,16 @@ struct DeckDetailView: View {
                             .foregroundStyle(.white)
                     }
                     .frame(width: 40, height: 40)
+                    .onTapGesture {
+                        filterMatchesByChampion(champion: nil)
+                    }
                     
                     ScrollView(.horizontal, showsIndicators: true) {
                         HStack {
                             ForEach(playedChampions, id: \.id) { champion in
-                                LineageWinRateView(champion: champion, winRate: Deck.winRate(deck: deck, champion: champion, context: modelContext), imageSize: 70)
+                                LineageWinRateView(champion: champion, winRate: Deck.winRate(deck: deck, champion: champion, context: modelContext), imageSize: 70) { champion in
+                                    filterMatchesByChampion(champion: champion)
+                                }
                                     .padding(.horizontal, 5)
                             }
                         }
@@ -65,7 +71,7 @@ struct DeckDetailView: View {
                         .overlay(.secondary)
                         .padding(.vertical, 5)
                     List {
-                        ForEach(matches, id: \.id) { match in
+                        ForEach(filteredMatches, id: \.id) { match in
                             MatchRowView(match: match)
                         }
                         .listRowBackground(Color.background)
@@ -82,6 +88,7 @@ struct DeckDetailView: View {
         .onAppear {
             loadChampionCards()
             matches = Match.loadMatchesForDeck(deck, context: modelContext).reversed() // Putting the most recent matches at the top
+            filteredMatches = matches
             playedChampions = Deck.getAllPlayedChampions(deck: deck, context: modelContext)
             
             let appearance = UINavigationBarAppearance()
@@ -110,7 +117,7 @@ struct DeckDetailView: View {
         .navigationBarTitleDisplayMode(.inline)
     }
     
-    func loadChampionCards() {
+    private func loadChampionCards() {
         Task {
             do {
                 for champion in deck.champions {
@@ -120,6 +127,18 @@ struct DeckDetailView: View {
             } catch {
                 print("Failed to fetch cards: \(error)")
             }
+        }
+    }
+    
+    private func filterMatchesByChampion(champion: Champion?) {
+        if let champion = champion { // Safely unwrap
+            filteredMatches = matches.filter { match in
+                match.opponentDeck.champions.contains { opponentChampion in
+                    opponentChampion.name == champion.name
+                }
+            }
+        } else {
+            filteredMatches = matches
         }
     }
 }

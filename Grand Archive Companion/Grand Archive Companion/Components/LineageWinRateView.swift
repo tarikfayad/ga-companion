@@ -11,6 +11,7 @@ struct LineageWinRateView: View {
     var champion: Champion
     var winRate: Double
     var imageSize: CGFloat = 100
+    let onTap: (Champion) -> Void
     
     var body: some View {
         ZStack {
@@ -32,6 +33,8 @@ struct LineageWinRateView: View {
                         .overlay(Circle().stroke(.white, lineWidth: 2))
                 )
                 .padding(.top, imageSize - 10)
+        }.onTapGesture{
+            onTap(champion)
         }
     }
 }
@@ -39,5 +42,5 @@ struct LineageWinRateView: View {
 #Preview {
     let playerChampion = Champion.init(name: "Lorraine, Crux Knight", lineage: "Lorraine", jobs: ["Warrior"], health: 28, level: 3)
     
-    LineageWinRateView(champion: playerChampion, winRate: 50.54)
+    LineageWinRateView(champion: playerChampion, winRate: 50.54){ champion in}
 }
