@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct DeckHistoryView: View {
+struct MatchHistoryView: View {
     @Environment(\.presentationMode) var presentationMode
     @Environment(\.modelContext) private var modelContext
     
@@ -139,6 +139,6 @@ struct DeckHistoryView: View {
     let match = Match.init(didUserWin: true, userDeck: playerDeck, opponentDeck: opponentDeck)
     
     NavigationStack {
-        DeckHistoryView(matches: [match, match, match, match, match, match, match, match, match, match])
+        MatchHistoryView(matches: [match, match, match, match, match, match, match, match, match, match])
     }
 }

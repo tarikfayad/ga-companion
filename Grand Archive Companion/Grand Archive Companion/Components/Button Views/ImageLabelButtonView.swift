@@ -12,6 +12,7 @@ struct ImageLabelButtonView: View {
     @State var title: String = "Match History"
     @State var fontColor: Color = .black
     @State var tintColor: Color = .white
+    @State var buttonSize: CGFloat = 112
     var onButtonTap: () -> Void
     
     var body: some View {
@@ -27,7 +28,7 @@ struct ImageLabelButtonView: View {
                 Text(title)
                     .font(.custom("Helvetica-Light", size: 14))
             }
-            .frame(width: 112, height: 112)
+            .frame(width: buttonSize, height: buttonSize)
             .foregroundStyle(fontColor)
         }
         .buttonStyle(.borderedProminent)

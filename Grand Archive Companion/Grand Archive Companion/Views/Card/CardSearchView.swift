@@ -22,38 +22,38 @@ struct CardSearchView: View {
     @State private var selectedCard: Card?
     
     var body: some View {
-        ZStack {
-            Color.background.ignoresSafeArea(.all)
-            List(cards, id: \.uuid) { card in
-                if isLoading {
-                    ProgressView("Searching for cards...")
-                } else {
-                    CardRowView(card: card)
-                        .listRowBackground(Color.background)
-                        .onTapGesture {
-                            selectedCard = card
-                            navigateToCardView = true
-                        }
-                }
+        
+        List(cards, id: \.uuid) { card in
+            if isLoading {
+                ProgressView("Searching for cards...")
+            } else {
+                CardRowView(card: card)
+                    .listRowBackground(Color.background)
+                    .onTapGesture {
+                        selectedCard = card
+                        navigateToCardView = true
+                    }
             }
-            .scrollContentBackground(.hidden)
-            .searchable(text: $searchText, placement: .navigationBarDrawer, prompt: "Enter a card name...")
-            .disableAutocorrection(true)
-            .onSubmit(of: .search){
-                searchCards()
+        }
+        .applyBackground()
+        .scrollContentBackground(.hidden)
+        .searchable(text: $searchText, placement: .navigationBarDrawer, prompt: "Enter a card name...")
+        .disableAutocorrection(true)
+        .onSubmit(of: .search){
+            searchCards()
+        }
+        .onChange(of: searchText) { newValue in
+            // MARK: Deoreciated but much easier to use than alternatives. Will change when needed.
+            searchText = newValue
+            debouncedSearch?()
+        }
+        .overlay{
+            if cards.isEmpty {
+                ContentUnavailableView("Card Search", systemImage: "magnifyingglass.circle", description: Text("Enter a card name to search\nor check the spelling of your search."))
+                    .foregroundStyle(.white)
             }
-            .onChange(of: searchText) { newValue in
-                // MARK: Deoreciated but much easier to use than alternatives. Will change when needed.
-                searchText = newValue
-                debouncedSearch?()
-            }
-            .overlay{
-                if cards.isEmpty {
-                    ContentUnavailableView("Card Search", systemImage: "magnifyingglass.circle", description: Text("Enter a card name to search\nor check the spelling of your search."))
-                        .foregroundStyle(.white)
-                }
-            }
-        }.onAppear {
+        }
+        .onAppear {
             let appearance = UINavigationBarAppearance()
             appearance.configureWithOpaqueBackground()
             appearance.backgroundColor = .background

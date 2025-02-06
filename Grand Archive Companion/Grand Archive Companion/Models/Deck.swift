@@ -36,6 +36,7 @@ class Deck {
         }
     }
     
+    // Function to load all deck objects
     static func load(context: ModelContext) -> [Deck] {
         let fetchDescriptor = FetchDescriptor<Deck>()
         do {
@@ -93,6 +94,49 @@ class Deck {
         } catch {
             print("Failed to load win rate: \(error)")
             return 0
+        }
+    }
+    
+    static func winRate(deck: Deck, champion: Champion, context: ModelContext) -> Double {
+        let deckID = deck.id // cannot reference a model object inside of a predicate so doing so here
+        let fetchDescriptor = FetchDescriptor<Match>(
+            predicate: #Predicate { $0.userDeck.id == deckID }
+        )
+        do {
+            let matches = try context.fetch(fetchDescriptor)
+            var wins: Int = 0
+            var totalMatches: Int = 0
+            for match in matches {
+                if match.opponentDeck.champions.contains(champion) {
+                    totalMatches += 1
+                    if match.didUserWin {
+                        wins += 1
+                    }
+                }
+            }
+            return Double(wins) / Double(totalMatches) * 100
+        } catch {
+            print("Failed to load win rate vs \(champion.name): \(error)")
+            return 0
+        }
+    }
+    
+    // Retrieve all the matchups that a deck has played.
+    static func getAllPlayedChampions(deck: Deck, context: ModelContext) -> [Champion] {
+        let deckID = deck.id
+        let fetchDescriptor = FetchDescriptor<Match>(
+            predicate: #Predicate { $0.userDeck.id == deckID }
+        )
+        do {
+            let matches = try context.fetch(fetchDescriptor)
+            var champions: [Champion] = []
+            for match in matches {
+                champions.append(contentsOf: match.opponentDeck.champions)
+            }
+            return Champion.filterChampionsByLineage(champions)
+        } catch {
+            print("Failed to load list of champions played: \(error)")
+            return []
         }
     }
 }

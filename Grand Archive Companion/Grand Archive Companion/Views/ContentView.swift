@@ -11,6 +11,7 @@ struct ContentView: View {
     @State private var navigateToPlayerView = false
     @State private var navigateToCardView = false
     @State private var navigateToHistoryView = false
+    @State private var navigateToDeckListView = false
     
     var body: some View {
         NavigationStack {
@@ -31,19 +32,23 @@ struct ContentView: View {
                         navigateToPlayerView = true
                     } label: {
                         Text("Start")
-                            .frame(width:270, height:27)
+                            .frame(width:290, height:27)
                     }
                     .padding()
                     .buttonStyle(.borderedProminent)
                     .tint(.playerBlue)
                     
                     HStack {
-                        ImageLabelButtonView(imageName: "magnifyingglass", title: "Card Search"){
+                        ImageLabelButtonView(imageName: "magnifyingglass", title: "Card Search", buttonSize: 78){
                             navigateToCardView = true
                         }
                         
-                        ImageLabelButtonView(imageName: "clock.arrow.trianglehead.counterclockwise.rotate.90", title: "Match History", fontColor: .white, tintColor: .playerPink){
+                        ImageLabelButtonView(imageName: "clock.arrow.trianglehead.counterclockwise.rotate.90", title: "Match History", fontColor: .white, tintColor: .playerPink, buttonSize: 78){
                             navigateToHistoryView = true
+                        }
+                        
+                        ImageLabelButtonView(imageName: "info.circle", title: "Deck Stats", fontColor: .white, tintColor: .playerGreen, buttonSize: 78){
+                            navigateToDeckListView = true
                         }
                     }.padding(.top, -10)
                 }
@@ -55,6 +60,9 @@ struct ContentView: View {
                 CardSearchView()
             }
             .navigationDestination(isPresented: $navigateToHistoryView){
+                MatchHistoryView()
+            }
+            .navigationDestination(isPresented: $navigateToDeckListView){
                 DeckHistoryView()
             }
         }

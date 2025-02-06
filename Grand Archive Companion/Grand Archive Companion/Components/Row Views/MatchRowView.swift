@@ -19,7 +19,7 @@ struct MatchRowView: View {
                 VStack {
                     HStack {
                         ZStack {
-                            let filteredChamps = filterChampionsByLineage(match.userDeck.champions)
+                            let filteredChamps = Champion.filterChampionsByLineage(match.userDeck.champions)
                             
                             if filteredChamps.count > 2 {
                                 VStack {
@@ -92,7 +92,7 @@ struct MatchRowView: View {
                 VStack {
                     HStack {
                         ZStack {
-                            let filteredChamps = filterChampionsByLineage(match.opponentDeck.champions)
+                            let filteredChamps = Champion.filterChampionsByLineage(match.opponentDeck.champions)
                             
                             if filteredChamps.count > 2 {
                                 VStack {
@@ -162,21 +162,6 @@ struct MatchRowView: View {
             RoundedRectangle(cornerRadius: 10)
                 .stroke(Color.white.opacity(0.5), lineWidth: 1)
         )
-    }
-    
-    // Helper functions
-    func filterChampionsByLineage(_ champions: [Champion]) -> [Champion] {
-        var seenLineages: Set<String> = []
-        var filteredChampions: [Champion] = []
-
-        for champion in champions {
-            if !seenLineages.contains(champion.lineage) {
-                seenLineages.insert(champion.lineage)
-                filteredChampions.append(champion)
-            }
-        }
-
-        return filteredChampions
     }
 }
 

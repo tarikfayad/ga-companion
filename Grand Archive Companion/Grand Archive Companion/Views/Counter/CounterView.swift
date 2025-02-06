@@ -170,6 +170,10 @@ struct CounterView: View {
             .onAppear {
                 checkFirstLaunch()
                 setupPlayers()
+                UIApplication.shared.isIdleTimerDisabled = true // Screen will stay awake while on this screen
+            }
+            .onDisappear {
+                UIApplication.shared.isIdleTimerDisabled = false // Screen will no longer stay awake after leaving this screen
             }
             .toolbar(.hidden)
             .navigationBarBackButtonHidden(true)
