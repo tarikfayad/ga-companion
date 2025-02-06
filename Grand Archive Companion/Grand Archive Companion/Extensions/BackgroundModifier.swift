@@ -12,6 +12,6 @@ struct BackgroundModifier: ViewModifier {
         ZStack {
             Color.background.ignoresSafeArea(.all)
             content
-        }
+        }.foregroundStyle(.white)
     }
 }

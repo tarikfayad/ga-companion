@@ -11,6 +11,7 @@ struct MatchRowView: View {
     @State var match: Match
     let imageSize: CGFloat = 45
     let imageStrokeColor: Color = .white
+    let onTap: (Match) -> Void
     
     var body: some View {
         VStack {
@@ -162,6 +163,7 @@ struct MatchRowView: View {
             RoundedRectangle(cornerRadius: 10)
                 .stroke(Color.white.opacity(0.5), lineWidth: 1)
         )
+        .onTapGesture { onTap(match) }
     }
 }
 
@@ -175,7 +177,7 @@ struct MatchRowView: View {
     let match = Match.init(didUserWin: true, userDeck: playerDeck, opponentDeck: opponentDeck)
         
     List(0..<5) { item in
-        MatchRowView(match: match)
+        MatchRowView(match: match){ _ in }
             .listRowBackground(Color.background)
     }
     .scrollContentBackground(.hidden)

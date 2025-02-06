@@ -17,7 +17,9 @@ struct MatchHistoryView: View {
     
     @State private var menuTitle: String = "Filter by Deck"
     @State private var selectedDeck: Deck?
+    @State private var selectedMatch: Match?
     @State private var navigateToCreateMatchView = false
+    @State private var navigateToMatchDetails = false
     
     var body: some View {
         GeometryReader { geometry in
@@ -61,7 +63,10 @@ struct MatchHistoryView: View {
                     
                     List {
                         ForEach(filteredMatches, id: \.self) { match in
-                            MatchRowView(match: match)
+                            MatchRowView(match: match) { match in
+                                selectedMatch = match
+                                navigateToMatchDetails = true
+                            }
                         }
                         .listRowBackground(Color.background)
                     }
@@ -73,6 +78,11 @@ struct MatchHistoryView: View {
         }
         .navigationDestination(isPresented: $navigateToCreateMatchView){
             AddMatchView()
+        }
+        .navigationDestination(isPresented: $navigateToMatchDetails) {
+            if let selectedMatch = selectedMatch {
+                MatchDetailView(match: selectedMatch)
+            }
         }
         .navigationBarBackButtonHidden(true)
         .toolbar {
@@ -110,15 +120,19 @@ struct MatchHistoryView: View {
             UINavigationBar.appearance().standardAppearance = appearance
             UINavigationBar.appearance().scrollEdgeAppearance = appearance
             
-            matches = Match.load(context: modelContext).reversed() // Show latest matches at the top
-            filteredMatches = matches
-            
-            var myDecks: Set<Deck> = []
-            for match in matches {
-                myDecks.insert(match.userDeck)
-            }
-            decks = Array(myDecks).sorted { $0.name < $1.name }
+            loadMatches()
+            loadDecks()
         }
+    }
+    
+    private func loadMatches() {
+        matches = Match.load(context: modelContext).reversed()
+        filteredMatches = matches
+    }
+
+    private func loadDecks() {
+        let uniqueDecks = Set(matches.map { $0.userDeck })
+        decks = uniqueDecks.sorted(by: { $0.name < $1.name })
     }
     
     private func filterMatchesByDeck(_ deck: Deck?) -> [Match] {
