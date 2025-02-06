@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 
-struct Rule: Codable {
+struct Rule: Codable, Equatable {
     let title: String
     let dateAdded: String
     let description: String
@@ -20,7 +20,7 @@ struct Rule: Codable {
     }
 }
 
-struct Edition: Codable {
+struct Edition: Codable, Equatable {
     let slug: String
     let rarity: Int
     
@@ -55,15 +55,15 @@ struct Edition: Codable {
     }
 }
 
-struct Legality: Codable {
-    struct Standard: Codable {
+struct Legality: Codable, Equatable {
+    struct Standard: Codable, Equatable {
         let limit: Int
     }
 
     let STANDARD: Standard?
 }
 
-struct Card: Codable {
+struct Card: Codable, Equatable {
     let uuid: String
     let types: [String]
     let classes: [String]

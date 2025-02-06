@@ -35,7 +35,8 @@ struct DeckDetailView: View {
                     
                     Text("WIN RATE")
                         .font(.caption)
-                    Text(String(format: "%.2f", Deck.winRate(deck: deck, context: modelContext)) + "%")
+                    Text(String(format: "%.0f", Deck.winRate(deck: deck, context: modelContext)) + "%")
+                        .foregroundStyle(.playerYellow)
                     
                     ScrollView(.horizontal, showsIndicators: true) {
                         HStack {
@@ -48,6 +49,10 @@ struct DeckDetailView: View {
                     
                     Text("MATCHES")
                         .font(.caption)
+                    Divider()
+                        .frame(width: UIScreen.main.bounds.width * 0.5)
+                        .overlay(.secondary)
+                        .padding(.vertical, 5)
                     List {
                         ForEach(matches, id: \.id) { match in
                             MatchRowView(match: match)
