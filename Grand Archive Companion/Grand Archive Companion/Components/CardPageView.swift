@@ -16,7 +16,7 @@ struct CardPageView: View {
     var body: some View {
         ZStack {
             TabView(selection: $currentPage) {
-                ForEach(cards, id: \.uuid) { card in
+                ForEach(Array(cards.enumerated()), id: \.element.uuid) { index, card in
                     WebImage(url: card.imageURL) { image in
                         image.resizable()
                             .scaledToFit()
@@ -28,7 +28,7 @@ struct CardPageView: View {
                             .scaledToFit()
                             .padding([.leading, .trailing] , 5)
                             .ignoresSafeArea()
-                    }.tag(cards.firstIndex(of: card) ?? 0)
+                    }.tag(index)
                 }
             }
             .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
