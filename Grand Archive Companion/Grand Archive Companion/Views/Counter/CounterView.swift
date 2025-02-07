@@ -100,7 +100,7 @@ struct CounterView: View {
                                     navigateToCardSearchView = true
                                 }
                                 
-                                CircleButtonView(imageName: "arrow.counterclockwise.circle", tintColor: Color.black, padding: 10, buttonSize: 30){
+                                CircleButtonView(imageName: "clock.arrow.trianglehead.counterclockwise.rotate.90", tintColor: Color.black, padding: 10, buttonSize: 30){
                                     navigateToHistoryView = true
                                 }
                                 
@@ -142,7 +142,7 @@ struct CounterView: View {
                                 CircleButtonView(imageName: "magnifyingglass", tintColor: Color.black, padding: 15, buttonSize: 20){
                                     navigateToCardSearchView = true
                                 }
-                                CircleButtonView(imageName: "arrow.counterclockwise.circle", tintColor: Color.black, padding: 10, buttonSize: 30){
+                                CircleButtonView(imageName: "clock.arrow.trianglehead.counterclockwise.rotate.90", tintColor: Color.black, padding: 10, buttonSize: 30){
                                     navigateToHistoryView = true
                                 }
                                 CircleButtonView(imageName: "square.and.arrow.down.fill", tintColor: Color.black, padding: 10, buttonSize: 30){
@@ -212,28 +212,53 @@ struct CounterView: View {
                     VStack {
                         HStack {
                             VStack {
-                                Image(systemName: "arrow.up.right")
+                                Image(systemName: "arrow.up")
                                     .padding(.bottom, 5)
                                 Text("Card Search")
-                                    .font(.system(size: 20, weight: .bold))
+                                    .font(.system(size: 15, weight: .bold))
                             }
-                            .frame(width: 150, height: 75)
+                            .frame(width: 80, height: 75)
                             .background(Color.black)
-                            Spacer()
-                                .frame(width: 40)
+                            
                             VStack {
-                                Image(systemName: "arrow.up.backward")
+                                Image(systemName: "arrow.up")
                                     .padding(.bottom, 5)
-                                Text("Damage History")
+                                Text("Damage\nHistory")
+                                    .font(.system(size: 15, weight: .bold))
+                            }
+                            .frame(width: 80, height: 75)
+                            .background(Color.black)
+                            
+                            VStack {
+                                Image(systemName: "arrow.up")
+                                    .padding(.bottom, 5)
+                                Text("Save")
                                     .font(.system(size: 20, weight: .bold))
                             }
-                            .frame(width: 160, height: 75)
+                            .frame(width: 80, height: 75)
                             .background(Color.black)
+                            
                         }.padding(.top, 70)
+                            .multilineTextAlignment(.center)
+                        Spacer()
+                        VStack {
+                            Text("Shake to Reset")
+                                .font(.system(size: 15, weight: .bold))
+                            
+                            Image(systemName: "iphone.gen3.radiowaves.left.and.right")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 30, height: 30)
+                                
+                        }
+                        .frame(width: 90, height: 90)
+                        .background(Color.black)
+                        .multilineTextAlignment(.center)
+                        
                         Spacer()
                         VStack {
                             Text("Token Menu")
-                                .font(.system(size: 20, weight: .bold))
+                                .font(.system(size: 15, weight: .bold))
                             Text("Open to add a token counter.\nSingle Tap to increment a token.\nDouble tap to decrement it.\nLong press to remove it.")
                                 .frame(width: 250)
                                 .font(.system(size: 15))
@@ -254,30 +279,57 @@ struct CounterView: View {
                 } else {
                     VStack {
                         Spacer()
-                        HStack {
-                            VStack {
-                                Text("Card Search")
-                                    .font(.system(size: 20, weight: .bold))
-                                Image(systemName: "arrow.down.right")
-                                    .padding(.top, 5)
-                            }
-                            .frame(width: 150, height: 75)
-                            .background(Color.black)
+                        VStack {
                             Spacer()
-                                .frame(width: 40)
                             VStack {
-                                Text("Damage History")
-                                    .font(.system(size: 20, weight: .bold))
-                                Image(systemName: "arrow.down.backward")
-                                    .padding(.top, 5)
+                                Text("Shake to Reset")
+                                    .font(.system(size: 15, weight: .bold))
+                                
+                                Image(systemName: "iphone.gen3.radiowaves.left.and.right")
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 30, height: 30)
+                                    
                             }
-                            .frame(width: 160, height: 75)
+                            .frame(width: 90, height: 90)
                             .background(Color.black)
-                        }.padding(.top, 70)
+                            .multilineTextAlignment(.center)
+                            Spacer()
+                            HStack {
+                                VStack {
+                                    Image(systemName: "arrow.up")
+                                        .padding(.bottom, 5)
+                                    Text("Card Search")
+                                        .font(.system(size: 15, weight: .bold))
+                                }
+                                .frame(width: 80, height: 75)
+                                .background(Color.black)
+                                
+                                VStack {
+                                    Image(systemName: "arrow.up")
+                                        .padding(.bottom, 5)
+                                    Text("Damage\nHistory")
+                                        .font(.system(size: 15, weight: .bold))
+                                }
+                                .frame(width: 80, height: 75)
+                                .background(Color.black)
+                                
+                                VStack {
+                                    Image(systemName: "arrow.up")
+                                        .padding(.bottom, 5)
+                                    Text("Save")
+                                        .font(.system(size: 20, weight: .bold))
+                                }
+                                .frame(width: 80, height: 75)
+                                .background(Color.black)
+                                
+                            }.padding(.top, 70)
+                                .multilineTextAlignment(.center)
+                        }
                         Spacer()
                         VStack {
                             Text("Token Menu")
-                                .font(.system(size: 20, weight: .bold))
+                                .font(.system(size: 15, weight: .bold))
                             Text("Open to add a token counter.\nSingle Tap to increment a token.\nDouble tap to decrement it.\nLong press to remove it.")
                                 .font(.system(size: 15))
                                 .multilineTextAlignment(.center)
@@ -285,7 +337,7 @@ struct CounterView: View {
                             Image(systemName: "arrow.down")
                         }.frame(width: 250, height: 150)
                         .background(Color.black)
-                        .padding(.bottom, 100)
+                        .padding(.bottom, 80)
                     }
                     .frame(width: UIScreen.main.bounds.width)
                     .foregroundStyle(.white)
