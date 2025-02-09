@@ -63,4 +63,23 @@ class Match: Identifiable {
             return []
         }
     }
+    
+    static func delete(match: Match, context: ModelContext) {
+        let matchID = match.id
+        
+        let fetchDescriptor = FetchDescriptor<Match>(
+            predicate: #Predicate { $0.id == matchID }
+        )
+        do {
+            let matches = try context.fetch(fetchDescriptor)
+            for match in matches {
+                context.delete(match)
+            }
+            try context.save()
+            print("All players deleted successfully.")
+        } catch let error as NSError {
+            print("Failed to save context: \(error.localizedDescription)")
+            print("Error details: \(error.userInfo)")
+        }
+    }
 }
