@@ -77,8 +77,9 @@ struct DeckDetailView: View {
                             selectedMatch = match
                             navigateToMatchDetails = true
                         }
+                        .listRowBackground(Color.background)
                     }
-                    .listRowBackground(Color.background)
+                    .onDelete(perform: deleteMatch)
                 }
                 .frame(minHeight: 300, maxHeight: .infinity)
                 .scrollContentBackground(.hidden)
@@ -157,6 +158,14 @@ struct DeckDetailView: View {
     
     private func isSelected(champion: Champion) -> Bool {
         return champion == selectedChampion
+    }
+    
+    private func deleteMatch(at offsets: IndexSet) {
+        guard let index = offsets.first else { return }
+        let match = filteredMatches[index]
+        filteredMatches.remove(atOffsets: offsets)
+        matches.removeAll(where: { $0.id == match.id })
+        Match.delete(match: match, context: modelContext)
     }
 }
 
