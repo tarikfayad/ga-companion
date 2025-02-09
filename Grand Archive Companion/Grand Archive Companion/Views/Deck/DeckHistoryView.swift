@@ -21,17 +21,20 @@ struct DeckHistoryView: View {
     @State private var selectedDeck: Deck?
 
     var body: some View {
-        List(filteredDecks, id: \.self) { deck in
-            if isLoading {
-                ProgressView("Searching for decks...")
-            } else {
-                DeckRowView(deck: deck)
-                    .listRowBackground(Color.background)
-                    .onTapGesture {
-                        selectedDeck = deck
-                        navigateToDeckView = true
-                    }
+        List {
+            ForEach(filteredDecks, id: \.self) { deck in
+                if isLoading {
+                    ProgressView("Searching for decks...")
+                } else {
+                    DeckRowView(deck: deck)
+                        .listRowBackground(Color.background)
+                        .onTapGesture {
+                            selectedDeck = deck
+                            navigateToDeckView = true
+                        }
+                }
             }
+            .onDelete(perform: deleteDeck)
         }
         .applyBackground()
         .scrollContentBackground(.hidden)
@@ -115,6 +118,14 @@ struct DeckHistoryView: View {
                 }
             }
         }
+    }
+    
+    private func deleteDeck(at offsets: IndexSet) {
+        guard let index = offsets.first else { return }
+        let deck = filteredDecks[index]
+        filteredDecks.remove(atOffsets: offsets)
+        decks.removeAll(where: { $0.id == deck.id })
+        Deck.delete(deck: deck, context: modelContext)
     }
 }
 
