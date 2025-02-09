@@ -67,8 +67,9 @@ struct MatchHistoryView: View {
                                 selectedMatch = match
                                 navigateToMatchDetails = true
                             }
+                            .listRowBackground(Color.background)
                         }
-                        .listRowBackground(Color.background)
+                        .onDelete(perform: deleteMatch)
                     }
                     .scrollContentBackground(.hidden)
                     .background(Color.background)
@@ -140,6 +141,14 @@ struct MatchHistoryView: View {
             return matches
         }
         return matches.filter { $0.userDeck == deck }
+    }
+    
+    private func deleteMatch(at offsets: IndexSet) {
+        guard let index = offsets.first else { return }
+        let match = filteredMatches[index]
+        filteredMatches.remove(atOffsets: offsets)
+        matches.removeAll(where: { $0.id == match.id })
+        Match.delete(match: match, context: modelContext)
     }
 }
 
