@@ -143,7 +143,7 @@ class Deck {
     static func delete(deck: Deck, context: ModelContext) {
         let deckID = deck.id
         
-        let fetchDescriptor = FetchDescriptor<Match>(
+        let fetchDescriptor = FetchDescriptor<Deck>(
             predicate: #Predicate { $0.id == deckID }
         )
         do {
@@ -152,7 +152,7 @@ class Deck {
                 context.delete(deck)
             }
             try context.save()
-            print("All players deleted successfully.")
+            print("Deck deleted successfully.")
         } catch let error as NSError {
             print("Failed to save context: \(error.localizedDescription)")
             print("Error details: \(error.userInfo)")
