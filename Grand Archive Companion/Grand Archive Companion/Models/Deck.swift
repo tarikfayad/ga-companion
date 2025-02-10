@@ -16,15 +16,17 @@ class Deck {
     var isUserDeck: Bool = false
     var champions: [Champion]
     var elements: [Element]
-    var mainDeck: [Card] // This won't get use for now. Long term I'll let people store what cards they have in their deck and import from SIlvie.
-    var sideDeck: [Card]
+    @Relationship(deleteRule: .cascade) var materialDeck: [Card] // This won't get use for now. Long term I'll let people store what cards they have in their deck and import from SIlvie.
+    @Relationship(deleteRule: .cascade) var mainDeck: [Card]
+    @Relationship(deleteRule: .cascade) var sideDeck: [Card]
     
-    init(id: UUID = UUID(), name: String, isUserDeck: Bool = false, champions: [Champion], elements: [Element], mainDeck: [Card] = [], sideDeck: [Card] = []) {
+    init(id: UUID = UUID(), name: String, isUserDeck: Bool = false, champions: [Champion], elements: [Element], materialDeck: [Card] = [], mainDeck: [Card] = [], sideDeck: [Card] = []) {
         self.id = id
         self.name = name
         self.isUserDeck = isUserDeck
         self.champions = champions
         self.elements = elements
+        self.materialDeck = materialDeck
         self.mainDeck = mainDeck
         self.sideDeck = sideDeck
     }
@@ -76,6 +78,25 @@ class Deck {
         } catch {
             print("Failed to load decks: \(error)")
             return []
+        }
+    }
+    
+    static func delete(deck: Deck, context: ModelContext) {
+        let deckID = deck.id
+        
+        let fetchDescriptor = FetchDescriptor<Deck>(
+            predicate: #Predicate { $0.id == deckID }
+        )
+        do {
+            let decks = try context.fetch(fetchDescriptor)
+            for deck in decks {
+                context.delete(deck)
+            }
+            try context.save()
+            print("Deck deleted successfully.")
+        } catch let error as NSError {
+            print("Failed to save context: \(error.localizedDescription)")
+            print("Error details: \(error.userInfo)")
         }
     }
     
@@ -142,22 +163,13 @@ class Deck {
         }
     }
     
-    static func delete(deck: Deck, context: ModelContext) {
-        let deckID = deck.id
-        
-        let fetchDescriptor = FetchDescriptor<Deck>(
-            predicate: #Predicate { $0.id == deckID }
-        )
-        do {
-            let decks = try context.fetch(fetchDescriptor)
-            for deck in decks {
-                context.delete(deck)
+    static func isLegal(deck: Deck) -> Bool {
+        let cards = Set(deck.materialDeck + deck.sideDeck + deck.mainDeck)
+        for card in cards {
+            if card.isBanned {
+                return false
             }
-            try context.save()
-            print("Deck deleted successfully.")
-        } catch let error as NSError {
-            print("Failed to save context: \(error.localizedDescription)")
-            print("Error details: \(error.userInfo)")
         }
+        return true
     }
 }

@@ -188,7 +188,7 @@ struct CardResponse: Codable, Equatable {
 
 @Model
 class Card {
-    @Attribute(.unique) var uuid: String
+    @Attribute(.unique) var uuid: UUID
     var types: [String]
     var classes: [String]
     var subtypes: [String]
@@ -213,7 +213,7 @@ class Card {
         legality?.STANDARD?.limit == 0
     }
     
-    init(uuid: String, types: [String], classes: [String], subtypes: [String], element: String, name: String, slug: String, effect: String? = nil, rules: [Rule]? = nil, flavorText: String? = nil, memoryCost: Int? = nil, reserveCost: Int? = nil, level: Int? = nil, power: Int? = nil, life: Int? = nil, durability: Int? = nil, speed: Bool? = nil, imageURL: URL? = nil, resultEditions: [Edition], legality: Legality? = nil) {
+    init(uuid: UUID, types: [String], classes: [String], subtypes: [String], element: String, name: String, slug: String, effect: String? = nil, rules: [Rule]? = nil, flavorText: String? = nil, memoryCost: Int? = nil, reserveCost: Int? = nil, level: Int? = nil, power: Int? = nil, life: Int? = nil, durability: Int? = nil, speed: Bool? = nil, imageURL: URL? = nil, resultEditions: [Edition], legality: Legality? = nil) {
         self.uuid = uuid
         self.types = types
         self.classes = classes
@@ -238,7 +238,7 @@ class Card {
     
     static func createCardFromResponse(response: CardResponse) -> Card {
         return Card(
-            uuid: response.uuid,
+            uuid: UUID(),
             types: response.types,
             classes: response.classes,
             subtypes: response.subtypes,

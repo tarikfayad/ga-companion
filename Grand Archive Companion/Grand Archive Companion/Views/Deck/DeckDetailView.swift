@@ -21,6 +21,7 @@ struct DeckDetailView: View {
     @State private var filteredMatches: [Match] = []
     @State private var playedChampions: [Champion] = []
     @State private var navigateToMatchDetails: Bool = false
+    @State private var navigateToDeckList: Bool = false
     
     var body: some View {
         ScrollView {
@@ -106,7 +107,7 @@ struct DeckDetailView: View {
         }
         .navigationBarBackButtonHidden(true)
         .toolbar {
-            ToolbarItem(placement: .navigationBarLeading) {
+            ToolbarItem(placement: .topBarLeading) {
                 Button(action: {
                     presentationMode.wrappedValue.dismiss() // Go back
                 }) {
@@ -121,12 +122,28 @@ struct DeckDetailView: View {
                     .foregroundStyle(.white)
                     .fontWeight(.bold)
             }
+            
+            ToolbarItem(placement: .topBarTrailing) {
+                Button(action: {
+                    navigateToDeckList = true
+                }) {
+                    HStack {
+                        Image("card_back")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 30, height: 30)
+                    } .foregroundStyle(.white)
+                }
+            }
         }
         .navigationBarTitleDisplayMode(.inline)
         .navigationDestination(isPresented: $navigateToMatchDetails) {
             if let selectedMatch = selectedMatch {
                 MatchDetailView(match: selectedMatch)
             }
+        }
+        .navigationDestination(isPresented: $navigateToDeckList) {
+            DeckListView()
         }
     }
     
