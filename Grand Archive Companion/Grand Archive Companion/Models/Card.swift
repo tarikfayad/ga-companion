@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftUI
+import SwiftData
 
 struct Rule: Codable, Equatable {
     let title: String
@@ -63,7 +64,7 @@ struct Legality: Codable, Equatable {
     let STANDARD: Standard?
 }
 
-struct Card: Codable, Equatable {
+struct CardResponse: Codable, Equatable {
     let uuid: String
     let types: [String]
     let classes: [String]
@@ -183,4 +184,90 @@ struct Card: Codable, Equatable {
         }
     }
     
+}
+
+@Model
+class Card {
+    @Attribute(.unique) var uuid: String
+    var types: [String]
+    var classes: [String]
+    var subtypes: [String]
+    var element: String
+    var name: String
+    var slug: String
+    var effect: String?
+    var rules: [Rule]?
+    var flavorText: String?
+    var memoryCost: Int?
+    var reserveCost: Int?
+    var level: Int?
+    var power: Int?
+    var life: Int?
+    var durability: Int?
+    var speed: Bool?
+    var imageURL: URL?
+    var resultEditions: [Edition]
+    var legality: Legality?
+    
+    var isBanned: Bool {
+        legality?.STANDARD?.limit == 0
+    }
+    
+    init(uuid: String, types: [String], classes: [String], subtypes: [String], element: String, name: String, slug: String, effect: String? = nil, rules: [Rule]? = nil, flavorText: String? = nil, memoryCost: Int? = nil, reserveCost: Int? = nil, level: Int? = nil, power: Int? = nil, life: Int? = nil, durability: Int? = nil, speed: Bool? = nil, imageURL: URL? = nil, resultEditions: [Edition], legality: Legality? = nil) {
+        self.uuid = uuid
+        self.types = types
+        self.classes = classes
+        self.subtypes = subtypes
+        self.element = element
+        self.name = name
+        self.slug = slug
+        self.effect = effect
+        self.rules = rules
+        self.flavorText = flavorText
+        self.memoryCost = memoryCost
+        self.reserveCost = reserveCost
+        self.level = level
+        self.power = power
+        self.life = life
+        self.durability = durability
+        self.speed = speed
+        self.imageURL = imageURL
+        self.resultEditions = resultEditions
+        self.legality = legality
+    }
+    
+    static func createCardFromResponse(response: CardResponse) -> Card {
+        return Card(
+            uuid: response.uuid,
+            types: response.types,
+            classes: response.classes,
+            subtypes: response.subtypes,
+            element: response.element,
+            name: response.name,
+            slug: response.slug,
+            effect: response.effect,
+            rules: response.rules,
+            flavorText: response.flavorText,
+            memoryCost: response.memoryCost,
+            reserveCost: response.reserveCost,
+            level: response.level,
+            power: response.power,
+            life: response.life,
+            durability: response.durability,
+            speed: response.speed,
+            imageURL: response.imageURL,
+            resultEditions: response.resultEditions,
+            legality: response.legality
+        )
+    }
+        
+    
+    static func save(cards: [Card], context: ModelContext) {
+        cards.forEach { context.insert($0) }
+        do {
+            try context.save()
+        } catch {
+            print("Failed to save cards: \(error)")
+        }
+    }
 }

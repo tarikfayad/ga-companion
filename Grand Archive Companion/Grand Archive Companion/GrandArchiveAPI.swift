@@ -8,10 +8,10 @@
 import Foundation
 
 struct APIResponse: Codable {
-    let data: [Card]
+    let data: [CardResponse]
 }
 
-func performCardSearch(for term: String) async throws -> [Card] {
+func performCardSearch(for term: String) async throws -> [CardResponse] {
     let url = URL(string: "https://api.gatcg.com/cards/search?name=\(term)")!
     do {
         let (data, _) = try await URLSession.shared.data(from: url)

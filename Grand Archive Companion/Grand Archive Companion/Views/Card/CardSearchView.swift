@@ -16,6 +16,7 @@ struct CardSearchView: View {
     
     @State private var searchText: String = ""
     @State private var cards: [Card] = []
+    @State private var cardResponses: [CardResponse] = []
     @State private var isLoading: Bool = false
     
     @State private var navigateToCardView = false
@@ -91,7 +92,8 @@ struct CardSearchView: View {
         Task {
             isLoading = true
             do {
-                cards = try await performCardSearch(for: searchText)
+                cardResponses = try await performCardSearch(for: searchText)
+                cards = cardResponses.map { Card.createCardFromResponse(response: $0) }
             } catch {
                 print("Failed to fetch cards: \(error)")
             }

@@ -16,6 +16,7 @@ struct DeckDetailView: View {
     @State var selectedMatch: Match?
     
     @State private var cards: [Card] = []
+    @State private var cardResponses: [CardResponse] = []
     @State private var champsLoaded: Bool = false
     @State private var matches: [Match] = []
     @State private var filteredMatches: [Match] = []
@@ -135,7 +136,8 @@ struct DeckDetailView: View {
             do {
                 for champion in deck.champions {
                     let champ = try await performCardSearch(for: champion.name)
-                    cards.append(contentsOf: champ)
+                    cardResponses.append(contentsOf: champ)
+                    cards = cardResponses.map { Card.createCardFromResponse(response: $0) }
                 }
             } catch {
                 print("Failed to fetch cards: \(error)")
