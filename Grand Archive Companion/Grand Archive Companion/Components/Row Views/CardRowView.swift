@@ -46,14 +46,16 @@ struct CardRowView: View {
                     .foregroundStyle(.gray)
                     .textCase(.uppercase)
                 }
-                if isComingFromDeckCreation && cardCount > 0 {
-                    HStack {
-                        Text("\(cardCount)")
-                            .frame(width: 30, height: 30)
-                            .background(.playerYellow)
-                            .clipShape(Circle())
-                            .foregroundColor(.background)
-                            .fontWeight(.bold)
+                if isComingFromDeckCreation {
+                    if cardCount > 0 {
+                        HStack {
+                            Text("\(cardCount)")
+                                .frame(width: 30, height: 30)
+                                .background(.playerYellow)
+                                .clipShape(Circle())
+                                .foregroundColor(.background)
+                                .fontWeight(.bold)
+                        }
                     }
                 } else {
                     Image(systemName: "chevron.right")

@@ -159,7 +159,25 @@ struct DeckListView: View {
             }
         }
         .navigationDestination(isPresented: $showCardSearch) {
-            CardSearchView(isComingFromDeckCreation: true)
+            let selectedCards: [Card] = {
+                    guard let section = selectedDeckSection else { return [] }
+                    switch section {
+                    case .material: return deck.materialDeck
+                    case .main:     return deck.mainDeck
+                    case .side:     return deck.sideDeck
+                    }
+                }()
+            CardSearchView(isComingFromDeckCreation: true, selectedCards: selectedCards) { selectedCard in
+                guard let section = selectedDeckSection else { return }
+                switch section {
+                    case .material:
+                        deck.materialDeck.append(selectedCard)
+                    case .main:
+                        deck.mainDeck.append(selectedCard)
+                    case .side:
+                        deck.sideDeck.append(selectedCard)
+                }
+            }
         }
     }
 }

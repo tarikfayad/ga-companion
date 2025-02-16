@@ -19,7 +19,7 @@ struct CardSearchView: View {
     @State private var isLoading: Bool = false
     
     @State var isComingFromDeckCreation: Bool = false
-    @State private var selectedCards: [Card] = []
+    @State var selectedCards: [Card] = []
     var onCardSelect: ((Card) -> Void)?
     
     @State private var navigateToCardView = false
