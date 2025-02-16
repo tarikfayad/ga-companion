@@ -29,6 +29,24 @@ class Champion: Codable, Equatable {
         self.level = level
     }
     
+    init (fromCard card: Card) {
+        
+        let allChamps = Champion.generateAllChampions()
+        
+        self.name = card.name
+        self.jobsString = card.classes.joined(separator: ",")
+        self.health = card.life ?? 0
+        self.level = card.level ?? 0
+        self.lineage = ""
+        
+        for champ in allChamps {
+            if card.name == champ.name {
+                self.lineage = champ.lineage
+                break
+            }
+        }
+    }
+    
     func imageName() -> String {
         return "\(lineage.lowercased())"
     }

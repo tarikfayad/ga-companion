@@ -6,12 +6,21 @@
 //
 
 import SwiftUI
+import SDWebImageSwiftUI
+
+enum DeckSection {
+    case material, main, side
+}
 
 struct DeckListView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.presentationMode) var presentationMode
     
-    @State private var deck: Deck? // Not actually optional but making it so so preview works easily
+    @State var deck: Deck
+    @State private var deckName: String = ""
+    @State private var creatingNewDeck: Bool = false
+    @State private var selectedDeckSection: DeckSection? = nil
+    @State private var showCardSearch: Bool = false
     
     let columns = [
         GridItem(.flexible()),
@@ -21,7 +30,94 @@ struct DeckListView: View {
     
     var body: some View {
         VStack {
-            Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+            ScrollView {
+                
+                TextField("Enter a deck name...", text: $deckName)
+                    .preferredColorScheme(.dark)
+                    .overlay(
+                        Rectangle()
+                            .frame(height: 1)
+                            .foregroundStyle(Color.secondary)
+                            .offset(y: 12)
+                    )
+                    .padding(.vertical, 20)
+                    .padding(.horizontal)
+                
+                Text("MATERIAL DECK")
+                    .font(.caption)
+                LazyVGrid(columns: columns, spacing: 10) {
+                    ForEach(deck.materialDeck, id: \.uuid) { card in
+                        WebImage(url: card.imageURL)
+                            .resizable()
+                            .frame(width: 100, height: 150)
+                    }
+                    
+                    if deck.materialDeck.count < 12 {
+                        ZStack {
+                            Image("card_back")
+                                .resizable()
+                                .frame(width: 100, height: 150)
+                            Image(systemName: "plus.circle.fill")
+                                .resizable()
+                                .frame(width: 30, height: 30)
+                                .foregroundColor(.white.opacity(0.8))
+                        }.onTapGesture {
+                            selectedDeckSection = .material
+                            showCardSearch = true
+                        }
+                    }
+                }
+                
+                Text("MAIN DECK")
+                    .font(.caption)
+                LazyVGrid(columns: columns, spacing: 10) {
+                    ForEach(deck.mainDeck, id: \.uuid) { card in
+                        WebImage(url: card.imageURL)
+                            .resizable()
+                            .frame(width: 100, height: 150)
+                    }
+                    
+                    if deck.mainDeck.count < 60 {
+                        ZStack {
+                            Image("card_back")
+                                .resizable()
+                                .frame(width: 100, height: 150)
+                            Image(systemName: "plus.circle.fill")
+                                .resizable()
+                                .frame(width: 30, height: 30)
+                                .foregroundColor(.white.opacity(0.8))
+                        }.onTapGesture {
+                            selectedDeckSection = .main
+                            showCardSearch = true
+                        }
+                    }
+                }
+                
+                Text("SIDEBOARD")
+                    .font(.caption)
+                LazyVGrid(columns: columns, spacing: 10) {
+                    ForEach(deck.sideDeck, id: \.uuid) { card in
+                        WebImage(url: card.imageURL)
+                            .resizable()
+                            .frame(width: 100, height: 150)
+                    }
+                    
+                    if Deck.sideDeckPoints(deck: deck) < 15 {
+                        ZStack {
+                            Image("card_back")
+                                .resizable()
+                                .frame(width: 100, height: 150)
+                            Image(systemName: "plus.circle.fill")
+                                .resizable()
+                                .frame(width: 30, height: 30)
+                                .foregroundColor(.white.opacity(0.8))
+                        }.onTapGesture {
+                            selectedDeckSection = .side
+                            showCardSearch = true
+                        }
+                    }
+                }
+            }
         }
         .applyBackground()
         .onAppear {
@@ -29,8 +125,12 @@ struct DeckListView: View {
             appearance.configureWithTransparentBackground()
             UINavigationBar.appearance().standardAppearance = appearance
             UINavigationBar.appearance().scrollEdgeAppearance = appearance
+            
+            deckName = deck.name
+            if deckName == "" { creatingNewDeck = true }
         }
         .navigationBarBackButtonHidden(true)
+        .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
                 Button(action: {
@@ -43,16 +143,29 @@ struct DeckListView: View {
             }
             
             ToolbarItem(placement: .principal) {
-//                Text(deck.name)
-//                    .foregroundStyle(.white)
-//                    .fontWeight(.bold)
+                Text(deckName == "" ? "Create Deck" : "Edit Deck")
+                    .foregroundStyle(.white)
+                    .fontWeight(.bold)
             }
+            
+            ToolbarItem(placement: .topBarTrailing) {
+                Button(action: {
+//                    presentationMode.wrappedValue.dismiss() // Go back
+                }) {
+                    HStack {
+                        Image(systemName: "checkmark.circle.fill") // Custom back icon
+                    } .foregroundStyle(.white)
+                }
+            }
+        }
+        .navigationDestination(isPresented: $showCardSearch) {
+            CardSearchView(isComingFromDeckCreation: true)
         }
     }
 }
 
 #Preview {
     NavigationStack {
-        DeckListView()
+        DeckListView(deck: Deck.init())
     }
 }

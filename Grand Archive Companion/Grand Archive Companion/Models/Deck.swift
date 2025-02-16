@@ -20,7 +20,7 @@ class Deck {
     @Relationship(deleteRule: .cascade) var mainDeck: [Card]
     @Relationship(deleteRule: .cascade) var sideDeck: [Card]
     
-    init(id: UUID = UUID(), name: String, isUserDeck: Bool = false, champions: [Champion], elements: [Element], materialDeck: [Card] = [], mainDeck: [Card] = [], sideDeck: [Card] = []) {
+    init(id: UUID = UUID(), name: String = "", isUserDeck: Bool = false, champions: [Champion] = [], elements: [Element] = [], materialDeck: [Card] = [], mainDeck: [Card] = [], sideDeck: [Card] = []) {
         self.id = id
         self.name = name
         self.isUserDeck = isUserDeck
@@ -170,6 +170,34 @@ class Deck {
                 return false
             }
         }
+        
+        if sideDeckPoints(deck: deck) > 15 { return false }
+        
+        let allCards = deck.materialDeck + deck.sideDeck + deck.mainDeck
+        let counts = allCards.reduce(into: [String: Int]()) { result, card in
+            result[card.name, default: 0] += 1
+        }
+        if counts.values.contains(where: { $0 > 4 }) { return false }
+        
         return true
+    }
+    
+    static func sideDeckPoints(deck: Deck) -> Int {
+        let cards: [Card] = deck.sideDeck
+        var value = 0
+        for card in cards {
+            if card.types.contains("CHAMPION") || card.types.contains("REGALIA") {
+                value += 3
+            } else {
+                value += 1
+            }
+        }
+        return value
+    }
+
+    static func numberOfCopies(of card: Card, in deck: Deck) -> Int {
+        return deck.materialDeck.filter { $0.name == card.name }.count
+        + deck.sideDeck.filter { $0.name == card.name }.count
+        + deck.mainDeck.filter { $0.name == card.name }.count
     }
 }

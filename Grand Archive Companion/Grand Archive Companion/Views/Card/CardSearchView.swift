@@ -18,6 +18,10 @@ struct CardSearchView: View {
     @State private var cards: [Card] = []
     @State private var isLoading: Bool = false
     
+    @State var isComingFromDeckCreation: Bool = false
+    @State private var selectedCards: [Card] = []
+    var onCardSelect: ((Card) -> Void)?
+    
     @State private var navigateToCardView = false
     @State private var selectedCard: Card?
     
@@ -27,11 +31,19 @@ struct CardSearchView: View {
             if isLoading {
                 ProgressView("Searching for cards...")
             } else {
-                CardRowView(card: card)
+                let numCopies: Int = selectedCards.filter { $0.name == card.name }.count
+                CardRowView(card: card, isComingFromDeckCreation: isComingFromDeckCreation, cardCount: numCopies)
                     .listRowBackground(Color.background)
                     .onTapGesture {
-                        selectedCard = card
-                        navigateToCardView = true
+                        if isComingFromDeckCreation {
+                            if numCopies < Card.maxNumber(card: card) {
+                                selectedCards.append(card)
+                                onCardSelect?(card)
+                            }
+                        } else {
+                            selectedCard = card
+                            navigateToCardView = true
+                        }
                     }
             }
         }
@@ -118,5 +130,7 @@ struct CardSearchView: View {
 }
 
 #Preview {
-    CardSearchView()
+    NavigationStack {
+        CardSearchView()
+    }
 }

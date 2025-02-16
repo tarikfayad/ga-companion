@@ -270,4 +270,9 @@ class Card {
             print("Failed to save cards: \(error)")
         }
     }
+    
+    static func maxNumber(card: Card) -> Int {
+        if card.types.contains("CHAMPION") || card.types.contains("REGALIA") { return 1 }
+        return 4
+    }
 }

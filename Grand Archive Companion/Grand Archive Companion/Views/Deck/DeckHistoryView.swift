@@ -18,6 +18,7 @@ struct DeckHistoryView: View {
     @State private var filteredDecks: [Deck] = []
     @State private var isLoading: Bool = false
     @State private var navigateToDeckView = false
+    @State private var navigateToCreateDeckView = false
     @State private var selectedDeck: Deck?
 
     var body: some View {
@@ -77,6 +78,9 @@ struct DeckHistoryView: View {
                 DeckDetailView(deck: selectedDeck)
             }
         }
+        .navigationDestination(isPresented: $navigateToCreateDeckView) {
+            DeckListView(deck: Deck.init())
+        }
         .navigationBarBackButtonHidden(true)
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
@@ -87,6 +91,17 @@ struct DeckHistoryView: View {
                         Image(systemName: "arrow.backward") // Custom back icon
                     }
                     .foregroundStyle(.white)
+                }
+            }
+            
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button(action: {
+                    // Allow user to create a deck
+                    navigateToCreateDeckView = true
+                }) {
+                    HStack {
+                        Image(systemName: "plus") // Custom back icon
+                    } .foregroundStyle(.white)
                 }
             }
         }

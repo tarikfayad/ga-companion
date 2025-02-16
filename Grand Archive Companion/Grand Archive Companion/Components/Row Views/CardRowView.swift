@@ -10,6 +10,8 @@ import SDWebImageSwiftUI
 
 struct CardRowView: View {
     @State var card: Card
+    var isComingFromDeckCreation = false
+    var cardCount: Int = 0
     
     var body: some View {
         ZStack {
@@ -44,8 +46,19 @@ struct CardRowView: View {
                     .foregroundStyle(.gray)
                     .textCase(.uppercase)
                 }
-                Image(systemName: "chevron.right")
-                    .foregroundColor(.gray)
+                if isComingFromDeckCreation && cardCount > 0 {
+                    HStack {
+                        Text("\(cardCount)")
+                            .frame(width: 30, height: 30)
+                            .background(.playerYellow)
+                            .clipShape(Circle())
+                            .foregroundColor(.background)
+                            .fontWeight(.bold)
+                    }
+                } else {
+                    Image(systemName: "chevron.right")
+                        .foregroundColor(.gray)
+                }
             }.frame(minHeight: 60)
         }.foregroundStyle(.black)
     }

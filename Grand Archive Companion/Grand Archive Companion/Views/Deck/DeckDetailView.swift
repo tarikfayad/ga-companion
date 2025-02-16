@@ -143,7 +143,7 @@ struct DeckDetailView: View {
             }
         }
         .navigationDestination(isPresented: $navigateToDeckList) {
-            DeckListView()
+            DeckListView(deck: deck)
         }
     }
     
