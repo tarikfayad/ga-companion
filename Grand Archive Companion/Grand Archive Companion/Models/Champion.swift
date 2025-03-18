@@ -29,24 +29,6 @@ class Champion: Codable, Equatable {
         self.level = level
     }
     
-    init (fromCard card: Card) {
-        
-        let allChamps = Champion.generateAllChampions()
-        
-        self.name = card.name
-        self.jobsString = card.classes.joined(separator: ",")
-        self.health = card.life ?? 0
-        self.level = card.level ?? 0
-        self.lineage = ""
-        
-        for champ in allChamps {
-            if card.name == champ.name {
-                self.lineage = champ.lineage
-                break
-            }
-        }
-    }
-    
     func imageName() -> String {
         return "\(lineage.lowercased())"
     }
@@ -60,6 +42,9 @@ class Champion: Codable, Equatable {
             .init(name: "Arisanna, Lucent Arbiter", lineage:"Arisanna", jobs: ["Cleric"], health: 25, level: 3),
             .init(name: "Arisanna, Master Alchemist", lineage: "Arisanna", jobs: ["Cleric"], health: 22, level: 2),
             .init(name: "Brissa, Spirit of Wind", lineage: "", jobs: ["Spirit"], health: 15, level: 0),
+            .init(name: "Diao Chan, Enchantress", lineage: "Diao Chan", jobs: ["Cleric"], health: 19, level: 1),
+            .init(name: "Diao Chan, Dreaming Wish", lineage: "Diao Chan", jobs: ["Cleric"], health: 22, level: 2),
+            .init(name: "Diao Chan, Idyll Corsage", lineage: "Diao Chan", jobs: ["Cleric"], health: 25, level: 3),
             .init(name: "Diana, Cursebreaker", lineage: "Diana", jobs: ["Ranger"], health: 25, level: 3),
             .init(name: "Diana, Deadly Duelist", lineage: "Diana", jobs: ["Ranger"], health: 22, level: 2),
             .init(name: "Diana, Duskstalker", lineage: "Diana", jobs: ["Ranger"], health: 25, level: 3),
@@ -67,10 +52,14 @@ class Champion: Codable, Equatable {
             .init(name: "Fragmented Spirit of Fire", lineage: "", jobs: ["Spirit"], health: 15, level: 0),
             .init(name: "Fragmented Spirit of Water", lineage: "", jobs: ["Spirit"], health: 15, level: 0),
             .init(name: "Fragmented Spirit of Wind", lineage: "", jobs: ["Spirit"], health: 15, level: 0),
+            .init(name: "Guo Jia, Chosen Disciple", lineage: "Guo Jia", jobs: ["Tamer"], health: 19, level: 1),
+            .init(name: "Guo Jia, Blessed Scion", lineage: "Guo Jia", jobs: ["Tamer"], health: 22, level: 2),
+            .init(name: "Guo Jia, Heaven's Favored", lineage: "Guo Jia", jobs: ["Tamer"], health: 25, level: 3),
             .init(name: "Gwendolyn, Spirit of Wind", lineage: "", jobs: ["Spirit"], health: 15, level: 0),
             .init(name: "Jin, Fate Defiant", lineage: "Jin", jobs: ["Warrior"], health: 20, level: 1), // Doesn't have a lineage on the
             .init(name: "Jin, Undying Resolve", lineage: "Jin", jobs: ["Warrior"], health: 28, level: 3),
             .init(name: "Jin, Zealous Maverick", lineage: "Jin", jobs: ["Warrior"], health: 24, level: 2),
+            .init(name: "Kongming, Erudite Strategist", lineage: "Kongming", jobs: ["Mage"], health: 22, level: 2),
             .init(name: "Kongming, Ascetic Vice", lineage: "Kongming", jobs: ["Mage"], health: 22, level: 2),
             .init(name: "Kongming, Fel Eidolon", lineage: "Kongming", jobs: ["Mage"], health: 25, level: 3),
             .init(name: "Kongming, Wayward Maven", lineage: "Kongming", jobs: ["Mage"], health: 19, level: 1), // Doesn't have a lineage on the
@@ -79,6 +68,7 @@ class Champion: Codable, Equatable {
             .init(name: "Lorraine, Spirit Ruler", lineage: "Lorraine", jobs: ["Warrior"], health: 28, level: 3),
             .init(name: "Lorraine, Wandering Warrior", lineage: "Lorraine", jobs: ["Warrior"], health: 20, level: 1), // Doesn't have a lineage on the
             .init(name: "Lost Spirit", lineage: "", jobs: ["Spirit"], health: 15, level: 0),
+            .init(name: "Lu Bu, Wrath Incarnate", lineage: "", jobs: ["Warrior"], health: 32, level: 4),
             .init(name: "Merlin, Kingslayer", lineage: "Merlin", jobs: ["Mage", "Warrior"], health: 28, level: 3),
             .init(name: "Merlin, Memory Thief", lineage: "Merlin", jobs: ["Mage"], health: 22, level: 2), // Doesn't have a lineage on the
             .init(name: "Minthe, Spirit of Water", lineage: "", jobs: ["Spirit"], health: 15, level: 0),
@@ -103,6 +93,9 @@ class Champion: Codable, Equatable {
             .init(name: "Silvie, Wilds Whisperer", lineage: "Silvie", jobs: ["Tamer"], health: 19, level: 1), // Doesn't have a lineage on the
             .init(name: "Silvie, With the Pack", lineage: "Silvie", jobs: ["Tamer"], health: 22, level: 2),
             .init(name: "Spirit of Fire", lineage: "", jobs: ["Spirit"], health: 15, level: 0),
+            .init(name: "Spirit of Fortuitous Fire", lineage: "", jobs: ["Spirit"], health: 15, level: 0),
+            .init(name: "Spirit of Fortuitous Water", lineage: "", jobs: ["Spirit"], health: 15, level: 0),
+            .init(name: "Spirit of Fortuitous Wind", lineage: "", jobs: ["Spirit"], health: 15, level: 0),
             .init(name: "Spirit of Serene Fire", lineage: "", jobs: ["Spirit"], health: 15, level: 0),
             .init(name: "Spirit of Serene Water", lineage: "", jobs: ["Spirit"], health: 15, level: 0),
             .init(name: "Spirit of Serene Wind", lineage: "", jobs: ["Spirit"], health: 15, level: 0),
